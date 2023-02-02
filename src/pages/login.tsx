@@ -6,6 +6,7 @@ import * as api from 'services/api'
 import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { emailAddressRegex } from '@/helpers/constants'
+import configSettings from '../config.json';
 
 const Login = () => {
 
@@ -59,8 +60,8 @@ const Login = () => {
       .then(result => 
         {          
           let expires = result.data.expires_in / 60 / 60 /24;
-          Cookies.set('access', result.data.access_token, { domain: 'localhost', secure: true, expires: expires });
-          Cookies.set('refresh', result.data.refresh_token, { domain: 'localhost', secure: true, expires: expires, path: '/oauth/authorize' });
+          Cookies.set('access', result.data.access_token, { domain: configSettings.cookieDomain, secure: true, expires: expires });
+          Cookies.set('refresh', result.data.refresh_token, { domain: configSettings.cookieDomain, secure: true, expires: expires, path: '/oauth/authorize' });
           redirect();
         }
       )

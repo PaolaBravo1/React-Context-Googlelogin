@@ -1,5 +1,6 @@
 {
-    "apiRootUrl": "http://localhost:4000"    
+    "apiRootUrl": "http://localhost:4000",
+    "cookieDomain": "localhost"
  }
  
  
