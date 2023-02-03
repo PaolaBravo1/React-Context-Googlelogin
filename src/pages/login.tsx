@@ -6,7 +6,7 @@ import * as api from 'services/api'
 import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { emailAddressRegex } from '@/helpers/constants'
-import configSettings from '../config.json';
+import configSettings from '../../config.json';
 
 const Login = () => {
 
