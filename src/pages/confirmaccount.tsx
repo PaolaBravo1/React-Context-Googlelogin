@@ -20,14 +20,15 @@ const ConfirmAccount = () => {
 
     if (paramToken === null || paramEmailAddress === null) {
       setErrorMessage("The link does not contain the required information in order to confirm your account.  Please try copying and pasting the link directly from the email you received.");
+      return;
     }
 
     setEmailAddress(paramEmailAddress!);
     setToken(paramToken!);
+    apiConfirmAccount(paramEmailAddress, paramToken);
   }, []);
 
   const apiConfirmAccount = async (emailAddress: string, token: string): Promise<any> => {
-
     api.confirmAccount(emailAddress, token)
       .then(result => {
         // note, even if the email or token are wrong, this will display.  

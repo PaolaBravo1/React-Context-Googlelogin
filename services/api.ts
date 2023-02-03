@@ -1,9 +1,19 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import app from "next/app";
 import configSettings from '../config.json';
 
+const DEBUG = process.env.NODE_ENV === "development";
 const rootUrl = configSettings.apiRootUrl;
+
+var ip = require('ip');
+
+
+axios.interceptors.request.use((config) => {
+    console.log("client ip: " + ip.address());
+    return config;
+}, (error) => {  
+    return Promise.reject(error);
+});
 
 const defaultHeader = { "Content-Type": "application/x-www-form-urlencoded" };
 
