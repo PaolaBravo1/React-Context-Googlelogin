@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import { useEffect, useState } from 'react'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
+import { useAuthentication } from '../contexts/useAuthentication';
 
 const ThankYou = () => {
   

@@ -20,7 +20,7 @@ const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reve
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div id={id} className="auth-container">
+      <div id={id} className="unauth-container">
         <div className="container-fluid">
           <div className="row no-gutter">
             {reversed ? <></> :

@@ -1,13 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import TextInput from '@/components/TextInput'
 import { useEffect, useState } from 'react'
-import * as api from 'services/api'
 import Link from 'next/link'
 import { emailAddressRegex, passwordRegex } from '@/helpers/constants'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
+import Router from 'next/router';
+import { useAuthentication } from '../contexts/useAuthentication';
 
 const Register = () => {
-  
   const [isMakingApiRequest, setIsMakingApiRequest] = useState(false);
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   const [isPasswordAllowed, setIsPasswordAllowed] = useState(false);
@@ -18,6 +18,8 @@ const Register = () => {
   const [password2, setPassword2] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
 
+  const { register } = useAuthentication();
+  
   useEffect(() => {    
     const params = new URLSearchParams(window.location.search);
     let passwordParam = params.get("password");    
@@ -78,10 +80,10 @@ const Register = () => {
   }
 
   const attemptRegister = async() => {
-    await api.register(firstName, lastName, emailAddress, password)
+    await register(firstName, lastName, emailAddress, password)
       .then(result => 
         {                    
-          window.location.href = "/thankyou";
+          Router.push("/thankyou");
         }
       )
       .catch(error => {
@@ -137,7 +139,7 @@ const Register = () => {
             <Link href="/login">Return to login page</Link>
           </div>                                             
         </form>
-    </LayoutUnauthenticated>        
+    </LayoutUnauthenticated>     
   )
 }
 

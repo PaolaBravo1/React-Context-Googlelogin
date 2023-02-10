@@ -1,53 +1,40 @@
 import Image from 'next/image'
 import 'bootstrap/dist/css/bootstrap.css'
 import TextInput from '@/components/TextInput'
-import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
-import * as api from 'services/api'
 import Link from 'next/link'
-import Head from 'next/head'
 import HTMLReactParser from 'html-react-parser'
+import { useAuthentication } from '../contexts/useAuthentication';
+import LayoutAuthenticated from '@/components/LayoutAuthenticated'
 
-const Dashboard = () => {
-  
+const Dashboard = () => {  
   const [content, setContent] = useState("");
+  const {getMe, oauthAccessTokenLifetime} = useAuthentication();
   
   useEffect(() => {
-    api.getMe()
-    .then(result => 
-      {                    
-        setContent(JSON.stringify(result))
+    getMe()
+    .then(result => {          
+        setContent(JSON.stringify(result.data))
       }
     )
     .catch(error => {        
-      
         if (error?.response?.data?.errorCodeName != null)
-        {
           setContent(JSON.stringify(error.response.data))
-        }
         else
-          setContent(JSON.stringify(error))
-       
+          setContent(JSON.stringify(error))       
       });    
 
   }, []);
+
   return (
-    <>
-    <Head>
-      <title>Hammerbeam</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
-    <div id="dashboard" className="auth-container">
-      <div className="container-fluid">
-        <div className="row no-gutter">
-          {HTMLReactParser(content)}
-        </div>
-      </div>
-    </div>
-  </>
+    <LayoutAuthenticated>                      
+      <div className="row no-gutter">
+        <div>{oauthAccessTokenLifetime}</div>
+        {HTMLReactParser(content)}
+      </div>      
+    </LayoutAuthenticated>  
   );
 }
 
-
 export default Dashboard
+

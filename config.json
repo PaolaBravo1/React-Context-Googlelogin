@@ -1,6 +1,9 @@
 {
-    "apiRootUrl": "http://localhost:2310",
-    "cookieDomain": "localhost"
+    "apiRootUrl": "http://localhost:4000",
+    "cookieDomain": "localhost",
+    "oauthAccessTokenTimeout": 60,
+    "oauthAccessTokenMinimumRefreshMargin": 30,
+    "oauthAccessTokenRefreshMarginPercent": 10
  }
  
  

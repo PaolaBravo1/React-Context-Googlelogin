@@ -1,8 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import { useEffect, useState } from 'react'
-import * as api from 'services/api'
 import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
+import { useAuthentication } from '../contexts/useAuthentication';
 
 const ConfirmAccount = () => {
   const [emailAddress, setEmailAddress] = useState("");
@@ -13,6 +13,8 @@ const ConfirmAccount = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isConfirmed, setIsConfirmed] = useState(false);
   
+  const { confirmAccount } = useAuthentication();
+   
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     let paramToken = params.get("token");
@@ -28,14 +30,12 @@ const ConfirmAccount = () => {
     apiConfirmAccount(paramEmailAddress, paramToken);
   }, []);
 
-  const apiConfirmAccount = async (emailAddress: string, token: string): Promise<any> => {
-    api.confirmAccount(emailAddress, token)
+  const apiConfirmAccount = async (emailAddress: string, token: string): Promise<void> => {
+    confirmAccount(emailAddress, token)
       .then(result => {
         // note, even if the email or token are wrong, this will display.  
         // I don't want to have an un-authenticated method that allows bots
         // to browse for valid accounts
-        // remove setTitle("Account Confirmed!");
-        // setMessage("Congratulations, your account is now confirmed!  Click the button below to log in and get started!");
         setIsConfirmed(true);        
       })
       .catch(error => {
@@ -54,7 +54,7 @@ const ConfirmAccount = () => {
             break;   
         }
 
-        setTitle("Account Confirmation Failed");
+        setTitle("Account Confirmation Failed");      
       });
   }
 
@@ -73,7 +73,7 @@ const ConfirmAccount = () => {
           </div>
         </form>
       }
-    </LayoutUnauthenticated>
+    </LayoutUnauthenticated>  
   )
 }
 

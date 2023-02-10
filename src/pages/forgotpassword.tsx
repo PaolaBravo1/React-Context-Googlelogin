@@ -1,17 +1,19 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import TextInput from '@/components/TextInput'
 import { useEffect, useState } from 'react'
-import * as api from 'services/api'
 import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { emailAddressRegex } from '@/helpers/constants'
+import Router from 'next/router';
+import { useAuthentication } from '../contexts/useAuthentication';
 
 const ForgotPassword = () => {
-
-  const [emailAddress, setEmailAddress] = useState("tester@hammerbeam.com");
+  const [emailAddress, setEmailAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
   const [isMakingApiRequest, setIsMakingApiRequest] = useState(false); 
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
+  
+  const { requestPasswordReset } = useAuthentication();
   
   useEffect(() => {    
     setIsSubmitButtonEnabled(!isMakingApiRequest && emailAddress.length > 0);
@@ -45,13 +47,13 @@ const ForgotPassword = () => {
 
   const attemptLogIn = async() => {
     
-    await api.requestPasswordReset(emailAddress)
-      .then(result => {
-           window.location.href = "/thankyou";
-      })
-      .catch(error => {
-          setErrorMessage(error?.response?.data?.message ?? JSON.stringify(error));
-      });      
+  await requestPasswordReset(emailAddress)
+    .then(result => {
+      Router.push("/thankyou");
+    })
+    .catch(error => {
+        setErrorMessage(error?.response?.data?.message ?? JSON.stringify(error));
+    });      
   };
 
   return (
@@ -67,7 +69,7 @@ const ForgotPassword = () => {
             <Link href="/login">Return to login page</Link>
           </div>                                         
         </form>
-    </LayoutUnauthenticated>                           
+    </LayoutUnauthenticated>                     
   )
 }
 

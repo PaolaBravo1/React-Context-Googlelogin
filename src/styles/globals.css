@@ -141,12 +141,12 @@ form.form-error .input-container label {
   color: #aa0000;
 }
 
-.auth-container .login,
-.auth-container .image {
+.unauth-container .login,
+.unauth-container .image {
   min-height: 100vh;
 }
 
-.auth-container .bg-image {
+.unauth-container .bg-image {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -172,51 +172,90 @@ form.hidden {
   background-color: #eeeeee !important;
 }
 
-.auth-container form {
+.unauth-container form {
   margin-top: 50px;
   margin-bottom: 30px;
 }
 
-.auth-container .input-container {
+.unauth-container .input-container {
   margin-top: 40px;
 }
 
-.auth-container button 
+.unauth-container button 
 {
   margin-top: 40px;
   margin-bottom: 30px;
 }
 
-.auth-container .form-check
+.unauth-container .form-check
 {
   display: none;
 }
 
-.auth-container .not-registered 
+.unauth-container .not-registered 
 {
   margin-top: 30px;
 }
 
-.auth-container a
+.unauth-container a
 {
   color: #498dee;
   cursor: pointer;
   text-decoration: none;
 }
 
-.auth-container a:hover
+.unauth-container a:hover
 {
   color: #2d6cc5;
   text-decoration: underline;
 }
 
-.auth-container .styled-button {
+.unauth-container .styled-button {
     color: #ffffff;
     display: block;
 }
 
-.auth-container .styled-button:hover {
+.unauth-container .styled-button:hover {
   color: #79b1ff;
   display: block;
   text-decoration: none;
+}
+
+.top-bar {
+  width: 100%;
+  height: 60px;
+  min-height: 60px;
+  background-color: #000000;
+  color: #ffffff;
+  position: relative;
+}
+
+.top-bar .status-bars {
+  margin-right: 30px;
+  position: absolute;
+  right: 0;
+  top: 26px;
+}
+
+.top-bar .status-bar {
+  height: 10px;
+  min-height: 10px;
+  width: 150px;
+  background-color: #555555;
+  position: relative;
+}
+
+.top-bar .status-bar .status-bar-complete
+{
+  background-color:#79b1ff;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: block;
+}
+
+.not-authenticated {
+  display: none;
 }

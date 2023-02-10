@@ -1,9 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import TextInput from '@/components/TextInput'
 import { useEffect, useState } from 'react'
-import * as api from 'services/api'
 import { passwordRegex } from '@/helpers/constants'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
+import Router from 'next/router';
+import { useAuthentication } from '../contexts/useAuthentication';
 
 const SetPassword = () => {
   const [title , setTitle] = useState("");
@@ -17,14 +18,15 @@ const SetPassword = () => {
   const [isMakingApiRequest, setIsMakingApiRequest] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
   
-   useEffect(() => {      
+  const { updatePassword } = useAuthentication();
+  
+  useEffect(() => {      
       setIsSubmitButtonEnabled(
         !isMakingApiRequest && password.length > 0 && password2.length > 0);
    }, [isMakingApiRequest, password, password2 ]);
 
   useEffect(() => {    
     const params = new URLSearchParams(window.location.search);
-    
     let paramToken = params.get("token");
     let paramEmailAddress = params.get("emailAddress");
     let paramsIsAccountConfirmed = params.get("isAccountConfirmed") !== "false";
@@ -58,15 +60,12 @@ const SetPassword = () => {
   }
 
   const validate = () => {
-
-    if (password.length == 0 || password2.length == 0)
-    {
+    if (password.length == 0 || password2.length == 0) {
       setErrorMessage(" ");
       return false;
     }
 
-    if (password != password2)
-    {
+    if (password != password2) {
       setErrorMessage("The passwords do not match.");
       return false;
     }
@@ -80,8 +79,7 @@ const SetPassword = () => {
   };
 
   const apiSetPassword = async() => {
-
-    await api.setPassword(emailAddress, password, token)
+    await updatePassword(emailAddress, password, token)
       .then(result => 
         {            
           setTitle("Success!");
@@ -89,7 +87,7 @@ const SetPassword = () => {
           setIsSuccessful(true);
 
           setTimeout(() => {
-            window.location.href = "/login?emailAddress=" + encodeURIComponent(emailAddress);
+            Router.push("/login?emailAddress=" + encodeURIComponent(emailAddress));
           }, 2000);
           
         }
@@ -101,7 +99,11 @@ const SetPassword = () => {
             break;
           
           case "AccountPasswordDoesNotMeetMinimumComplexity":
-            setErrorMessage("The password does not meet the minimum complexity requirements.  Please make sure that your password is at least 8 characters and includes a lowercase letter, an uppercase letter, a number, and a symbol.");
+            setErrorMessage("The password does not meet the minimum complexity requirements.  Please choose a password with at least 8 characters, including a lowercase letter, an uppercase letter, a number, and a symbol.");
+            break;
+
+          case "AccountPasswordUsedPreviously":
+            setErrorMessage("The password has been used before by this account.  Please choose a unique password.");
             break;
 
           default:
@@ -112,18 +114,18 @@ const SetPassword = () => {
 
   return (
     <LayoutUnauthenticated id="setpassword" title={title} message={message} errorMessage={errorMessage} reversed={true}>
-        <form className={(errorMessage.length > 0 ? "form-error" : "") + (isSuccessful ? "hidden" : "")} onSubmit={handleSubmit}>                        
-          <div className="mb-3">
-            <TextInput type="password" label="Password" name="password" value={password} onChange={(value:string) => setPassword(value)}></TextInput>
-          </div>                       
-          <div className="mb-3">
-            <TextInput type="password" label="Retype password" name="password2" value={password2} onChange={(value:string) => setPassword2(value)}></TextInput>
-          </div>                       
-          <div className="d-grid gap-2 mt-2">
-            <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Submit</button>
-          </div>                                                                
-        </form>
-      </LayoutUnauthenticated>
+      <form className={(errorMessage.length > 0 ? "form-error" : "") + (isSuccessful ? "hidden" : "")} onSubmit={handleSubmit}>                        
+        <div className="mb-3">
+          <TextInput type="password" label="Password" name="password" value={password} onChange={(value:string) => setPassword(value)}></TextInput>
+        </div>                       
+        <div className="mb-3">
+          <TextInput type="password" label="Retype password" name="password2" value={password2} onChange={(value:string) => setPassword2(value)}></TextInput>
+        </div>                       
+        <div className="d-grid gap-2 mt-2">
+          <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Submit</button>
+        </div>                                                                
+      </form>
+    </LayoutUnauthenticated>
   )
 }
 
