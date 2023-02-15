@@ -29,7 +29,7 @@ const Dashboard = () => {
   return (
     <LayoutAuthenticated>                      
       <div className="row no-gutter">
-        <div>{oauthAccessTokenLifetime}</div>
+        <div></div>
         {HTMLReactParser(content)}
       </div>      
     </LayoutAuthenticated>  

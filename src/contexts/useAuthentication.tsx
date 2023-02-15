@@ -101,7 +101,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
     authTimerCountdown = setInterval(function () {
       const countdown = (Date.parse(expiration) - (new Date()).getTime()) / 1000;      
       setOAuthAccessTokenLifetime(100.0 * countdown / configSettings.oauthAccessTokenTimeout);
-    }, 200);   
+    }, 1000);   
   }
 
   const getOAuthTokenTtl = (expiration: number): number => {

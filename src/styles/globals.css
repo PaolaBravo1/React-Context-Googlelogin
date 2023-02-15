@@ -234,7 +234,7 @@ form.hidden {
   margin-right: 30px;
   position: absolute;
   right: 0;
-  top: 26px;
+  top: 16px;
 }
 
 .top-bar .status-bar {
@@ -243,7 +243,9 @@ form.hidden {
   width: 150px;
   background-color: #555555;
   position: relative;
+  margin-bottom: 8px;
 }
+
 
 .top-bar .status-bar .status-bar-complete
 {
@@ -258,4 +260,63 @@ form.hidden {
 
 .not-authenticated {
   display: none;
+}
+
+.top-modal {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 0;
+  width: 100%;
+  transition: all 2s ease-in-out;
+  background-color:#79b1ff;
+  padding: 15px 10px 0 20px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 18px;
+  overflow: hidden;
+}
+
+.top-modal-card,
+.top-modal-content {
+  overflow: auto;
+  position: relative; 
+}
+
+.top-modal-card {
+  flex-direction: column;
+  overflow: hidden;
+  -ms-overflow-y: visible;
+  width: 100%;
+}
+
+.top-modal-buttons 
+{
+  position: absolute;
+  right: 20px;
+}
+
+.top-modal-buttons .button
+{
+  display: inline;
+  border: solid 1px #ffffff;
+  background-color: #ffffff;
+  color: #79b1ff;
+  border-radius: 4px;
+}
+
+.top-modal-buttons .button:last-child {
+  margin-left: .5em;
+  border: solid 1px #ffffff;
+  background-color: #79b1ff;
+  color: #ffffff;
+}
+
+.top-modal.is-active{
+    display:flex;
+    z-index: 100;
+    height: 60px;
+    min-height: 60px;
 }

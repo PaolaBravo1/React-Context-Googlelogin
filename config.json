@@ -3,7 +3,9 @@
     "cookieDomain": "localhost",
     "oauthAccessTokenTimeout": 60,
     "oauthAccessTokenMinimumRefreshMargin": 30,
-    "oauthAccessTokenRefreshMarginPercent": 10
+    "oauthAccessTokenRefreshMarginPercent": 10,
+    "idlePopupDuration": 15000,
+    "idleTimeout": 30
  }
  
  
