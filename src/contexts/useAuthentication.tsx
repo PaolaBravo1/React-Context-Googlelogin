@@ -99,7 +99,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
     }, ttl);
 
     authTimerCountdown = setInterval(function () {
-      const countdown = (Date.parse(expiration) - (new Date()).getTime()) / 1000;      
+      const countdown = (Date.parse(expiration) - (new Date()).getTime()) / 1000;   
       setOAuthAccessTokenLifetime(100.0 * countdown / configSettings.oauthAccessTokenTimeout);
     }, 1000);   
   }

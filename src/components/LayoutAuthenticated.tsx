@@ -103,7 +103,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
-    <IdlePopup show={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
+    <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
     <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"}`}>
       <div className="top-bar">
         <div className="status-bars">
@@ -116,8 +116,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
         </div>          
       </div>
       <div className="container-fluid">          
-        <main>{children}</main>
-        <div>{idleTimeRemaining}s</div>
+        <main>{children}</main>        
       </div>
     </div>            
     </>
