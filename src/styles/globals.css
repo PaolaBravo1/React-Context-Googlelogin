@@ -234,16 +234,16 @@ form.hidden {
   margin-right: 30px;
   position: absolute;
   right: 0;
-  top: 17px;
+  top: 13px;
 }
 
 .top-bar .status-bar {
-  height: 10px;
-  min-height: 10px;
+  height: 14px;
+  min-height: 14px;
   width: 150px;
   background-color: #555555;
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 
 
@@ -320,4 +320,29 @@ form.hidden {
 
 .top-modal.is-open{        
     max-height: 60px;
+}
+
+.status-bar .icon {
+  position: absolute;
+  left: -25px;
+  top: -3px;
+  font-size: 15px;
+  color: #79b1ff;
+  width: 19px;
+  text-align: right;
+  transition: all 1s ease-in-out;  
+}
+
+.status-bar .icon svg.strobe {
+  
+  animation: strobe 500ms ease-in-out infinite;
+}
+
+@keyframes strobe {
+  0% {
+    color: #79b1ff;
+  }  
+  50% {
+    color: #555555;
+  }
 }

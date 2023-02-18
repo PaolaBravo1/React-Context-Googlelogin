@@ -32,7 +32,7 @@ const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
   }, [isOpen, time]);
 
   return (
-    <div className={`top-modal ${isOpen ? "is-open" : ""}`}>
+    <div className={`top-modal${isOpen ? " is-open" : ""}`}>
       <div className="top-modal-frame">
         <div className="top-modal-content">
             You've been idle for a while.  You'll be logged out in {time} secs, unless you're still there!

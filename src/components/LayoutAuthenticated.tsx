@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import Router from "next/router";
 import IdlePopup from "./IdlePopup";
 import configSettings from "../../config.json";
+import Icon from "./Icon";
+import StatusBar from "./StatusBar";
 
 interface ILayoutAuthenticated {
   children: any
@@ -16,14 +18,14 @@ const refreshTokenCookieName = "hammer_refresh_token";
 const expirationCookieName = "hammer_expiration";
 
 const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {    
-  const { oauthAccessTokenLifetime, clearOAuthCookies } = useAuthentication();
+  const { oauthAccessTokenLifeRemaining, clearOAuthCookies } = useAuthentication();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isIdlePopupOpen, setIsIdlePopupOpen] = useState(false);
   const [lastActiveTime, setLastActiveTime] = useState(Date.now());
-  const [idleTimeRemaining, setIdleTimeRemaining] = useState(0);
+  const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
 
-  // const domEvents = ["click", "scroll", "keypress"];
-  const domEvents = ["click", "scroll", "keypress", "mousemove"];
+  const domEvents = ["click", "scroll", "keypress"];
+  //cconst domEvents = ["click", "scroll", "keypress", "mousemove"];
 
   var idleTimer: ReturnType<typeof setTimeout>;
 
@@ -52,8 +54,8 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
 
     idleTimer = setInterval(() => {
       const secondsRemaining = configSettings.idleTimeout - Math.round((Date.now() - now) / 1000);
-      const precentTimeRemaining = Math.round(100 * secondsRemaining / configSettings.idleTimeout);
-      setIdleTimeRemaining(precentTimeRemaining);
+      const precentTimeRemaining = 100 * secondsRemaining / configSettings.idleTimeout;
+      setIdleLifeRemaining(precentTimeRemaining);
     }, 1000);    
   }, []);
 
@@ -107,12 +109,8 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"}`}>
       <div className="top-bar">
         <div className="status-bars">
-          <div className="status-bar" id="oauth-token-timeout">
-            <span className="status-bar-complete" style={{width: oauthAccessTokenLifetime + "%"}}></span>
-          </div>
-          <div className="status-bar" id="idle-timeout">
-            <span className="status-bar-complete" style={{width: idleTimeRemaining + "%"}}></span>
-          </div>
+          <StatusBar id="oauth-token-timeout" icon="user" warningAt={10 + configSettings.oauthAccessTokenRefreshMarginPercent} complete={oauthAccessTokenLifeRemaining}></StatusBar>
+          <StatusBar id="idle-timeout" icon="bell" warningAt={10} complete={idleLifeRemaining}></StatusBar>          
         </div>          
       </div>
       <div className="container-fluid">          
@@ -124,3 +122,4 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
   }
 
   export default LayoutAuthenticated
+  

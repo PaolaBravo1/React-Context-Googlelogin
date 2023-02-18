@@ -25,7 +25,7 @@ interface ContextInterface {
   getMe: () => Promise<AxiosResponse<any, any>>,
   clearOAuthCookies: () => void,
 
-  oauthAccessTokenLifetime: number
+  oauthAccessTokenLifeRemaining: number
 }
 
 export const useAuthentication = (): ContextInterface => {
@@ -39,7 +39,7 @@ export const useAuthentication = (): ContextInterface => {
     getMe,
     clearOAuthCookies,
 
-    oauthAccessTokenLifetime
+    oauthAccessTokenLifeRemaining
   } = useContext(AuthenticationContext); 
   
   return {
@@ -52,14 +52,14 @@ export const useAuthentication = (): ContextInterface => {
     getMe,
     clearOAuthCookies,
 
-    oauthAccessTokenLifetime
+    oauthAccessTokenLifeRemaining
   };
 }
 
 export const AuthenticationContext = createContext({} as ContextInterface);
 
 export function AuthenticationProvider({ children }: {children:any}) {
-  const [oauthAccessTokenLifetime, setOAuthAccessTokenLifetime] = useState(0);
+  const [oauthAccessTokenLifeRemaining, setOAuthAccessTokenLifeRemaining] = useState(100);
   
   let instance = axios.create({
     baseURL: configSettings.apiRootUrl
@@ -100,7 +100,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
 
     authTimerCountdown = setInterval(function () {
       const countdown = (Date.parse(expiration) - (new Date()).getTime()) / 1000;   
-      setOAuthAccessTokenLifetime(100.0 * countdown / configSettings.oauthAccessTokenTimeout);
+      setOAuthAccessTokenLifeRemaining(100.0 * countdown / configSettings.oauthAccessTokenTimeout);
     }, 1000);   
   }
 
@@ -233,7 +233,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
       getMe,
       clearOAuthCookies,
 
-      oauthAccessTokenLifetime
+      oauthAccessTokenLifeRemaining
     }}>{children}
     </AuthenticationContext.Provider>
   )
