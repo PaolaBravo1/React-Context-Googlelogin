@@ -115,8 +115,8 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"}`}>
       <div className="top-bar">
         <div className="status-bars">
-          <StatusBar id="oauth-token-timeout" icon="user" warningAt={10 + configSettings.oauthAccessTokenRefreshMarginPercent} complete={oauthAccessTokenLifeRemaining}></StatusBar>
-          <StatusBar id="idle-timeout" icon="bell" warningAt={10} complete={idleLifeRemaining}></StatusBar>          
+          <StatusBar id="oauth-token-timeout" icon="cloud" warningAt={10 + configSettings.oauthAccessTokenRefreshMarginPercent} complete={oauthAccessTokenLifeRemaining}></StatusBar>
+          <StatusBar id="idle-timeout" icon="bed" warningAt={10} complete={idleLifeRemaining}></StatusBar>          
         </div>          
       </div>
       <div className="container-fluid">          
