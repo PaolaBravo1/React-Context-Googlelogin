@@ -10,13 +10,10 @@ interface IStatusBar {
 
 const StatusBar = ({ id, icon, warningAt, complete }: IStatusBar) => {
   return (
-    <>
-    <div className="status-bar" id={id}>
+  <div className="status-bar" id={id}>
     <Icon name={icon} className={(complete < warningAt) ? " strobe" : ""} />
     <span className="status-bar-complete" style={{width: complete + "%"}}></span>
   </div>
-  <div>{complete} / {warningAt}</div>
-  </>
   )
 }
 

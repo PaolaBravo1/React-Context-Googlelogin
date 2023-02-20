@@ -8,7 +8,7 @@ import Icon from '@/components/Icon'
 
 const Dashboard = () => {  
   const [content, setContent] = useState("");
-  const {getMe, oauthAccessTokenLifetime} = useAuthentication();
+  const { getMe } = useAuthentication();
   
   useEffect(() => {
     getMe()

@@ -5,8 +5,8 @@ import Cookies from "js-cookie";
 import Router from "next/router";
 import IdlePopup from "./IdlePopup";
 import configSettings from "../../config.json";
-import Icon from "./Icon";
 import StatusBar from "./StatusBar";
+import { isLocalURL } from "next/dist/shared/lib/router/router";
 
 interface ILayoutAuthenticated {
   children: any
@@ -66,7 +66,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
       Router.push("/login");
   }
   
-  const onIdlePopupClose = (isLogout: boolean) => {
+  const onIdlePopupClose = useCallback((isLogout: boolean) => {
     setIsIdlePopupOpen(false);
 
     if (isLogout) {
@@ -78,7 +78,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
       clearInterval(idleTimer);
       setLastActiveTime(Date.now());
     }
-  }
+  }, []);
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -103,7 +103,13 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     <Head>
       <title>Hammerbeam</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href="/favicon.ico" />      
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+      <link href="https://fonts.googleapis.com/css2?family=Lato" rel="preload" as="style"/>
+      <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet" media="print" />
+      <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&display=swap" />
+      </noscript>
     </Head>
     <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
     <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"}`}>

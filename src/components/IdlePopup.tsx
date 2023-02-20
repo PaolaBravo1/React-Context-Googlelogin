@@ -35,11 +35,11 @@ const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
     <div className={`top-modal${isOpen ? " is-open" : ""}`}>
       <div className="top-modal-frame">
         <div className="top-modal-content">
-            You've been idle for a while.  You'll be logged out in {time} secs, unless you're still there!
+            You&apos;ve been idle for a while.  You&apos;ll be logged out in {time} secs, unless you&apos;re still there!
         </div>
         <div className="top-modal-buttons">
           <button className="button" onClick={() => onClose(false)}>
-            I'm still here!
+            I&apos;m still here!
           </button>
           <button className="button is-danger" onClick={() => onClose(true)}>
             Logout
