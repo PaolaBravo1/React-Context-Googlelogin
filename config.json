@@ -1,11 +1,11 @@
 {
-    "apiRootUrl": "http://localhost:4000",
-    "cookieDomain": "localhost",
+    "apiRootUrl": "https://api.hammerbeam.com",
+    "cookieDomain": "hammerbeam.com",
     "oauthAccessTokenTimeout": 600,
     "oauthAccessTokenMinimumRefreshMargin": 30,
     "oauthAccessTokenRefreshMarginPercent": 10,    
     "idleTimeout": 600,
-    "idlePopupDuration": 30
+    "idlePopupDuration": 15
  }
  
  
