@@ -13,7 +13,7 @@ const Register = () => {
   const [isPasswordAllowed, setIsPasswordAllowed] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("participant@hammerbeam.com");
+  const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [errorMessage, setErrorMessage] = useState("")

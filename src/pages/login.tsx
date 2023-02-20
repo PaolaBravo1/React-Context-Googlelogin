@@ -8,7 +8,7 @@ import Router from 'next/router';
 import { useAuthentication } from '../contexts/useAuthentication';
 
 const Login = () => {
-  const [emailAddress, setEmailAddress] = useState("participant+1@hammerbeam.com");
+  const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
   const [isMakingApiRequest, setIsMakingApiRequest] = useState(false);
