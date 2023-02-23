@@ -224,7 +224,7 @@ form.hidden {
   height: 60px;
   max-height: 0;
   width: 100%;
-  transition: max-height 500ms ease-in-out;
+  transition: all 500ms ease-in-out;
   background-color:#79b1ff;
   padding: 0;
   color: #ffffff;
@@ -232,6 +232,7 @@ form.hidden {
   font-size: 17px;
   overflow: hidden;
   z-index: 100;
+  opacity: 0;
 }
 
 .top-modal-frame,
@@ -271,8 +272,9 @@ form.hidden {
   color: #ffffff;
 }
 
-.top-modal.is-open{        
+.top-modal.is-open {        
     max-height: 60px;
+    opacity: 1;
 }
 
 .status-bar .icon {

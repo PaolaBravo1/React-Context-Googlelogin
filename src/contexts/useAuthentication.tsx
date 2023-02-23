@@ -147,7 +147,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
       await saveOAuthToken(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       return result.data.access_token;
     }
-    ).catch(error => { alert(JSON.stringify(error)); throw error; });
+    ).catch(error => { console.log(JSON.stringify(error)); throw error; });
 
     return "";
   }
@@ -164,7 +164,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
       await saveOAuthToken(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       return result.data.access_token;
     }
-    ).catch(error => { alert(JSON.stringify(error)); throw error; });
+    ).catch(error => { console.log(JSON.stringify(error)); throw error; });
 
     return "";
   }
