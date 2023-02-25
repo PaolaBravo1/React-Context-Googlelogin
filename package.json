@@ -15,6 +15,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@next/font": "13.1.5",
     "@popperjs/core": "^2.11.6",
+    "@react-oauth/google": "^0.8.0",
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
@@ -28,6 +29,7 @@
     "next": "13.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-google-button": "^0.7.2",
     "react-idle-timer": "^5.5.2",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.8.0"

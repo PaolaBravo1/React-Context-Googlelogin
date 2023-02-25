@@ -1,5 +1,7 @@
 import HTMLReactParser from "html-react-parser";
 import Head from "next/head";
+import configSettings from "../../config.json";
+import Script from 'next/script';
 
 interface ILayoutUnauthenticated {
     children: any,
@@ -16,6 +18,7 @@ const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reve
       <Head>
         <title>Hammerbeam</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="google-signin-client_id" content={configSettings.googleOAuthClientID}></meta>
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Lato" rel="preload" as="style"/>
