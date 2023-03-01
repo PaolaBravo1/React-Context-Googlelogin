@@ -5,6 +5,7 @@ import { passwordRegex } from '@/helpers/constants'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import Router from 'next/router';
 import { useAuthentication } from '../contexts/useAuthentication';
+import { ErrorCode } from 'errorcodes'
 
 const SetPassword = () => {
   const [title , setTitle] = useState("");
@@ -94,15 +95,15 @@ const SetPassword = () => {
       )
       .catch(error => {          
         switch(error?.response?.data?.errorCodeName) {
-          case "AccountMagicUrlTokenExpired": 
+          case ErrorCode.AccountMagicUrlTokenExpired: 
             setErrorMessage("Your account confirmation link has expired.  Please <a href='/forgotpassword'>request a new password</a> to generate a new link.");
             break;
           
-          case "AccountPasswordDoesNotMeetMinimumComplexity":
+          case ErrorCode.AccountPasswordDoesNotMeetMinimumComplexity:
             setErrorMessage("The password does not meet the minimum complexity requirements.  Please choose a password with at least 8 characters, including a lowercase letter, an uppercase letter, a number, and a symbol.");
             break;
 
-          case "AccountPasswordUsedPreviously":
+          case ErrorCode.AccountPasswordUsedPreviously:
             setErrorMessage("The password has been used before by this account.  Please choose a unique password.");
             break;
 

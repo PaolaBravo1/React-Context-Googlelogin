@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import configSettings from "../../config.json";
+import jwt from 'jwt-decode' 
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";
@@ -17,6 +18,7 @@ var authTimerCountdown: ReturnType<typeof setInterval>;
 
 interface ContextInterface {
   authorize: (emailAddress: string, password: string) => Promise<string>,
+  authorizeGoogle: (credential: string) => Promise<string>,
   reauthorize: (emailAddress: string, refreshToken: string) => Promise<string>,
   confirmAccount: (emailAddress: string, token: string) => Promise<AxiosResponse<any, any>>,
   requestPasswordReset: (emailAddress: string) => Promise<AxiosResponse<any, any>>,
@@ -31,6 +33,7 @@ interface ContextInterface {
 export const useAuthentication = (): ContextInterface => {
   const { 
     authorize,
+    authorizeGoogle,
     reauthorize,
     confirmAccount,
     requestPasswordReset,
@@ -44,6 +47,7 @@ export const useAuthentication = (): ContextInterface => {
   
   return {
     authorize,
+    authorizeGoogle,
     reauthorize,
     confirmAccount,
     requestPasswordReset,
@@ -134,7 +138,6 @@ export function AuthenticationProvider({ children }: {children:any}) {
     Cookies.remove(expirationCookieName);
   }
 
-  // todo figure out async return promise or not?
   const authorize = async (emailAddress: string, password: string): Promise<string> => {
     console.log('authorizing....');
     await instance.post(authEndPoint,
@@ -147,7 +150,26 @@ export function AuthenticationProvider({ children }: {children:any}) {
       await saveOAuthToken(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       return result.data.access_token;
     }
-    ).catch(error => { console.log(JSON.stringify(error)); throw error; });
+    ).catch(error => { throw error; });
+
+    return "";
+  }
+
+  const authorizeGoogle = async (credential: string): Promise<string> => {   
+    console.log('authorizing via google....');   
+    const item = jwt<any>(credential);
+ 
+    await instance.post(authEndPoint,
+      new URLSearchParams({
+        grant_type: "password",
+        username: item.email,
+        google_credential: credential
+      })
+    ).then(async result => {
+      await saveOAuthToken(item.email, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      return result.data.access_token;
+    }
+    ).catch(error => { throw error; });
 
     return "";
   }
@@ -164,7 +186,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
       await saveOAuthToken(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       return result.data.access_token;
     }
-    ).catch(error => { console.log(JSON.stringify(error)); throw error; });
+    ).catch(error => { throw error; });
 
     return "";
   }
@@ -225,6 +247,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
   return (
     <AuthenticationContext.Provider value={{
       authorize,
+      authorizeGoogle,
       reauthorize,
       confirmAccount,
       requestPasswordReset,

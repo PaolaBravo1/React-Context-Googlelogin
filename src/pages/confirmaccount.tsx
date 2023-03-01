@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { useAuthentication } from '../contexts/useAuthentication';
+import { ErrorCode } from 'errorcodes';
 
 const ConfirmAccount = () => {
   const [emailAddress, setEmailAddress] = useState("");
@@ -39,13 +40,13 @@ const ConfirmAccount = () => {
         setIsConfirmed(true);        
       })
       .catch(error => {
-        switch (error?.response?.data?.errorCodeName) {
-          case "AccountAlreadyConfirmed":
+        switch (error?.response?.data?.errorCode) {
+          case ErrorCode.AccountAlreadyConfirmed:
             setMessage("Your account has already been confimed.  Click the button below to log in and get started!");
             setIsConfirmed(true);
             return;
 
-          case "AccountMagicUrlTokenExpired":
+          case ErrorCode.AccountMagicUrlTokenExpired:
             setErrorMessage("Your account confirmation link has expired.  Please <a href='/forgotpassword'>request a new password</a> to generate a new link.");
             break;
 

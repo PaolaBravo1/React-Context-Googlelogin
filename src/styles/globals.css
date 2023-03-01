@@ -20,7 +20,7 @@
 
 .styled-button {
     box-shadow: 0 0 16px 0 rgba(0,0,0,0.2), 0 0 20px 0 rgba(0,0,0,0.19);  
-    border:none;
+    border: none;
     color: #fff;
     background-color: #79b1ff;
     padding: 1.2em 2.8em;
@@ -29,11 +29,20 @@
     text-transform: uppercase;
     font-weight: 700;
     transition: all .2s ease-in;
+    letter-spacing: 1px;;
 }
 
 .styled-button:hover {
   background-color: #fff;
   color: #79b1ff;
+}
+
+.styled-button:disabled
+{
+  color: #ffffff !important;
+  background-color: #aaaaaa;
+  cursor:wait;
+  xbox-shadow: none;
 }
 
 .input-container {
@@ -103,13 +112,6 @@ form.form-error .input-container label {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-}
-
-.styled-button:disabled
-{
-  color: #ffffff !important;
-  background-color: #aaaaaa;
-  cursor:wait;
 }
 
 #register form
@@ -301,3 +303,59 @@ form.hidden {
     color: #555555;
   }
 }
+
+#social-login-buttons {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  background-color: #ffffff;
+}
+
+#social-login-buttons #google-login-button div:first-child {
+  opacity: 0;
+  overflow: hidden;
+}
+
+#google-login-button,
+#apple-login-button
+{
+  position: relative;
+  margin-top: 40px;
+  
+}
+
+#google-login-override,
+#apple-login-override {
+  position: absolute;
+  width: 100%;
+  background-color: #ffffff;
+  color: #999999 !important;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: 40px 40px;
+  background-position-x: 14px;
+  background-position-y: 12px;
+}
+
+#apple-login-override {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+#google-login-button:hover > #google-login-override,
+#apple-login-button:hover > #apple-login-override
+{
+  background-color: #79b1ff !important;
+  color: #ffffff !important; 
+}
+
+#google-login-override {
+  background-image: url("/social/google.png");
+}
+
+#apple-login-override {
+  background-image: url("/social/apple.png");
+}
+

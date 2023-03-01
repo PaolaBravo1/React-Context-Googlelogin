@@ -6,6 +6,7 @@ import { emailAddressRegex, passwordRegex } from '@/helpers/constants'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import Router from 'next/router';
 import { useAuthentication } from '../contexts/useAuthentication';
+import { ErrorCode } from 'errorcodes'
 
 const Register = () => {
   const [isMakingApiRequest, setIsMakingApiRequest] = useState(false);
@@ -93,12 +94,12 @@ const Register = () => {
           return;
         }
 
-        switch(error?.response?.data?.errorCodeName) {
-          case "AccountEmailAddressInvalid":          
+        switch(error?.response?.data?.errorCode) {
+          case ErrorCode.AccountEmailAddressInvalid:          
               setErrorMessage("The credentials you provided are invalid.  Please check your email address and password and try again to sign in.");              
               break;
 
-          case "AccountPasswordDoesNotMeetMinimumComplexity":
+          case ErrorCode.AccountPasswordDoesNotMeetMinimumComplexity:
               setErrorMessage("The password does not meet the minimum complexity requirements.  Please make sure that your password is at least 8 characters and includes a lowercase letter, an uppercase letter, a number, and a symbol.");
               break;
 

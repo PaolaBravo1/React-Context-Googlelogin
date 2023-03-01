@@ -6,6 +6,9 @@ import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { emailAddressRegex } from '@/helpers/constants'
 import Router from 'next/router';
 import { useAuthentication } from '../contexts/useAuthentication';
+import { ErrorCode } from 'errorcodes'
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
+import configSettings from "../../config.json";
 
 const Login = () => {
   const [emailAddress, setEmailAddress] = useState("");
@@ -14,11 +17,10 @@ const Login = () => {
   const [isMakingApiRequest, setIsMakingApiRequest] = useState(false);
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
     
-  const { authorize, clearOAuthCookies } = useAuthentication();
+  const { authorize, authorizeGoogle, clearOAuthCookies } = useAuthentication();
   
   useEffect(() => {    
     clearOAuthCookies();
-
     const params = new URLSearchParams(window.location.search);  
     setEmailAddress(params.get("emailAddress") ?? "");   
   }, []);
@@ -35,8 +37,12 @@ const Login = () => {
       return;
 
     setIsMakingApiRequest(true);
-    await login();
+    await login(async () => { await authorize(emailAddress, password); } );
     setIsMakingApiRequest(false);
+  }
+
+  const handleSubmitGoogle = async (credential: string) => {
+    await login(async () => { await authorizeGoogle(credential);  } );    
   }
 
   const validate = () => {
@@ -53,37 +59,53 @@ const Login = () => {
     return true;
   }
 
-  const login = async() => {        
-    try {      
-      await authorize(emailAddress, password);
+  const login = async(authFunction: () => Promise<void>) => {        
+    try {    
+      await authFunction();
       
       if (Router.query.redirectTo)
         Router.push(decodeURIComponent(Router.query.redirectTo.toString()));
       else
         Router.push("/dashboard");      
     }
-    catch (error:any) {
-        switch(error?.response?.data?.errorCodeName) {
-          case "AccountEmailAddressNotConfirmed": 
-            setErrorMessage("You cannot log in until you have confirmed your account.  Please check your email for the welcome message we sent when you registered.<br/><br/>If you have not received the welcome message, please use the link below to request a password reset.");
-            break;
-
-          case "AccountCredentialsInvalid":
+    catch (error:any) { 
+        switch(error?.response?.data?.errorCode) {
+          case ErrorCode.AccountCredentialsInvalid:
             setErrorMessage("The credentials you provided are invalid.  Please check your email address and password and try again to sign in.");
             break;
           
-          case "AccountLockedOut":
-          case "AccountLockedOutOverride":
+          case ErrorCode.AccountExternalCredentialsInvalid:
+              setErrorMessage("The Google account does not appear to be configured as an account on this system.");
+              break;
+          
+          case ErrorCode.AccountEmailAddressNotConfirmed:
+            setErrorMessage("You cannot log in until you have confirmed your account.  Please check your email for the welcome message we sent when you registered.<br/><br/>If you have not received the welcome message, please use the link below to request a password reset.");
+            break;
+
+          case ErrorCode.AccountLockedOut:
+          case ErrorCode.AccountLockedOutOverride:
             setErrorMessage("Your account has been locked due to too many failed login attempts.  Please wait for 30 minutes, then request a password reset.");
             break;
 
-          case "AccountTombstoned":
+          case ErrorCode.AccountTombstoned:
             setErrorMessage("Your account has been disabled.");
             break;
 
-          case "AccountCredentialsExpired":
-          case "AccountCredentialsNotConfirmed":
+          case ErrorCode.AccountCredentialsExpired:
+          case ErrorCode.AccountCredentialsNotConfirmed:
             setErrorMessage("Your account credentials are expired.  Please check your email for a password reset email, or click the Forgot Password link below to retry.");
+            break;
+
+          case ErrorCode.AccountRequiresIdentityProviderLocal:
+            setErrorMessage("You created your account using an email address and password.  Please log in using these credentials rather than using the Google sign-in framework.");
+            break;
+
+          case ErrorCode.AccountRequiresIdentityProviderGoogle:
+            setErrorMessage("You created your account using your Google account, rather than using a standard email address and password.  Please log in using the Google sign-in button.");
+            break;
+
+          case ErrorCode.GoogleOAuthTokenInvalid:
+            setErrorMessage("Your account could not be validated by Google.  Please check that your Google account is valid and try again.");
             break;
 
           default:
@@ -117,7 +139,21 @@ const Login = () => {
         </div>        
         <div>
           <div><Link href="/forgotpassword">Forgot your password?</Link></div>
-        </div>                
+        </div>  
+        <div id="social-login-buttons">
+          <div id="google-login-button">
+            <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}> 
+              <GoogleLogin theme="filled_black" shape="circle" size="large" width="400"
+                onSuccess={credentialResponse => { handleSubmitGoogle(credentialResponse.credential ?? ""); }}  // collapse?
+                onError={() => { console.log('Login Failed'); }} // todo fix
+              />    
+            </GoogleOAuthProvider>
+            <div id="google-login-override" className="styled-button">Sign in with Google</div>
+          </div>
+          <div id="apple-login-button">
+            <div id="apple-login-override" className="styled-button">Sign in with Apple</div>
+          </div>
+        </div>       
       </form>
     </LayoutUnauthenticated>
   )
