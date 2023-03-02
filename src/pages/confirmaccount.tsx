@@ -32,14 +32,20 @@ const ConfirmAccount = () => {
   }, []);
 
   const apiConfirmAccount = async (emailAddress: string, token: string): Promise<void> => {
-    confirmAccount(emailAddress, token)
+    console.log(1);
+    await confirmAccount(emailAddress, token)
       .then(result => {
+        console.log(2);
         // note, even if the email or token are wrong, this will display.  
         // I don't want to have an un-authenticated method that allows bots
         // to browse for valid accounts
+        setTitle("Account Confirmed!");
+        setMessage("Please click the button below to login and get started.")
         setIsConfirmed(true);        
       })
       .catch(error => {
+        console.log(3);
+
         switch (error?.response?.data?.errorCode) {
           case ErrorCode.AccountAlreadyConfirmed:
             setMessage("Your account has already been confimed.  Click the button below to log in and get started!");

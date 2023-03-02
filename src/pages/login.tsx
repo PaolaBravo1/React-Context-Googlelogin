@@ -41,8 +41,17 @@ const Login = () => {
     setIsMakingApiRequest(false);
   }
 
-  const handleSubmitGoogle = async (credential: string) => {
-    await login(async () => { await authorizeGoogle(credential);  } );    
+  const handleGoogleSubmit = async (credentialResponse: any) => {
+    if (credentialResponse == null || credentialResponse.credential == null) {
+      setErrorMessage("An error occurred while attempting to sign in via Google: the remote system failed to return a valid credential token.");      
+      return;
+    }
+    
+    await login(async () => { await authorizeGoogle(credentialResponse.credential);  } );    
+  }
+
+  const handleGoogleError = async () => {
+    setErrorMessage("An error occurred while attempting to sign in via Google.");      
   }
 
   const validate = () => {
@@ -143,16 +152,10 @@ const Login = () => {
         <div id="social-login-buttons">
           <div id="google-login-button">
             <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}> 
-              <GoogleLogin theme="filled_black" shape="circle" size="large" width="400"
-                onSuccess={credentialResponse => { handleSubmitGoogle(credentialResponse.credential ?? ""); }}  // collapse?
-                onError={() => { console.log('Login Failed'); }} // todo fix
-              />    
+              <GoogleLogin theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
             </GoogleOAuthProvider>
-            <div id="google-login-override" className="styled-button">Sign in with Google</div>
-          </div>
-          <div id="apple-login-button">
-            <div id="apple-login-override" className="styled-button">Sign in with Apple</div>
-          </div>
+            <div id="google-login-override" className="styled-button">Sign in using Google</div>
+          </div>          
         </div>       
       </form>
     </LayoutUnauthenticated>

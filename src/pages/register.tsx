@@ -7,6 +7,8 @@ import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import Router from 'next/router';
 import { useAuthentication } from '../contexts/useAuthentication';
 import { ErrorCode } from 'errorcodes'
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
+import configSettings from "../../config.json";
 
 const Register = () => {
   const [isMakingApiRequest, setIsMakingApiRequest] = useState(false);
@@ -19,7 +21,7 @@ const Register = () => {
   const [password2, setPassword2] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
 
-  const { register } = useAuthentication();
+  const { register, registerGoogle } = useAuthentication();
   
   useEffect(() => {    
     const params = new URLSearchParams(window.location.search);
@@ -41,27 +43,38 @@ const Register = () => {
       return;
 
     setIsMakingApiRequest(true);
-    await attemptRegister();   
+    await attemptRegister(async () => { await register(firstName, lastName, emailAddress, password) });    
     setIsMakingApiRequest(false);           
+  }
+  
+  const handleGoogleSubmit = async (credentialResponse: any) => {
+    if (credentialResponse == null || credentialResponse.credential == null) {
+      setErrorMessage("An error occurred while attempting to sign in via Google: the remote system failed to return a valid credential token.");      
+      return;
+    }
+    
+    setIsMakingApiRequest(true);
+    await attemptRegister(async () => { await registerGoogle(credentialResponse.credential); });   
+    setIsMakingApiRequest(false);            
+  }
+
+  const handleGoogleError = async () => {
+    setErrorMessage("An error occurred while attempting to sign in via Google.");      
   }
 
   const validate = () => {
-    
     if (firstName.length == 0 || lastName.length == 0 || emailAddress.length == 0) {
       setErrorMessage(" ");
       return false;
     }
 
-    if (isPasswordAllowed)
-    {
-      if (password.length == 0 || password2.length == 0)
-      {
+    if (isPasswordAllowed) {
+      if (password.length == 0 || password2.length == 0) {
         setErrorMessage(" ");
         return false;
       }
   
-      if (password != password2)
-      {
+      if (password != password2) {
         setErrorMessage("The passwords do not match.");
         return false;
       }
@@ -79,17 +92,15 @@ const Register = () => {
  
     return true;
   }
-
-  const attemptRegister = async() => {
-    await register(firstName, lastName, emailAddress, password)
-      .then(result => 
-        {                    
+ 
+  const attemptRegister = async(registerFunction: () => Promise<void>) => {     
+    await registerFunction()
+      .then(result => {                    
           Router.push("/thankyou");
         }
       )
       .catch(error => {
-        if (!error.response?.data?.errorCode)
-        {
+        if (!error.response?.data?.errorCode) {
           setErrorMessage(JSON.stringify(error));
           return;
         }
@@ -138,7 +149,15 @@ const Register = () => {
           </div>
           <div className="not-registered text-muted">
             <Link href="/login">Return to login page</Link>
-          </div>                                             
+          </div> 
+          <div id="social-login-buttons">
+            <div id="google-login-button">
+              <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}> 
+                <GoogleLogin theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
+              </GoogleOAuthProvider>
+              <div id="google-login-override" className="styled-button">Register using Google</div>
+            </div>          
+          </div>                                                  
         </form>
     </LayoutUnauthenticated>     
   )

@@ -24,6 +24,7 @@ interface ContextInterface {
   requestPasswordReset: (emailAddress: string) => Promise<AxiosResponse<any, any>>,
   updatePassword: (emailAddress: string, password: string, token: string) => Promise<AxiosResponse<any, any>>,
   register: (firstName: string, lastName: string, emailAddress: string, password: string) => Promise<AxiosResponse<any, any>>,
+  registerGoogle: (credential: string) => Promise<AxiosResponse<any, any>>,
   getMe: () => Promise<AxiosResponse<any, any>>,
   clearOAuthCookies: () => void,
 
@@ -39,6 +40,7 @@ export const useAuthentication = (): ContextInterface => {
     requestPasswordReset,
     updatePassword,
     register,
+    registerGoogle,
     getMe,
     clearOAuthCookies,
 
@@ -53,6 +55,7 @@ export const useAuthentication = (): ContextInterface => {
     requestPasswordReset,
     updatePassword,
     register,
+    registerGoogle,
     getMe,
     clearOAuthCookies,
 
@@ -240,6 +243,19 @@ export function AuthenticationProvider({ children }: {children:any}) {
     }
   }
 
+  const registerGoogle = async (credential: string): Promise<AxiosResponse<any, any>> => {
+    const item = jwt<any>(credential);
+     
+    return await instance.post("/participant",
+      new URLSearchParams({
+        firstName: item.given_name,
+        lastName: item.family_name,
+        emailAddress: item.email,
+        googleCredential: credential
+      })
+    );
+  }
+
   const getMe = async (): Promise<AxiosResponse<any, any>> => {
     return await instance.get("/account/me");
   }    
@@ -253,6 +269,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
       requestPasswordReset,
       updatePassword,
       register,
+      registerGoogle,
       getMe,
       clearOAuthCookies,
 
