@@ -11,18 +11,19 @@ const Dashboard = () => {
   const { getMe } = useAuthentication();
   
   useEffect(() => {
-    getMe()
-    .then(result => {          
-        setContent(JSON.stringify(result.data))
-      }
-    )
-    .catch(error => {        
-        if (error?.response?.data?.errorCodeName != null)
-          setContent(JSON.stringify(error.response.data))
-        else
-          setContent(JSON.stringify(error))       
-      });    
-
+    async() => {
+      getMe()
+      .then(result => {          
+          setContent(JSON.stringify(result.data))
+        }
+      )
+      .catch(error => {        
+          if (error?.response?.data?.errorCodeName != null)
+            setContent(JSON.stringify(error.response.data))
+          else
+            setContent(JSON.stringify(error))       
+        });    
+    }
   }, []);
 
   return (

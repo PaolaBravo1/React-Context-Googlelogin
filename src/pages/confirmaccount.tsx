@@ -17,25 +17,25 @@ const ConfirmAccount = () => {
   const { confirmAccount } = useAuthentication();
    
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    let paramToken = params.get("token");
-    let paramEmailAddress = params.get("emailAddress");
+    async() => {
+      const params = new URLSearchParams(window.location.search);
+      let paramToken = params.get("token");
+      let paramEmailAddress = params.get("emailAddress");
 
-    if (paramToken === null || paramEmailAddress === null) {
-      setErrorMessage("The link does not contain the required information in order to confirm your account.  Please try copying and pasting the link directly from the email you received.");
-      return;
+      if (paramToken === null || paramEmailAddress === null) {
+        setErrorMessage("The link does not contain the required information in order to confirm your account.  Please try copying and pasting the link directly from the email you received.");
+        return;
+      }
+
+      setEmailAddress(paramEmailAddress!);
+      setToken(paramToken!);
+      await apiConfirmAccount(paramEmailAddress, paramToken);
     }
-
-    setEmailAddress(paramEmailAddress!);
-    setToken(paramToken!);
-    apiConfirmAccount(paramEmailAddress, paramToken);
   }, []);
 
   const apiConfirmAccount = async (emailAddress: string, token: string): Promise<void> => {
-    console.log(1);
     await confirmAccount(emailAddress, token)
       .then(result => {
-        console.log(2);
         // note, even if the email or token are wrong, this will display.  
         // I don't want to have an un-authenticated method that allows bots
         // to browse for valid accounts
@@ -44,8 +44,6 @@ const ConfirmAccount = () => {
         setIsConfirmed(true);        
       })
       .catch(error => {
-        console.log(3);
-
         switch (error?.response?.data?.errorCode) {
           case ErrorCode.AccountAlreadyConfirmed:
             setMessage("Your account has already been confimed.  Click the button below to log in and get started!");
