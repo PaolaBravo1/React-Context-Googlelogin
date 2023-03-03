@@ -28,7 +28,12 @@ const ConfirmAccount = () => {
 
       setEmailAddress(paramEmailAddress!);
       setToken(paramToken!);
-      apiConfirmAccount(paramEmailAddress, paramToken);
+
+      const asyncApiConfirmAccount = async (paramEmailAddress: string, paramToken: string) => {
+        await apiConfirmAccount(paramEmailAddress, paramToken);
+      }
+
+      asyncApiConfirmAccount(paramEmailAddress!, paramToken!);
     }, []);
 
   const apiConfirmAccount = async (emailAddress: string, token: string): Promise<void> => {    
