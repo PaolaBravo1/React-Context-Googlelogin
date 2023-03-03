@@ -17,7 +17,6 @@ const ConfirmAccount = () => {
   const { confirmAccount } = useAuthentication();
    
   useEffect(() => {
-    async() => {
       const params = new URLSearchParams(window.location.search);
       let paramToken = params.get("token");
       let paramEmailAddress = params.get("emailAddress");
@@ -29,11 +28,10 @@ const ConfirmAccount = () => {
 
       setEmailAddress(paramEmailAddress!);
       setToken(paramToken!);
-      await apiConfirmAccount(paramEmailAddress, paramToken);
-    }
-  }, []);
+      apiConfirmAccount(paramEmailAddress, paramToken);
+    }, []);
 
-  const apiConfirmAccount = async (emailAddress: string, token: string): Promise<void> => {
+  const apiConfirmAccount = async (emailAddress: string, token: string): Promise<void> => {    
     await confirmAccount(emailAddress, token)
       .then(result => {
         // note, even if the email or token are wrong, this will display.  
