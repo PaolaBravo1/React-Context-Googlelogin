@@ -5,19 +5,18 @@ import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { emailAddressRegex } from '@/helpers/constants'
 import Router from 'next/router';
-import { useAuthentication } from '../contexts/useAuthentication';
+import { useApi } from '../contexts/useApi';
 
 const ForgotPassword = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
-  const [isMakingApiRequest, setIsMakingApiRequest] = useState(false); 
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   
-  const { requestPasswordReset } = useAuthentication();
+  const { requestPasswordReset, isMakingRequest } = useApi();
   
   useEffect(() => {    
-    setIsSubmitButtonEnabled(!isMakingApiRequest && emailAddress.length > 0);
-  }, [isMakingApiRequest, emailAddress]);
+    setIsSubmitButtonEnabled(!isMakingRequest && emailAddress.length > 0);
+  }, [isMakingRequest, emailAddress]);
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,9 +24,7 @@ const ForgotPassword = () => {
     if (!validate())
       return;
     
-    setIsMakingApiRequest(true);
-    await attemptLogIn();
-    setIsMakingApiRequest(false);
+    await attemptLogIn();    
   }
 
   const validate = () => {

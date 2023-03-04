@@ -27,11 +27,12 @@ interface ContextInterface {
   registerGoogle: (credential: string) => Promise<AxiosResponse<any, any>>,
   getMe: () => Promise<AxiosResponse<any, any>>,
   clearOAuthCookies: () => void,
-
-  oauthAccessTokenLifeRemaining: number
+  
+  oauthAccessTokenLifeRemaining: number,
+  isMakingRequest: boolean
 }
 
-export const useAuthentication = (): ContextInterface => {
+export const useApi = (): ContextInterface => {
   const { 
     authorize,
     authorizeGoogle,
@@ -44,7 +45,8 @@ export const useAuthentication = (): ContextInterface => {
     getMe,
     clearOAuthCookies,
 
-    oauthAccessTokenLifeRemaining
+    oauthAccessTokenLifeRemaining,
+    isMakingRequest
   } = useContext(AuthenticationContext); 
   
   return {
@@ -59,7 +61,8 @@ export const useAuthentication = (): ContextInterface => {
     getMe,
     clearOAuthCookies,
 
-    oauthAccessTokenLifeRemaining
+    oauthAccessTokenLifeRemaining,
+    isMakingRequest
   };
 }
 
@@ -67,12 +70,15 @@ export const AuthenticationContext = createContext({} as ContextInterface);
 
 export function AuthenticationProvider({ children }: {children:any}) {
   const [oauthAccessTokenLifeRemaining, setOAuthAccessTokenLifeRemaining] = useState(100);
+  const [isMakingRequest, setIsMakingRequest] = useState(false);
   
   let instance = axios.create({
     baseURL: configSettings.apiRootUrl
   });
 
   instance.interceptors.request.use((config) => {
+    setIsMakingRequest(true);
+
     const emailAddress = Cookies.get(emailAddressCookieName);
     const accessToken = Cookies.get(accessTokenCookieName);
     const refreshToken = Cookies.get(refreshTokenCookieName);
@@ -93,7 +99,19 @@ export function AuthenticationProvider({ children }: {children:any}) {
     } 
     
     return config;    
-  });
+  }, (error) => {
+    setIsMakingRequest(false);   
+    return Promise.reject(error);
+});
+
+
+  instance.interceptors.response.use((config) => {   
+    setIsMakingRequest(false);
+    return config;    
+  }, (error) => {
+    setIsMakingRequest(false);   
+    return Promise.reject(error);
+});
 
   const restartTimers = (emailAddress: string, refreshToken: string, expiration: string) => {
     clearTimeout(authTimer);
@@ -142,7 +160,6 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }
 
   const authorize = async (emailAddress: string, password: string): Promise<string> => {
-    console.log('authorizing....');
     await instance.post(authEndPoint,
       new URLSearchParams({
         grant_type: "password",
@@ -159,7 +176,6 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }
 
   const authorizeGoogle = async (credential: string): Promise<string> => {   
-    console.log('authorizing via google....');   
     const item = jwt<any>(credential);
  
     await instance.post(authEndPoint,
@@ -178,7 +194,6 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }
 
   const reauthorize = async (emailAddress: string, refreshToken: string): Promise<string> => {
-    console.log('reauthorizing....');
     await instance.post(authEndPoint,
       new URLSearchParams({
         grant_type: "refresh_token",
@@ -273,7 +288,8 @@ export function AuthenticationProvider({ children }: {children:any}) {
       getMe,
       clearOAuthCookies,
 
-      oauthAccessTokenLifeRemaining
+      oauthAccessTokenLifeRemaining,
+      isMakingRequest
     }}>{children}
     </AuthenticationContext.Provider>
   )

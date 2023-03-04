@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
-import { useAuthentication } from '../contexts/useAuthentication';
+import { useApi } from '../contexts/useApi';
 import { ErrorCode } from 'errorcodes';
 
 const ConfirmAccount = () => {
@@ -14,7 +14,7 @@ const ConfirmAccount = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isConfirmed, setIsConfirmed] = useState(false);
   
-  const { confirmAccount } = useAuthentication();
+  const { confirmAccount } = useApi();
    
   useEffect(() => {
       const params = new URLSearchParams(window.location.search);

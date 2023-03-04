@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { passwordRegex } from '@/helpers/constants'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import Router from 'next/router';
-import { useAuthentication } from '../contexts/useAuthentication';
+import { useApi } from '../contexts/useApi';
 import { ErrorCode } from 'errorcodes'
 
 const SetPassword = () => {
@@ -16,15 +16,14 @@ const SetPassword = () => {
   const [password2, setPassword2] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
-  const [isMakingApiRequest, setIsMakingApiRequest] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
   
-  const { updatePassword } = useAuthentication();
+  const { updatePassword, isMakingRequest } = useApi();
   
   useEffect(() => {      
       setIsSubmitButtonEnabled(
-        !isMakingApiRequest && password.length > 0 && password2.length > 0);
-   }, [isMakingApiRequest, password, password2 ]);
+        !isMakingRequest && password.length > 0 && password2.length > 0);
+   }, [isMakingRequest, password, password2 ]);
 
   useEffect(() => {    
     const params = new URLSearchParams(window.location.search);
@@ -55,9 +54,7 @@ const SetPassword = () => {
     if (!validate())
       return;
 
-    setIsMakingApiRequest(true);    
-    await apiSetPassword();
-    setIsMakingApiRequest(false);    
+    await apiSetPassword();   
   }
 
   const validate = () => {

@@ -2,13 +2,13 @@ import Image from 'next/image'
 import 'bootstrap/dist/css/bootstrap.css'
 import { useEffect, useState } from 'react'
 import HTMLReactParser from 'html-react-parser'
-import { useAuthentication } from '../contexts/useAuthentication'
+import { useApi } from '../contexts/useApi'
 import LayoutAuthenticated from '@/components/LayoutAuthenticated'
-import Icon from '@/components/Icon'
 
 const Dashboard = () => {  
   const [content, setContent] = useState("");
-  const { getMe } = useAuthentication();
+  
+  const { getMe } = useApi();
   
   useEffect(() => {
     const asyncGetMe = async () => {    

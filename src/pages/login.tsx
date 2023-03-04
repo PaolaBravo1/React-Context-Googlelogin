@@ -5,7 +5,7 @@ import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { emailAddressRegex } from '@/helpers/constants'
 import Router from 'next/router';
-import { useAuthentication } from '../contexts/useAuthentication';
+import { useApi } from '../contexts/useApi';
 import { ErrorCode } from 'errorcodes'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 import configSettings from "../../config.json";
@@ -14,10 +14,9 @@ const Login = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
-  const [isMakingApiRequest, setIsMakingApiRequest] = useState(false);
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
     
-  const { authorize, authorizeGoogle, clearOAuthCookies } = useAuthentication();
+  const { authorize, authorizeGoogle, clearOAuthCookies, isMakingRequest } = useApi();
   
   useEffect(() => {    
     clearOAuthCookies();
@@ -27,8 +26,8 @@ const Login = () => {
     
   useEffect(() => {    
     setIsSubmitButtonEnabled(
-      !isMakingApiRequest && emailAddress.length > 0 && password.length > 0);
-  }, [emailAddress, password, isMakingApiRequest]);
+      !isMakingRequest && emailAddress.length > 0 && password.length > 0);
+  }, [emailAddress, password, isMakingRequest]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,9 +35,7 @@ const Login = () => {
     if (!validate())
       return;
 
-    setIsMakingApiRequest(true);
-    await login(async () => { await authorize(emailAddress, password); } );
-    setIsMakingApiRequest(false);
+    await login(async () => { await authorize(emailAddress, password); } ); 
   }
 
   const handleGoogleSubmit = async (credentialResponse: any) => {

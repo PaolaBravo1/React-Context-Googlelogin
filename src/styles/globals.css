@@ -4,6 +4,22 @@
   font-family: "Lato";
 }
 
+.unauth-container, 
+.unauth-container {
+  opacity: 1;
+  transition: opacity .2s ease-in-out;
+  transition-delay: .5s;
+}
+
+.making-api-request {
+  cursor: wait !important;
+  opacity: .4;
+}
+
+.making-api-request input {
+  pointer-events: none;
+}
+
 .error {
   color: #aa0000;
 }

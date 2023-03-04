@@ -1,6 +1,6 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { AuthenticationProvider } from '../contexts/useAuthentication';
+import { AuthenticationProvider } from '../contexts/useApi';
 
 function Hammerbeam({ Component, pageProps }: AppProps) {    
   return (

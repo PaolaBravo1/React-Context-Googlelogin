@@ -1,3 +1,4 @@
+import { useApi } from "@/contexts/useApi";
 import { SetStateAction, useEffect, useState } from "react";
 
 interface ITextInput {
@@ -10,6 +11,8 @@ interface ITextInput {
 
 const TextInput = ({type = "text", label, name, onChange, value}: ITextInput) => {     
   const [text, setText] = useState('');
+  
+  const { isMakingRequest } = useApi();
   
   useEffect(() => {  
     if (value && value.length > 0)  
@@ -35,7 +38,7 @@ const TextInput = ({type = "text", label, name, onChange, value}: ITextInput) =>
 
   return (
     <div className="input-container">
-      <input name={name} type={type} value={text} onChange={handleChange} onBlur={handleBlur} />
+      <input disabled={isMakingRequest} name={name} type={type} value={text} onChange={handleChange} onBlur={handleBlur} />
       <label className={text && "filled"} htmlFor={name}>
         {label}
       </label>

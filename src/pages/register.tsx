@@ -5,13 +5,12 @@ import Link from 'next/link'
 import { emailAddressRegex, passwordRegex } from '@/helpers/constants'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import Router from 'next/router';
-import { useAuthentication } from '../contexts/useAuthentication';
+import { useApi } from '../contexts/useApi';
 import { ErrorCode } from 'errorcodes'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 import configSettings from "../../config.json";
 
 const Register = () => {
-  const [isMakingApiRequest, setIsMakingApiRequest] = useState(false);
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   const [isPasswordAllowed, setIsPasswordAllowed] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -21,7 +20,7 @@ const Register = () => {
   const [password2, setPassword2] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
 
-  const { register, registerGoogle } = useAuthentication();
+  const { register, registerGoogle, isMakingRequest } = useApi();
   
   useEffect(() => {    
     const params = new URLSearchParams(window.location.search);
@@ -31,10 +30,10 @@ const Register = () => {
 
   useEffect(() => {    
       setIsSubmitButtonEnabled(
-        !isMakingApiRequest 
+        !isMakingRequest 
           && firstName.length > 0 && lastName.length > 0 && emailAddress.length > 0
           && (!isPasswordAllowed || ( password.length > 0 && password2.length > 0) ));
-   }, [isMakingApiRequest, isPasswordAllowed, firstName, lastName, emailAddress, password, password2 ]);
+   }, [isMakingRequest, isPasswordAllowed, firstName, lastName, emailAddress, password, password2 ]);
    
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,9 +41,7 @@ const Register = () => {
     if (!validate())
       return;
 
-    setIsMakingApiRequest(true);
-    await attemptRegister(async () => { await register(firstName, lastName, emailAddress, password) });    
-    setIsMakingApiRequest(false);           
+    await attemptRegister(async () => { await register(firstName, lastName, emailAddress, password) });       
   }
   
   const handleGoogleSubmit = async (credentialResponse: any) => {
@@ -53,9 +50,7 @@ const Register = () => {
       return;
     }
     
-    setIsMakingApiRequest(true);
-    await attemptRegister(async () => { await registerGoogle(credentialResponse.credential); });   
-    setIsMakingApiRequest(false);            
+    await attemptRegister(async () => { await registerGoogle(credentialResponse.credential); });       
   }
 
   const handleGoogleError = async () => {

@@ -1,12 +1,11 @@
 import Head from "next/head";
-import { useAuthentication } from '../contexts/useAuthentication';
+import { useApi } from '../contexts/useApi';
 import { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import IdlePopup from "./IdlePopup";
 import configSettings from "../../config.json";
 import StatusBar from "./StatusBar";
-import { isLocalURL } from "next/dist/shared/lib/router/router";
 
 interface ILayoutAuthenticated {
   children: any
@@ -18,12 +17,13 @@ const refreshTokenCookieName = "hammer_refresh_token";
 const expirationCookieName = "hammer_expiration";
 
 const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {    
-  const { oauthAccessTokenLifeRemaining, clearOAuthCookies } = useAuthentication();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isIdlePopupOpen, setIsIdlePopupOpen] = useState(false);
   const [lastActiveTime, setLastActiveTime] = useState(Date.now());
   const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
 
+  const { oauthAccessTokenLifeRemaining, clearOAuthCookies, isMakingRequest } = useApi();
+  
   const domEvents = ["click", "scroll", "keypress"];
   //cconst domEvents = ["click", "scroll", "keypress", "mousemove"];
 
@@ -112,7 +112,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
       </noscript>
     </Head>
     <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
-    <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"}`}>
+    <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isMakingRequest ? "making-api-request" : ""}`}>
       <div className="top-bar">
         <div className="status-bars">
           <StatusBar id="oauth-token-timeout" icon="cloud" warningAt={10 + configSettings.oauthAccessTokenRefreshMarginPercent} complete={oauthAccessTokenLifeRemaining}></StatusBar>
