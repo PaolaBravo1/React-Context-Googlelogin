@@ -12,11 +12,11 @@ const ForgotPassword = () => {
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   
-  const { requestPasswordReset, isMakingRequest } = useApi();
+  const { requestPasswordReset } = useApi();
   
   useEffect(() => {    
-    setIsSubmitButtonEnabled(!isMakingRequest && emailAddress.length > 0);
-  }, [isMakingRequest, emailAddress]);
+    setIsSubmitButtonEnabled(emailAddress.length > 0);
+  }, [emailAddress]);
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

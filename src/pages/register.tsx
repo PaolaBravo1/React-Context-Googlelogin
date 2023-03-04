@@ -9,6 +9,7 @@ import { useApi } from '../contexts/useApi';
 import { ErrorCode } from 'errorcodes'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 import configSettings from "../../config.json";
+import { v4 } from 'uuid'
 
 const Register = () => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
@@ -19,8 +20,9 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
+  const [nonce, setNonce] = useState(v4())
 
-  const { register, registerGoogle, isMakingRequest } = useApi();
+  const { register, registerGoogle } = useApi();
   
   useEffect(() => {    
     const params = new URLSearchParams(window.location.search);
@@ -30,10 +32,9 @@ const Register = () => {
 
   useEffect(() => {    
       setIsSubmitButtonEnabled(
-        !isMakingRequest 
-          && firstName.length > 0 && lastName.length > 0 && emailAddress.length > 0
+         firstName.length > 0 && lastName.length > 0 && emailAddress.length > 0
           && (!isPasswordAllowed || ( password.length > 0 && password2.length > 0) ));
-   }, [isMakingRequest, isPasswordAllowed, firstName, lastName, emailAddress, password, password2 ]);
+   }, [isPasswordAllowed, firstName, lastName, emailAddress, password, password2 ]);
    
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,7 +51,7 @@ const Register = () => {
       return;
     }
     
-    await attemptRegister(async () => { await registerGoogle(credentialResponse.credential); });       
+    await attemptRegister(async () => { await registerGoogle(credentialResponse.credential, nonce); });       
   }
 
   const handleGoogleError = async () => {
@@ -102,13 +103,21 @@ const Register = () => {
 
         switch(error?.response?.data?.errorCode) {
           case ErrorCode.AccountEmailAddressInvalid:          
-              setErrorMessage("The credentials you provided are invalid.  Please check your email address and password and try again to sign in.");              
-              break;
+            setErrorMessage("The credentials you provided are invalid.  Please check your email address and password and try again to sign in.");              
+            break;
 
           case ErrorCode.AccountPasswordDoesNotMeetMinimumComplexity:
-              setErrorMessage("The password does not meet the minimum complexity requirements.  Please make sure that your password is at least 8 characters and includes a lowercase letter, an uppercase letter, a number, and a symbol.");
-              break;
+            setErrorMessage("The password does not meet the minimum complexity requirements.  Please make sure that your password is at least 8 characters and includes a lowercase letter, an uppercase letter, a number, and a symbol.");
+            break;
+            
+          case ErrorCode.GoogleOAuthTokenInvalid:
+            setErrorMessage("Your account could not be validated by Google.  Please check that your Google account is valid and try again.");
+            break;
 
+          case ErrorCode.GoogleOAuthNonceInvalid:
+            setErrorMessage("Your account could not be validated by Google, the nonce is invalid.  Please check that your Google account is valid and try again.");
+            break;
+    
           default:
             setErrorMessage(error?.response?.data?.message ?? JSON.stringify(error));
             break;        
@@ -148,7 +157,7 @@ const Register = () => {
           <div id="social-login-buttons">
             <div id="google-login-button">
               <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}> 
-                <GoogleLogin theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
+                <GoogleLogin nonce={nonce} theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
               </GoogleOAuthProvider>
               <div id="google-login-override" className="styled-button">Register using Google</div>
             </div>          

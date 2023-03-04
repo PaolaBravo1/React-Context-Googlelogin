@@ -9,14 +9,16 @@ import { useApi } from '../contexts/useApi';
 import { ErrorCode } from 'errorcodes'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 import configSettings from "../../config.json";
+import { v4 } from 'uuid'
 
 const Login = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [nonce, setNonce] = useState(v4());
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
     
-  const { authorize, authorizeGoogle, clearOAuthCookies, isMakingRequest } = useApi();
+  const { authorize, authorizeGoogle, clearOAuthCookies } = useApi();
   
   useEffect(() => {    
     clearOAuthCookies();
@@ -26,8 +28,8 @@ const Login = () => {
     
   useEffect(() => {    
     setIsSubmitButtonEnabled(
-      !isMakingRequest && emailAddress.length > 0 && password.length > 0);
-  }, [emailAddress, password, isMakingRequest]);
+      emailAddress.length > 0 && password.length > 0);
+  }, [emailAddress, password]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,7 +46,7 @@ const Login = () => {
       return;
     }
     
-    await login(async () => { await authorizeGoogle(credentialResponse.credential);  } );    
+    await login(async () => { await authorizeGoogle(credentialResponse.credential, nonce);  } );    
   }
 
   const handleGoogleError = async () => {
@@ -114,6 +116,10 @@ const Login = () => {
             setErrorMessage("Your account could not be validated by Google.  Please check that your Google account is valid and try again.");
             break;
 
+          case ErrorCode.GoogleOAuthNonceInvalid:
+            setErrorMessage("Your account could not be validated by Google, the nonce is invalid.  Please check that your Google account is valid and try again.");
+            break;
+
           default:
             if (error.message == "Network Error")
               setErrorMessage("The request could not be completed, the backend API may not be configured correctly.");  
@@ -149,7 +155,7 @@ const Login = () => {
         <div id="social-login-buttons">
           <div id="google-login-button">
             <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}> 
-              <GoogleLogin theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
+              <GoogleLogin nonce={nonce} theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
             </GoogleOAuthProvider>
             <div id="google-login-override" className="styled-button">Sign in using Google</div>
           </div>          

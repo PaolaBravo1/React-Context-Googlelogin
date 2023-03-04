@@ -18,12 +18,12 @@ const SetPassword = () => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
   
-  const { updatePassword, isMakingRequest } = useApi();
+  const { updatePassword } = useApi();
   
   useEffect(() => {      
       setIsSubmitButtonEnabled(
-        !isMakingRequest && password.length > 0 && password2.length > 0);
-   }, [isMakingRequest, password, password2 ]);
+        password.length > 0 && password2.length > 0);
+   }, [password, password2 ]);
 
   useEffect(() => {    
     const params = new URLSearchParams(window.location.search);

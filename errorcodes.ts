@@ -46,6 +46,7 @@ export enum ErrorCode {
   OAuthBearerTokenMissing = 2104,
   OAuthClaimInvalid = 2105,
   GoogleOAuthTokenInvalid = 2200,
+  GoogleOAuthNonceInvalid = 2201,
   ParticipantInternalIDCouldNotBeGenerated = 3000,
   EmailDeliveryFailed = 4000
 }
