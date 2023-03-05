@@ -6,7 +6,7 @@ import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { emailAddressRegex } from '@/helpers/constants'
 import Router from 'next/router';
 import { useApi } from '../contexts/useApi';
-import { ErrorCode } from 'errorcodes'
+import { ErrorCode } from '@/helpers/errorcodes'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 import configSettings from "../../config.json";
 import { v4 } from 'uuid'
@@ -54,7 +54,7 @@ const Login = () => {
   }
 
   const validate = () => {
-    if (emailAddress.length == 0 || password.length == 0) {
+    if (emailAddress.length == 0 || password.length == 0) {      
       setErrorMessage(" ");      
       return false;
     }
@@ -83,7 +83,7 @@ const Login = () => {
             break;
           
           case ErrorCode.AccountExternalCredentialsInvalid:
-              setErrorMessage("The Google account does not appear to be configured as an account on this system.");
+              setErrorMessage("The Google account does not appear to be configured as an account on this system.  Please try signing in with an email address and password, or create a new account on the registration page.");
               break;
           
           case ErrorCode.AccountEmailAddressNotConfirmed:
@@ -147,10 +147,10 @@ const Login = () => {
           <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Sign in</button>
         </div>
         <div className="not-registered text-muted">
-          Not registered yet?  <Link href="/register">Click here to get started!</Link>
+          Not registered yet?  <Link className="simple-link" href="/register">Click here to get started!</Link>
         </div>        
         <div>
-          <div><Link href="/forgotpassword">Forgot your password?</Link></div>
+          <div><Link className="simple-link" href="/forgotpassword">Forgot your password?</Link></div>
         </div>  
         <div id="social-login-buttons">
           <div id="google-login-button">

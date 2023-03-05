@@ -5,7 +5,7 @@ import { passwordRegex } from '@/helpers/constants'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import Router from 'next/router';
 import { useApi } from '../contexts/useApi';
-import { ErrorCode } from 'errorcodes'
+import { ErrorCode } from '@/helpers/errorcodes'
 
 const SetPassword = () => {
   const [title , setTitle] = useState("");

@@ -6,7 +6,7 @@ import { emailAddressRegex, passwordRegex } from '@/helpers/constants'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import Router from 'next/router';
 import { useApi } from '../contexts/useApi';
-import { ErrorCode } from 'errorcodes'
+import { ErrorCode } from '@/helpers/errorcodes'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
 import configSettings from "../../config.json";
 import { v4 } from 'uuid'
@@ -103,7 +103,7 @@ const Register = () => {
 
         switch(error?.response?.data?.errorCode) {
           case ErrorCode.AccountEmailAddressInvalid:          
-            setErrorMessage("The credentials you provided are invalid.  Please check your email address and password and try again to sign in.");              
+            setErrorMessage("The email address you provided is not valid.");              
             break;
 
           case ErrorCode.AccountPasswordDoesNotMeetMinimumComplexity:
@@ -117,11 +117,15 @@ const Register = () => {
           case ErrorCode.GoogleOAuthNonceInvalid:
             setErrorMessage("Your account could not be validated by Google, the nonce is invalid.  Please check that your Google account is valid and try again.");
             break;
-    
+            
           default:
-            setErrorMessage(error?.response?.data?.message ?? JSON.stringify(error));
-            break;        
-      }});
+            if (error.message == "Network Error")
+              setErrorMessage("The request could not be completed, the backend API may not be configured correctly.");  
+            else
+              setErrorMessage(error?.response?.data?.message ?? JSON.stringify(error));
+            break;                
+        }
+      });
   };
 
   return (
@@ -152,7 +156,7 @@ const Register = () => {
             <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Register</button>
           </div>
           <div className="not-registered text-muted">
-            <Link href="/login">Return to login page</Link>
+            <Link className="simple-link" href="/login">Return to login page</Link>
           </div> 
           <div id="social-login-buttons">
             <div id="google-login-button">

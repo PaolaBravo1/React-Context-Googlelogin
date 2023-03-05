@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import Router from "next/router";
 import configSettings from "../../config.json";
 import jwt from 'jwt-decode' 
-import { ErrorCode } from 'errorcodes';
+import { ErrorCode } from '@/helpers/errorcodes';
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";

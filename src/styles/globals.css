@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
 
 * {
   font-family: "Lato";
@@ -14,6 +13,10 @@
 .making-api-request {
   cursor: wait !important;
   opacity: .4;
+}
+
+.making-api-request button:hover {
+  cursor: wait !important;
 }
 
 .making-api-request input {
@@ -37,7 +40,7 @@
 .styled-button {
     box-shadow: 0 0 16px 0 rgba(0,0,0,0.2), 0 0 20px 0 rgba(0,0,0,0.19);  
     border: none;
-    color: #fff;
+    color: #ffffff;
     background-color: #79b1ff;
     padding: 1.2em 2.8em;
     text-decoration: none;
@@ -45,11 +48,12 @@
     text-transform: uppercase;
     font-weight: 700;
     transition: all .2s ease-in;
-    letter-spacing: 1px;;
+    letter-spacing: 1px;
+    cursor: pointer;
 }
 
 .styled-button:hover {
-  background-color: #fff;
+  background-color: #ffffff;
   color: #79b1ff;
 }
 
@@ -57,8 +61,12 @@
 {
   color: #ffffff !important;
   background-color: #aaaaaa;
-  cursor:wait;
-  xbox-shadow: none;
+  cursor: wait; 
+}
+
+.making-api-request .styled-button {
+  background-color: #aaaaaa;
+  color: #ffffff;    
 }
 
 .input-container {
@@ -152,44 +160,28 @@ form.hidden {
   margin-top: 40px;
 }
 
-.unauth-container button 
-{
+.unauth-container button {
   margin-top: 40px;
   margin-bottom: 30px;
 }
 
-.unauth-container .form-check
-{
+.unauth-container .form-check {
   display: none;
 }
 
-.unauth-container .not-registered 
-{
+.unauth-container .not-registered {
   margin-top: 30px;
 }
 
-.unauth-container a
-{
+.simple-link {
   color: #498dee;
   cursor: pointer;
   text-decoration: none;
 }
 
-.unauth-container a:hover
-{
-  color: #2d6cc5;
+.simple-link:hover {
+  xcolor: #2d6cc5;
   text-decoration: underline;
-}
-
-.unauth-container .styled-button {
-    color: #ffffff;
-    display: block;
-}
-
-.unauth-container .styled-button:hover {
-  color: #79b1ff;
-  display: block;
-  text-decoration: none;
 }
 
 .top-bar {
