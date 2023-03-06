@@ -9,7 +9,7 @@ const Email = () => {
     const { query } = useRouter();
     const { setEmailReceived } = useApi();
 
-    useEffect(() => {    
+    useEffect(() => {  
         if (!query)
             return;
            

@@ -133,9 +133,9 @@ form.form-error .input-container label {
 }
 
 .unauth-container .bg-image {
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
 }
 
 #register form

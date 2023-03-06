@@ -297,7 +297,8 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }    
 
   const setEmailReceived = async (uniqueID: string): Promise<string> => {
-    return await instance.get(`/content/email/${uniqueID}/received`);
+    instance.get(`/content/email/${uniqueID}/received`);   
+    return "";
   }    
 
   return (
