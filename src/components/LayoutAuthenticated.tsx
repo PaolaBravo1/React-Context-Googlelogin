@@ -11,18 +11,13 @@ interface ILayoutAuthenticated {
   children: any
 }
   
-const emailAddressCookieName = "hammer_username";
-const accessTokenCookieName = "hammer_access_token";
-const refreshTokenCookieName = "hammer_refresh_token";
-const expirationCookieName = "hammer_expiration";
-
 const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {    
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isIdlePopupOpen, setIsIdlePopupOpen] = useState(false);
   const [lastActiveTime, setLastActiveTime] = useState(Date.now());
   const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
 
-  const { oauthAccessTokenLifeRemaining, clearOAuthCookies, isMakingRequest } = useApi();
+  const { oauthAccessTokenLifeRemaining, clearIdentity, getIdentity, isMakingRequest } = useApi();
   
   const domEvents = ["click", "scroll", "keypress"];
   //cconst domEvents = ["click", "scroll", "keypress", "mousemove"];
@@ -32,12 +27,9 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
   useEffect(() => {
     clearInterval(idleTimer);
 
-    const emailAddress = Cookies.get(emailAddressCookieName);
-    const accessToken = Cookies.get(accessTokenCookieName);
-    const refreshToken = Cookies.get(refreshTokenCookieName);
-    const expiration = Cookies.get(expirationCookieName);
-    
-    if (emailAddress && accessToken && refreshToken && expiration) {
+    const identity = getIdentity();
+
+    if (identity) {
       setIsAuthenticated(true);       
       resetIdleTimer();
     }
@@ -70,7 +62,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     setIsIdlePopupOpen(false);
 
     if (isLogout) {
-      clearOAuthCookies();
+      clearIdentity();
       clearInterval(idleTimer);
       redirectUnauthenticated();      
     } else 

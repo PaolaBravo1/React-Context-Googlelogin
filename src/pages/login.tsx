@@ -18,12 +18,15 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
     
-  const { authorize, authorizeGoogle, clearOAuthCookies } = useApi();
+  const { authorize, authorizeGoogle, clearIdentity, getProvider } = useApi();
   
   useEffect(() => {    
-    clearOAuthCookies();
+    clearIdentity();
     const params = new URLSearchParams(window.location.search);  
-    setEmailAddress(params.get("emailAddress") ?? "");   
+    const provider = getProvider();
+    
+    if (provider == "Local")
+      setEmailAddress(params.get("emailAddress") ?? "");   
   }, []);
     
   useEffect(() => {    

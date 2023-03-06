@@ -5,15 +5,12 @@ import Router from "next/router";
 import configSettings from "../../config.json";
 import jwt from 'jwt-decode' 
 import { ErrorCode } from '@/helpers/errorcodes';
+import { Identity } from '@/helpers/identity';
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";
-const emailAddressCookieName = "hammer_username";
-const accessTokenCookieName = "hammer_access_token";
-const refreshTokenCookieName = "hammer_refresh_token";
-const expirationCookieName = "hammer_expiration";
-const nonceCookieName = "hammer_nonce";
-
+const identityCookieName = "hammer_identity";
+const providerCookieName = "hammer_provider";
 const authEndPoint = "/oauth/authorize";
 
 var authTimer: ReturnType<typeof setTimeout>;
@@ -22,14 +19,16 @@ var authTimerCountdown: ReturnType<typeof setInterval>;
 interface ContextInterface {
   authorize: (emailAddress: string, password: string) => Promise<string>,
   authorizeGoogle: (credential: string, nonce: string) => Promise<string>,
-  reauthorize: (emailAddress: string, refreshToken: string) => Promise<string>,
+  reauthorize: (emailAddress: string, provider: string, refreshToken: string) => Promise<string>,
   confirmAccount: (emailAddress: string, token: string) => Promise<AxiosResponse<any, any>>,
   requestPasswordReset: (emailAddress: string) => Promise<AxiosResponse<any, any>>,
   updatePassword: (emailAddress: string, password: string, token: string) => Promise<AxiosResponse<any, any>>,
   register: (firstName: string, lastName: string, emailAddress: string, password: string) => Promise<AxiosResponse<any, any>>,
   registerGoogle: (credential: string, nonce: string) => Promise<string>,
   getMe: () => Promise<AxiosResponse<any, any>>,
-  clearOAuthCookies: () => void,
+  clearIdentity: () => void,
+  getIdentity: () => Identity | null,
+  getProvider: () => string,
   
   oauthAccessTokenLifeRemaining: number,
   isMakingRequest: boolean
@@ -46,8 +45,10 @@ export const useApi = (): ContextInterface => {
     register,
     registerGoogle,
     getMe,
-    clearOAuthCookies,
-    
+    clearIdentity,
+    getIdentity,
+    getProvider,
+
     oauthAccessTokenLifeRemaining,
     isMakingRequest
   } = useContext(AuthenticationContext); 
@@ -62,8 +63,10 @@ export const useApi = (): ContextInterface => {
     register,
     registerGoogle,
     getMe,
-    clearOAuthCookies,
-    
+    clearIdentity,
+    getIdentity,
+    getProvider,
+
     oauthAccessTokenLifeRemaining,
     isMakingRequest
   };
@@ -81,32 +84,22 @@ export function AuthenticationProvider({ children }: {children:any}) {
 
   instance.interceptors.request.use((config) => {
     setIsMakingRequest(true);
+    
+    const identity = getIdentity();
 
-    const emailAddress = Cookies.get(emailAddressCookieName);
-    const accessToken = Cookies.get(accessTokenCookieName);
-    const refreshToken = Cookies.get(refreshTokenCookieName);
-    const expiration = Cookies.get(expirationCookieName);
+    if (identity != null) {
+        if (!authTimer)
+          restartTimers(identity);
 
-    if (emailAddress && accessToken && refreshToken && expiration) {
-      if (!authTimer)
-        restartTimers(emailAddress, refreshToken, expiration);
-
-      if (accessToken)
-        config.headers[authHeaderKey] = `Bearer ${accessToken}`;
-      else {
-        config.headers[authHeaderKey] = null;
-        delete config.headers[authHeaderKey];
-      }
-
-      config.headers[contentTypeHeaderKey] = "application/x-www-form-urlencoded";
-    } 
+        config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;        
+        config.headers[contentTypeHeaderKey] = "application/x-www-form-urlencoded";
+    }
     
     return config;    
   }, (error) => {
     setIsMakingRequest(false);   
     return Promise.reject(error);
-});
-
+  });
 
   instance.interceptors.response.use((config) => {   
     setIsMakingRequest(false);
@@ -114,22 +107,49 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }, (error) => {
     setIsMakingRequest(false);   
     return Promise.reject(error);
-});
+  });
 
-  const restartTimers = (emailAddress: string, refreshToken: string, expiration: string) => {
+  const restartTimers = (identity: Identity) => {
     clearTimeout(authTimer);
     clearInterval(authTimerCountdown);
 
-    const ttl = getOAuthTokenTtl(Date.parse(expiration));
+    const ttl = getOAuthTokenTtl(Date.parse(identity.expiration));
 
     authTimer = setTimeout(() => {
-      reauthorize(emailAddress, refreshToken);
+      reauthorize(identity.emailAddress, identity.refreshToken );
     }, ttl);
 
     authTimerCountdown = setInterval(function () {
-      const countdown = (Date.parse(expiration) - (new Date()).getTime()) / 1000;   
+      const countdown = (Date.parse(identity.expiration) - (new Date()).getTime()) / 1000;   
       setOAuthAccessTokenLifeRemaining(100.0 * countdown / configSettings.oauthAccessTokenTimeout);
     }, 1000);   
+  }
+
+  const getIdentity = (): Identity | null => {    
+    const identityCookie = Cookies.get(identityCookieName);
+    
+    if (identityCookie) {
+      const identity = Identity.parse(identityCookie);
+
+      if (identity)
+        return identity;
+    }
+
+    return null;
+  }
+
+  const getProvider = (): string => {    
+    const provider = Cookies.get(providerCookieName);
+    
+    if (provider && provider.length > 0) 
+      return provider;
+    else
+      return "";
+  }
+
+  const setProvider = (provider: string) => {
+    const params = { domain: configSettings.cookieDomain, secure: true, expires: 365 };
+    Cookies.set(providerCookieName, provider, params);       
   }
 
   const getOAuthTokenTtl = (expiration: number): number => {
@@ -138,32 +158,27 @@ export function AuthenticationProvider({ children }: {children:any}) {
     if (margin < configSettings.oauthAccessTokenMinimumRefreshMargin)
       margin = configSettings.oauthAccessTokenMinimumRefreshMargin;
 
-    let ttl = (expiration - margin * 1000) - new Date().getTime();
+    const ttl = (expiration - margin * 1000) - new Date().getTime();
     return ttl;
   }
 
-  const saveOAuthToken = async (emailAddress: string, accessToken: string, refreshToken: string, expiresInSeconds: number) => {
+  const saveIdentity = async (emailAddress: string, accessToken: string, refreshToken: string, expiresInSeconds: number) => {
     const expiration = new Date(new Date().getTime() + expiresInSeconds * 1000).toISOString();
     const expiresInDays = (expiresInSeconds) / 60 / 60 / 24;
     const params = { domain: configSettings.cookieDomain, secure: true, expires: expiresInDays };
 
-    Cookies.set(emailAddressCookieName, emailAddress, params);
-    Cookies.set(accessTokenCookieName, accessToken, params);
-    Cookies.set(refreshTokenCookieName, refreshToken, params);
-    Cookies.set(expirationCookieName, expiration, params);
-
-    restartTimers(emailAddress, refreshToken, expiration);
+    var identity = new Identity(emailAddress, accessToken, refreshToken, null, expiration);
+    Cookies.set(identityCookieName, JSON.stringify(identity), params);    
+   
+    restartTimers(identity);
   }
 
-  const clearOAuthCookies = () => {
-    Cookies.remove(emailAddressCookieName);
-    Cookies.remove(accessTokenCookieName);
-    Cookies.remove(refreshTokenCookieName);
-    Cookies.remove(expirationCookieName);
-    Cookies.remove(nonceCookieName);
+  const clearIdentity = () => {
+    Cookies.remove(identityCookieName);  
   }
 
   const authorize = async (emailAddress: string, password: string): Promise<string> => {
+    console.log("authorizing...");
     await instance.post(authEndPoint,
       new URLSearchParams({
         grant_type: "password",
@@ -171,7 +186,9 @@ export function AuthenticationProvider({ children }: {children:any}) {
         password: password
       })
     ).then(async result => {
-      await saveOAuthToken(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      await saveIdentity(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      setProvider("Local");    
+   
       return result.data.access_token;
     }
     ).catch(error => { throw error; });
@@ -180,8 +197,8 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }
 
   const authorizeGoogle = async (credential: string, nonce: string): Promise<string> => {   
+    console.log("authorizing google...");
     const item = jwt<any>(credential);
- 
     await instance.post(authEndPoint,
       new URLSearchParams({
         grant_type: "password",
@@ -191,11 +208,13 @@ export function AuthenticationProvider({ children }: {children:any}) {
     ).then(async result => {
       if (nonce != item.nonce)    
       {
-        clearOAuthCookies();
+        clearIdentity();
         throw  { response: { data: { errorCode: 2201, errorCodeName: ErrorCode.GoogleOAuthNonceInvalid }}};   
       }
 
-      await saveOAuthToken(item.email, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      await saveIdentity(item.email, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      setProvider("Google");    
+   
       return result.data.access_token;
     }
     ).catch(error => { throw error; });
@@ -204,6 +223,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }
 
   const reauthorize = async (emailAddress: string, refreshToken: string): Promise<string> => {
+    console.log("reauthorizing...");
     await instance.post(authEndPoint,
       new URLSearchParams({
         grant_type: "refresh_token",
@@ -211,7 +231,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
         refresh_token: refreshToken
       })
     ).then(async result => {
-      await saveOAuthToken(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      await saveIdentity(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       return result.data.access_token;
     }
     ).catch(error => { throw error; });
@@ -247,6 +267,8 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }
 
   const register = async (firstName: string, lastName: string, emailAddress: string, password: string): Promise<AxiosResponse<any, any>> => {
+    setProvider("Local");    
+   
     if (password.length == 0) {
       return await instance.post("/participant",
         new URLSearchParams({
@@ -269,6 +291,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }
 
   const registerGoogle = async (credential: string, nonce: string): Promise<string> => {
+    setProvider("Google");    
     const item = jwt<any>(credential);
      
     return await instance.post("/participant",
@@ -280,7 +303,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
       })
     ).then(async result => {
       if (nonce != item.nonce) {
-        clearOAuthCookies();
+        clearIdentity();
         throw  { response: { data: { errorCode: 2201, errorCodeName: ErrorCode.GoogleOAuthNonceInvalid }}};   
       }
       return "";
@@ -304,7 +327,9 @@ export function AuthenticationProvider({ children }: {children:any}) {
       register,
       registerGoogle,
       getMe,
-      clearOAuthCookies,
+      clearIdentity,
+      getIdentity,
+      getProvider,
 
       oauthAccessTokenLifeRemaining,
       isMakingRequest

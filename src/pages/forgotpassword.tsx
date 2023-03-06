@@ -28,8 +28,7 @@ const ForgotPassword = () => {
   }
 
   const validate = () => {
-    if (emailAddress.length == 0)
-    {
+    if (emailAddress.length == 0) {
       setErrorMessage(" ");      
       return false;
     }
@@ -42,9 +41,8 @@ const ForgotPassword = () => {
     return true;
   }
 
-  const attemptLogIn = async() => {
-    
-  await requestPasswordReset(emailAddress)
+  const attemptLogIn = async() => {    
+    await requestPasswordReset(emailAddress)
     .then(result => {
       Router.push("/thankyou");
     })
