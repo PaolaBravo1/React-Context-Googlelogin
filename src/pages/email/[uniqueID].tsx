@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useApi } from '../../contexts/useApi';
 import { ErrorCode } from '@/helpers/errorcodes';
 import { useRouter } from 'next/router';
-import { guidRegex, magicPixel } from '@/helpers/constants';
+import { guidRegex } from '@/helpers/constants';
 
 const Email = () => {
     const { query } = useRouter();
@@ -31,7 +31,7 @@ const Email = () => {
    }, [query]);
 
    return (
-    <img src={`data:image/png;base64,${magicPixel}`} alt="img" />
+    <img src="/pixel.png" alt="pixel" />
    );
 }
 
