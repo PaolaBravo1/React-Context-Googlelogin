@@ -30,7 +30,6 @@ interface ContextInterface {
   registerGoogle: (credential: string, nonce: string) => Promise<string>,
   getMe: () => Promise<AxiosResponse<any, any>>,
   clearOAuthCookies: () => void,
-  setEmailReceived: (uniqueID: string) => Promise<string>,
   
   oauthAccessTokenLifeRemaining: number,
   isMakingRequest: boolean
@@ -48,7 +47,6 @@ export const useApi = (): ContextInterface => {
     registerGoogle,
     getMe,
     clearOAuthCookies,
-    setEmailReceived,
     
     oauthAccessTokenLifeRemaining,
     isMakingRequest
@@ -65,7 +63,6 @@ export const useApi = (): ContextInterface => {
     registerGoogle,
     getMe,
     clearOAuthCookies,
-    setEmailReceived,
     
     oauthAccessTokenLifeRemaining,
     isMakingRequest
@@ -296,11 +293,6 @@ export function AuthenticationProvider({ children }: {children:any}) {
     return await instance.get("/account/me");
   }    
 
-  const setEmailReceived = async (uniqueID: string): Promise<string> => {
-    instance.get(`/content/email/${uniqueID}/received`);   
-    return "";
-  }    
-
   return (
     <AuthenticationContext.Provider value={{
       authorize,
@@ -313,7 +305,6 @@ export function AuthenticationProvider({ children }: {children:any}) {
       registerGoogle,
       getMe,
       clearOAuthCookies,
-      setEmailReceived,
 
       oauthAccessTokenLifeRemaining,
       isMakingRequest
