@@ -17,7 +17,8 @@ const Login = () => {
   const [nonce, setNonce] = useState(v4());
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
-    
+  const [isPasswordResetLinkVisible, setIsPasswordResetLinkVisible] = useState(false);
+
   const { authorize, authorizeGoogle, clearIdentity, getProvider } = useApi();
   
   useEffect(() => {    
@@ -83,6 +84,7 @@ const Login = () => {
         switch(error?.response?.data?.errorCode) {
           case ErrorCode.AccountCredentialsInvalid:
             setErrorMessage("The credentials you provided are invalid.  Please check your email address and password and try again to sign in.");
+            setIsPasswordResetLinkVisible(true);
             break;
           
           case ErrorCode.AccountExternalCredentialsInvalid:
@@ -134,7 +136,8 @@ const Login = () => {
   };
 
   return (
-    <LayoutUnauthenticated id="login" title="Welcome!" message="Please provide your user credentials in order to log in." errorMessage={errorMessage}>                   
+    <LayoutUnauthenticated id="login" title="Welcome!" message="Please provide your user credentials in order to log in." errorMessage={errorMessage}>  
+      <div className={`muted password-reset ${isPasswordResetLinkVisible ? "": "hidden"}`}>Forgot your password? <Link className="simple-link" href="/forgotpassword">Click here to request a passsword reset!</Link></div>
       <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>
         <div className="mb-3">
           <TextInput type="text" label="Email address" name="email-address" value={emailAddress} onChange={(value:string) => setEmailAddress(value)}></TextInput>
@@ -149,12 +152,9 @@ const Login = () => {
         <div className="d-grid gap-2 mt-2">
           <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Sign in</button>
         </div>
-        <div className="not-registered text-muted">
-          Not registered yet?  <Link className="simple-link" href="/register">Click here to get started!</Link>
-        </div>        
-        <div>
-          <div><Link className="simple-link" href="/forgotpassword">Forgot your password?</Link></div>
-        </div>  
+        <div className="or-block">
+          <span>OR</span>
+        </div>
         <div id="social-login-buttons">
           <div id="google-login-button">
             <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}> 
@@ -162,7 +162,10 @@ const Login = () => {
             </GoogleOAuthProvider>
             <div id="google-login-override" className="styled-button">Sign in using Google</div>
           </div>          
-        </div>       
+        </div>   
+        <div className="not-registered text-muted">
+          Not registered yet?  <Link className="simple-link" href="/register">Click here to get started!</Link>
+        </div>                        
       </form>
     </LayoutUnauthenticated>
   )

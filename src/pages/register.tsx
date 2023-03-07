@@ -155,9 +155,9 @@ const Register = () => {
           <div className="d-grid gap-2 mt-2">
             <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Register</button>
           </div>
-          <div className="not-registered text-muted">
-            <Link className="simple-link" href="/login">Return to login page</Link>
-          </div> 
+          <div className="or-block">
+            <span>OR</span>
+          </div>
           <div id="social-login-buttons">
             <div id="google-login-button">
               <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}> 
@@ -165,7 +165,10 @@ const Register = () => {
               </GoogleOAuthProvider>
               <div id="google-login-override" className="styled-button">Register using Google</div>
             </div>          
-          </div>                                                  
+          </div>       
+          <div className="not-registered text-muted">
+            <Link className="simple-link" href="/login">Return to login page</Link>
+          </div>                                            
         </form>
     </LayoutUnauthenticated>     
   )
