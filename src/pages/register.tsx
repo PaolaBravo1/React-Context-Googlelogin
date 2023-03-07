@@ -25,15 +25,18 @@ const Register = () => {
   const { register, registerGoogle } = useApi();
   
   useEffect(() => {    
-    const params = new URLSearchParams(window.location.search);
-    let passwordParam = params.get("password");    
-    setIsPasswordAllowed(passwordParam === "true");
+    // renable this if you want participants to create passwords upon registration, rather than after email confirmation
+    // const params = new URLSearchParams(window.location.search);
+    // let passwordParam = params.get("password");    
+    // setIsPasswordAllowed(passwordParam === "true");
   }, []);
 
   useEffect(() => {    
       setIsSubmitButtonEnabled(
          firstName.length > 0 && lastName.length > 0 && emailAddress.length > 0
-          && (!isPasswordAllowed || ( password.length > 0 && password2.length > 0) ));
+          && (!isPasswordAllowed || ( password.length > 0 && password2.length > 0))
+          && new RegExp(emailAddressRegex).test(emailAddress)          
+        );
    }, [isPasswordAllowed, firstName, lastName, emailAddress, password, password2 ]);
    
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,6 +66,11 @@ const Register = () => {
       setErrorMessage(" ");
       return false;
     }
+    
+    if (!new RegExp(emailAddressRegex).test(emailAddress)){
+      setErrorMessage("The email address you provided is not valid.");
+      return false;
+    }
 
     if (isPasswordAllowed) {
       if (password.length == 0 || password2.length == 0) {
@@ -75,11 +83,6 @@ const Register = () => {
         return false;
       }
   
-      if (!new RegExp(emailAddressRegex).test(emailAddress)){
-        setErrorMessage("The email address you provided is not valid.");
-        return false;
-      }
-
       if (!new RegExp(passwordRegex).test(password)){
         setErrorMessage("The password does not meet the minimum complexity requirements.  Please make sure that your password is at least 8 characters and includes a lowercase letter, an uppercase letter, a number, and a symbol.");
         return false;

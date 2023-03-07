@@ -138,11 +138,6 @@ form.form-error .input-container label {
   background-repeat: no-repeat !important;
 }
 
-#register form
-{
-  margin-top: 0;
-}
-
 .hidden {
   display: none;
 }
@@ -157,11 +152,11 @@ form.form-error .input-container label {
 }
 
 .unauth-container .input-container {
-  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 .unauth-container button {
-  margin-top: 40px;
+  margin-top: 20px;
   margin-bottom: 30px;
 }
 
