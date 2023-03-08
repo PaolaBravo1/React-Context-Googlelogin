@@ -34,7 +34,8 @@
     "react-idle-timer": "^5.5.2",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.8.0",
-    "uuidv4": "^6.2.13"
+    "uuidv4": "^6.2.13",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.2",
