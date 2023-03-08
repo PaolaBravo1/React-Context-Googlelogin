@@ -21,7 +21,12 @@ const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reve
       <title>Hammerbeam</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.ico" />      
-      <style data-href="https://fonts.googleapis.com/css2?family=Lato"></style>
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+      <link href="https://fonts.googleapis.com/css2?family=Lato" rel="preload" as="style"/>
+      <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet" media="print" />
+      <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&display=swap" />
+      </noscript>
     </Head>
     <div id={id} className={`unauth-container ${isMakingRequest ? "making-api-request" : ""}`}>
       <div className="container-fluid">
