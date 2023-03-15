@@ -49,4 +49,5 @@ const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
     </div>
   );
 };
+
 export default IdlePopup;

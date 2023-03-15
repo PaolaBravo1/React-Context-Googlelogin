@@ -1,41 +1,62 @@
-import Image from 'next/image'
 import 'bootstrap/dist/css/bootstrap.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import HTMLReactParser from 'html-react-parser'
 import { useApi } from '@/contexts/useApi'
 import LayoutAuthenticated from '@/components/LayoutAuthenticated'
+import Icon from "../../components/Icon"
+import Table from '@/components/Table'
 
-const Dashboard = () => {  
-  const [content, setContent] = useState("");
-  
-  const { redirectUnauthenticated, getIdentity, getMe } = useApi();
-  
+const Dashboard = () => {
+  const [participants, setParticipants] = useState<any>();
+
+  const { getParticipants } = useApi();
+
+  const columns = useMemo(
+    () => [
+      {
+        label: "Name",
+        accessor: "fullName"
+      },
+      {
+        label: "Email address",
+        accessor: "emailAddress"
+      },
+      {
+        label: "Internal ID",
+        accessor: "internalID"
+      },
+    ],
+    [],
+  );
+
   useEffect(() => {
-    const asyncGetDashboard = async () => {    
-      await getMe()
-      .then(result => {          
-          setContent(JSON.stringify(result.data))
+    const asyncGetParticipants = async () => {
+      await getParticipants()
+        .then(result => {
+          setParticipants(result.data);          
         }
-      )
-      .catch(error => {        
-          if (error?.response?.data?.errorCodeName != null)
-            setContent(JSON.stringify(error.response.data))
-          else
-            setContent(JSON.stringify(error))       
-        });    
-    }    
+        )
+        .catch(error => {
+          console.log(JSON.stringify(error));
+        });
+    }
 
-    asyncGetDashboard();
+    asyncGetParticipants();
   }, []);
 
   return (
-    <LayoutAuthenticated>                      
+    <LayoutAuthenticated>
       <div className="row no-gutter">
-        {HTMLReactParser(content)}
-      </div>      
-    </LayoutAuthenticated>  
+        {(participants == null) ?
+          <div></div>
+          :
+          <div className="table">
+            <Table caption={"Participant List"} columns={columns} sourceData={participants} />
+          </div>
+        }
+      </div>
+    </LayoutAuthenticated>
   );
 }
 
 export default Dashboard
-

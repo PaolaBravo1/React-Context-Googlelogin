@@ -3,9 +3,9 @@ import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import configSettings from "../../config.json";
-import jwt from 'jwt-decode' 
+import jwt from 'jwt-decode'
 import { ErrorCode } from '@/helpers/errorcodes';
-import { Identity } from '@/helpers/identity';
+import { Identity } from '@/models/identity';
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";
@@ -27,16 +27,17 @@ interface ContextInterface {
   register: (firstName: string, lastName: string, emailAddress: string, password: string) => Promise<AxiosResponse<any, any>>,
   registerGoogle: (credential: string, nonce: string) => Promise<string>,
   getMe: () => Promise<AxiosResponse<any, any>>,
+  getParticipants: () => Promise<AxiosResponse<any, any>>,
   clearIdentity: () => void,
   getIdentity: () => Identity | null,
   getProvider: () => string,
-  
+
   oauthAccessTokenLifeRemaining: number,
   isMakingRequest: boolean
 }
 
 export const useApi = (): ContextInterface => {
-  const { 
+  const {
     redirectUnauthenticated,
     authorize,
     authorizeGoogle,
@@ -47,14 +48,15 @@ export const useApi = (): ContextInterface => {
     register,
     registerGoogle,
     getMe,
+    getParticipants,
     clearIdentity,
     getIdentity,
     getProvider,
 
     oauthAccessTokenLifeRemaining,
     isMakingRequest
-  } = useContext(AuthenticationContext); 
-  
+  } = useContext(AuthenticationContext);
+
   return {
     redirectUnauthenticated,
     authorize,
@@ -66,6 +68,7 @@ export const useApi = (): ContextInterface => {
     register,
     registerGoogle,
     getMe,
+    getParticipants,
     clearIdentity,
     getIdentity,
     getProvider,
@@ -77,38 +80,38 @@ export const useApi = (): ContextInterface => {
 
 export const AuthenticationContext = createContext({} as ContextInterface);
 
-export function AuthenticationProvider({ children }: {children:any}) {
+export function AuthenticationProvider({ children }: { children: any }) {
   const [oauthAccessTokenLifeRemaining, setOAuthAccessTokenLifeRemaining] = useState(100);
   const [isMakingRequest, setIsMakingRequest] = useState(false);
-  
+
   let instance = axios.create({
     baseURL: configSettings.apiRootUrl
   });
 
   instance.interceptors.request.use((config) => {
     setIsMakingRequest(true);
-    
+
     const identity = getIdentity();
 
     if (identity != null) {
-        if (!authTimer)
-          restartTimers(identity);
+      if (!authTimer)
+        restartTimers(identity);
 
-        config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;        
-        config.headers[contentTypeHeaderKey] = "application/x-www-form-urlencoded";
+      config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;
+      config.headers[contentTypeHeaderKey] = "application/x-www-form-urlencoded";
     }
-    
-    return config;    
+
+    return config;
   }, (error) => {
-    setIsMakingRequest(false);   
+    setIsMakingRequest(false);
     return Promise.reject(error);
   });
 
-  instance.interceptors.response.use((config) => {   
+  instance.interceptors.response.use((config) => {
     setIsMakingRequest(false);
-    return config;    
+    return config;
   }, (error) => {
-    setIsMakingRequest(false);   
+    setIsMakingRequest(false);
     return Promise.reject(error);
   });
 
@@ -118,7 +121,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
     else
       Router.push("/login");
   }
-  
+
   const restartTimers = (identity: Identity) => {
     clearTimeout(authTimer);
     clearInterval(authTimerCountdown);
@@ -126,18 +129,18 @@ export function AuthenticationProvider({ children }: {children:any}) {
     const ttl = getOAuthTokenTtl(Date.parse(identity.expiration));
 
     authTimer = setTimeout(() => {
-      reauthorize(identity.emailAddress, identity.refreshToken );
+      reauthorize(identity.emailAddress, identity.refreshToken);
     }, ttl);
 
     authTimerCountdown = setInterval(function () {
-      const countdown = (Date.parse(identity.expiration) - (new Date()).getTime()) / 1000;   
+      const countdown = (Date.parse(identity.expiration) - (new Date()).getTime()) / 1000;
       setOAuthAccessTokenLifeRemaining(100.0 * countdown / configSettings.oauthAccessTokenTimeout);
-    }, 1000);   
+    }, 1000);
   }
 
-  const getIdentity = (): Identity | null => {    
+  const getIdentity = (): Identity | null => {
     const identityCookie = Cookies.get(identityCookieName);
-    
+
     if (identityCookie) {
       const identity = Identity.parse(identityCookie);
 
@@ -148,10 +151,10 @@ export function AuthenticationProvider({ children }: {children:any}) {
     return null;
   }
 
-  const getProvider = (): string => {    
+  const getProvider = (): string => {
     const provider = Cookies.get(providerCookieName);
-    
-    if (provider && provider.length > 0) 
+
+    if (provider && provider.length > 0)
       return provider;
     else
       return "";
@@ -159,7 +162,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
 
   const setProvider = (provider: string) => {
     const params = { domain: configSettings.cookieDomain, secure: true, expires: 365 };
-    Cookies.set(providerCookieName, provider, params);       
+    Cookies.set(providerCookieName, provider, params);
   }
 
   const getOAuthTokenTtl = (expiration: number): number => {
@@ -178,13 +181,13 @@ export function AuthenticationProvider({ children }: {children:any}) {
     const params = { domain: configSettings.cookieDomain, secure: true, expires: expiresInDays };
 
     var identity = new Identity(emailAddress, role, accessToken, refreshToken, null, expiration);
-    Cookies.set(identityCookieName, JSON.stringify(identity), params);    
-   
+    Cookies.set(identityCookieName, JSON.stringify(identity), params);
+
     restartTimers(identity);
   }
 
   const clearIdentity = () => {
-    Cookies.remove(identityCookieName);  
+    Cookies.remove(identityCookieName);
   }
 
   const authorize = async (emailAddress: string, password: string): Promise<string> => {
@@ -197,8 +200,8 @@ export function AuthenticationProvider({ children }: {children:any}) {
       })
     ).then(async result => {
       await saveIdentity(emailAddress, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
-      setProvider("Local");    
-   
+      setProvider("Local");
+
       return result.data.access_token;
     }
     ).catch(error => { throw error; });
@@ -206,7 +209,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
     return "";
   }
 
-  const authorizeGoogle = async (credential: string, nonce: string): Promise<string> => {   
+  const authorizeGoogle = async (credential: string, nonce: string): Promise<string> => {
     console.log("authorizing google...");
     const item = jwt<any>(credential);
     await instance.post(authEndPoint,
@@ -216,15 +219,14 @@ export function AuthenticationProvider({ children }: {children:any}) {
         google_credential: credential
       })
     ).then(async result => {
-      if (nonce != item.nonce)    
-      {
+      if (nonce != item.nonce) {
         clearIdentity();
-        throw  { response: { data: { errorCode: 2201, errorCodeName: ErrorCode.GoogleOAuthNonceInvalid }}};   
+        throw { response: { data: { errorCode: 2201, errorCodeName: ErrorCode.GoogleOAuthNonceInvalid } } };
       }
 
       await saveIdentity(item.email, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
-      setProvider("Google");    
-   
+      setProvider("Google");
+
       return result.data.access_token;
     }
     ).catch(error => { throw error; });
@@ -277,8 +279,8 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }
 
   const register = async (firstName: string, lastName: string, emailAddress: string, password: string): Promise<AxiosResponse<any, any>> => {
-    setProvider("Local");    
-   
+    setProvider("Local");
+
     if (password.length == 0) {
       return await instance.post("/participant",
         new URLSearchParams({
@@ -301,9 +303,9 @@ export function AuthenticationProvider({ children }: {children:any}) {
   }
 
   const registerGoogle = async (credential: string, nonce: string): Promise<string> => {
-    setProvider("Google");    
+    setProvider("Google");
     const item = jwt<any>(credential);
-     
+
     return await instance.post("/participant",
       new URLSearchParams({
         firstName: item.given_name,
@@ -314,17 +316,21 @@ export function AuthenticationProvider({ children }: {children:any}) {
     ).then(async result => {
       if (nonce != item.nonce) {
         clearIdentity();
-        throw  { response: { data: { errorCode: 2201, errorCodeName: ErrorCode.GoogleOAuthNonceInvalid }}};   
+        throw { response: { data: { errorCode: 2201, errorCodeName: ErrorCode.GoogleOAuthNonceInvalid } } };
       }
       return "";
     }
     ).catch(error => { throw error; });
-;
+    ;
   }
 
   const getMe = async (): Promise<AxiosResponse<any, any>> => {
     return await instance.get("/account/me");
-  }    
+  }
+
+  const getParticipants = async (): Promise<AxiosResponse<any, any>> => {
+    return await instance.get("/participant/list?pageIndex=0&pageSize=100");
+  }
 
   return (
     <AuthenticationContext.Provider value={{
@@ -338,6 +344,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
       register,
       registerGoogle,
       getMe,
+      getParticipants,
       clearIdentity,
       getIdentity,
       getProvider,

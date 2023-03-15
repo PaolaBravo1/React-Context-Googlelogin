@@ -19,7 +19,6 @@ const TextInput = ({type = "text", label, name, onChange, value}: ITextInput) =>
       setText(value);
   }, [value]);
     
-
   const handleChange = (e:any) => {
       setText(e.target.value);
 

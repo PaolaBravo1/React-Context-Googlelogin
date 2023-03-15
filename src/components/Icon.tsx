@@ -9,7 +9,7 @@ config.autoAddCss = false
 
 interface IIcon {
   name: any,
-  className: string
+  className?: string
 }
 
 const Icon = ({ name, className }: IIcon) => {

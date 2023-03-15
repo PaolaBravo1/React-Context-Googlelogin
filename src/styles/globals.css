@@ -380,3 +380,18 @@ form.form-error .input-container label {
 .password-reset {
   margin-top: 30px;
 }
+
+
+.table .MuiPaper-root,
+.table .MuiTableRow-root {
+  box-shadow: none;
+}
+
+.sort-icon {
+  padding-left: 10px;
+  padding-top: 1px;
+}
+
+table th span {
+  cursor: pointer;
+}
