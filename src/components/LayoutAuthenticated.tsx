@@ -17,7 +17,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
   const [lastActiveTime, setLastActiveTime] = useState(Date.now());
   const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
 
-  const { oauthAccessTokenLifeRemaining, clearIdentity, getIdentity, isMakingRequest } = useApi();
+  const { redirectUnauthenticated, oauthAccessTokenLifeRemaining, clearIdentity, getIdentity, isMakingRequest } = useApi();
   
   const domEvents = ["click", "scroll", "keypress"];
   //cconst domEvents = ["click", "scroll", "keypress", "mousemove"];
@@ -27,9 +27,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
   useEffect(() => {
     clearInterval(idleTimer);
 
-    const identity = getIdentity();
-
-    if (identity) {
+    if (validateIdentity()) {
       setIsAuthenticated(true);       
       resetIdleTimer();
     }
@@ -38,6 +36,23 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
       redirectUnauthenticated();
     }
   }, []);
+
+  const validateIdentity = ()  => {
+    const identity = getIdentity();
+
+    if (!identity)
+      return false;
+      
+    var parts = Router.pathname.split("/").slice(1);
+
+    if (parts.length == 0)
+      return false;
+
+    if (parts.length == 1)
+      return true;
+      
+    return (parts[0].toLowerCase() == identity.role.toLowerCase());
+  }
 
   const resetIdleTimer = useCallback(() => {
     const now = Date.now();
@@ -51,13 +66,6 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     }, 1000);    
   }, []);
 
-  const redirectUnauthenticated = () => {
-    if (Router.pathname.indexOf("/login") < 0)
-      Router.push("/login?" + encodeURIComponent(Router.pathname.toString()));
-    else
-      Router.push("/login");
-  }
-  
   const onIdlePopupClose = useCallback((isLogout: boolean) => {
     setIsIdlePopupOpen(false);
 

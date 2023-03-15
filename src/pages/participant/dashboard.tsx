@@ -2,16 +2,16 @@ import Image from 'next/image'
 import 'bootstrap/dist/css/bootstrap.css'
 import { useEffect, useState } from 'react'
 import HTMLReactParser from 'html-react-parser'
-import { useApi } from '../contexts/useApi'
+import { useApi } from '@/contexts/useApi'
 import LayoutAuthenticated from '@/components/LayoutAuthenticated'
 
 const Dashboard = () => {  
   const [content, setContent] = useState("");
   
-  const { getMe } = useApi();
+  const { redirectUnauthenticated, getIdentity, getMe } = useApi();
   
-  useEffect(() => {
-    const asyncGetMe = async () => {    
+  useEffect(() => {   
+    const asyncGetDashboard = async () => {    
       await getMe()
       .then(result => {          
           setContent(JSON.stringify(result.data))
@@ -25,7 +25,7 @@ const Dashboard = () => {
         });    
     }    
 
-    asyncGetMe();
+    asyncGetDashboard();
   }, []);
 
   return (

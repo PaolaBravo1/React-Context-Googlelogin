@@ -17,6 +17,7 @@ var authTimer: ReturnType<typeof setTimeout>;
 var authTimerCountdown: ReturnType<typeof setInterval>;
 
 interface ContextInterface {
+  redirectUnauthenticated: () => void,
   authorize: (emailAddress: string, password: string) => Promise<string>,
   authorizeGoogle: (credential: string, nonce: string) => Promise<string>,
   reauthorize: (emailAddress: string, provider: string, refreshToken: string) => Promise<string>,
@@ -36,6 +37,7 @@ interface ContextInterface {
 
 export const useApi = (): ContextInterface => {
   const { 
+    redirectUnauthenticated,
     authorize,
     authorizeGoogle,
     reauthorize,
@@ -54,6 +56,7 @@ export const useApi = (): ContextInterface => {
   } = useContext(AuthenticationContext); 
   
   return {
+    redirectUnauthenticated,
     authorize,
     authorizeGoogle,
     reauthorize,
@@ -109,6 +112,13 @@ export function AuthenticationProvider({ children }: {children:any}) {
     return Promise.reject(error);
   });
 
+  const redirectUnauthenticated = () => {
+    if (Router.pathname.indexOf("/login") < 0)
+      Router.push("/login?" + encodeURIComponent(Router.pathname.toString()));
+    else
+      Router.push("/login");
+  }
+  
   const restartTimers = (identity: Identity) => {
     clearTimeout(authTimer);
     clearInterval(authTimerCountdown);
@@ -162,12 +172,12 @@ export function AuthenticationProvider({ children }: {children:any}) {
     return ttl;
   }
 
-  const saveIdentity = async (emailAddress: string, accessToken: string, refreshToken: string, expiresInSeconds: number) => {
+  const saveIdentity = async (emailAddress: string, role: string, accessToken: string, refreshToken: string, expiresInSeconds: number) => {
     const expiration = new Date(new Date().getTime() + expiresInSeconds * 1000).toISOString();
     const expiresInDays = (expiresInSeconds) / 60 / 60 / 24;
     const params = { domain: configSettings.cookieDomain, secure: true, expires: expiresInDays };
 
-    var identity = new Identity(emailAddress, accessToken, refreshToken, null, expiration);
+    var identity = new Identity(emailAddress, role, accessToken, refreshToken, null, expiration);
     Cookies.set(identityCookieName, JSON.stringify(identity), params);    
    
     restartTimers(identity);
@@ -186,7 +196,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
         password: password
       })
     ).then(async result => {
-      await saveIdentity(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      await saveIdentity(emailAddress, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       setProvider("Local");    
    
       return result.data.access_token;
@@ -212,7 +222,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
         throw  { response: { data: { errorCode: 2201, errorCodeName: ErrorCode.GoogleOAuthNonceInvalid }}};   
       }
 
-      await saveIdentity(item.email, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      await saveIdentity(item.email, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       setProvider("Google");    
    
       return result.data.access_token;
@@ -231,7 +241,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
         refresh_token: refreshToken
       })
     ).then(async result => {
-      await saveIdentity(emailAddress, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      await saveIdentity(emailAddress, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       return result.data.access_token;
     }
     ).catch(error => { throw error; });
@@ -318,6 +328,7 @@ export function AuthenticationProvider({ children }: {children:any}) {
 
   return (
     <AuthenticationContext.Provider value={{
+      redirectUnauthenticated,
       authorize,
       authorizeGoogle,
       reauthorize,

@@ -5,10 +5,10 @@ import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { emailAddressRegex } from '@/helpers/constants'
 import Router from 'next/router';
-import { useApi } from '../contexts/useApi';
+import { useApi } from '@/contexts/useApi';
 import { ErrorCode } from '@/helpers/errorcodes'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
-import configSettings from "../../config.json";
+import configSettings from "config.json";
 import { v4 } from 'uuid'
 
 const Login = () => {
@@ -19,7 +19,7 @@ const Login = () => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   const [isPasswordResetLinkVisible, setIsPasswordResetLinkVisible] = useState(false);
 
-  const { authorize, authorizeGoogle, clearIdentity, getProvider } = useApi();
+  const { getIdentity, authorize, authorizeGoogle, clearIdentity, getProvider } = useApi();
   
   useEffect(() => {    
     clearIdentity();
@@ -78,7 +78,7 @@ const Login = () => {
       if (Router.query.redirectTo)
         Router.push(decodeURIComponent(Router.query.redirectTo.toString()));
       else
-        Router.push("/dashboard");      
+        Router.push(getIdentity()!.role.toLowerCase() + "/dashboard");      
     }
     catch (error:any) { 
         switch(error?.response?.data?.errorCode) {

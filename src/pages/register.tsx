@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { emailAddressRegex, passwordRegex } from '@/helpers/constants'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import Router from 'next/router';
-import { useApi } from '../contexts/useApi';
+import { useApi } from '@/contexts/useApi';
 import { ErrorCode } from '@/helpers/errorcodes'
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google'
-import configSettings from "../../config.json";
+import configSettings from "config.json";
 import { v4 } from 'uuid'
 
 const Register = () => {

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
 import { emailAddressRegex } from '@/helpers/constants'
 import Router from 'next/router';
-import { useApi } from '../contexts/useApi';
+import { useApi } from '@/contexts/useApi';
 
 const ForgotPassword = () => {
   const [emailAddress, setEmailAddress] = useState("");
