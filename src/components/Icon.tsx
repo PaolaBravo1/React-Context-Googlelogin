@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
 const { library, config } = require('@fortawesome/fontawesome-svg-core');
 import { fas } from '@fortawesome/free-solid-svg-icons'

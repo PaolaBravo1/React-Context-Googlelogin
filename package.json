@@ -38,6 +38,7 @@
     "react-router-dom": "^6.8.0",
     "react-table": "^7.8.0",
     "uuidv4": "^6.2.13",
+    "vercel": "^28.16.15",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
