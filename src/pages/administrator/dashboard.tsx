@@ -25,6 +25,16 @@ const Dashboard = () => {
         label: "Internal ID",
         accessor: "internalID"
       },
+      {
+        label: "Date of birth",
+        accessor: "dateOfBirth",
+        type: "date"
+      },
+      {
+        label: "Last authenticated",
+        accessor: "authenticatedTimestamp",
+        type: "datetime"
+      }
     ],
     [],
   );

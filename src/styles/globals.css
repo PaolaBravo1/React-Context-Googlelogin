@@ -381,17 +381,33 @@ form.form-error .input-container label {
   margin-top: 30px;
 }
 
-
-.table .MuiPaper-root,
-.table .MuiTableRow-root {
-  box-shadow: none;
-}
-
 .sort-icon {
   padding-left: 10px;
   padding-top: 1px;
 }
 
-table th span {
+.table {
+  padding: 30px 50px 0 50px !important;
+  font-size: 15px;  
+}
+
+.table table th span {
   cursor: pointer;
 }
+
+.table table th:hover  {
+  color: #95A2FF;
+}
+
+.table table tbody tr:nth-child(even) {
+  background-color: #f3f3f3;
+}
+
+.table table tbody tr {
+  cursor: pointer;
+}
+
+.table table tbody tr:hover {
+  background-color: #D7EEFF;
+}
+

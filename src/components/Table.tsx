@@ -1,43 +1,6 @@
 import { useEffect, useState } from "react";
 import Icon from "./Icon";
-
-/*
-const handleSortingChange = (accessor: string) => {
-  const sortOrder =
-    accessor === sortField && order === "asc" ? "desc" : "asc";
-  setSortField(accessor);
-  setOrder(sortOrder);
-  handleSorting(accessor, sortOrder);
-};
-
-*/
-/*const getDefaultSorting = (defaultTableData, columns) => {
-    const sorted = [...defaultTableData].sort((a, b) => {
-      const filterColumn = columns.filter((column) => column.sortbyOrder);
-  
-      // Merge all array objects into single object and extract accessor and sortbyOrder keys
-      let { accessor = "id", sortbyOrder = "asc" } = Object.assign(
-        {},
-        ...filterColumn
-      );
-  
-      if (a[accessor] === null) return 1;
-      if (b[accessor] === null) return -1;
-      if (a[accessor] === null && b[accessor] === null) return 0;
-  
-      const ascending = a[accessor]
-        .toString()
-        .localeCompare(b[accessor].toString(), "en", {
-          numeric: true,
-        });
-  
-      return sortbyOrder === "asc" ? ascending : -ascending;
-    });
-    return sorted;
-  }
-  
-  
-*/
+import moment from "moment";
 
 interface ITable {
     caption: string,
@@ -111,8 +74,23 @@ const Table = ({ caption, columns, sourceData }: ITable) => {
                 {data.map((item: any) => {
                     return (
                         <tr key={item.id}>
-                            {columns.map(({ accessor }) => {
-                                const cell = item[accessor] ? item[accessor] : "-";
+                            {columns.map(({ accessor, type }) => {
+                                let cell = "-";
+                                
+                                if (item[accessor]) {
+                                    switch (type) {
+                                        case "date":
+                                            cell = moment.utc(item[accessor]).format("MM/DD/YYYY");
+                                            break;
+                                        case "datetime":
+                                            cell = moment(item[accessor]).format("MM/DD/YYYY [at] hh:mma");
+                                            break;
+                                        default:
+                                            cell = item[accessor];
+                                            break;
+                                    }                                    
+                                }
+                               
                                 return <td key={accessor}>{cell}</td>;
                             })}
                         </tr>
