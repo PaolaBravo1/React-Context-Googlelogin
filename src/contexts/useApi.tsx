@@ -27,7 +27,6 @@ interface ContextInterface {
   register: (firstName: string, lastName: string, emailAddress: string, password: string) => Promise<AxiosResponse<any, any>>,
   registerGoogle: (credential: string, nonce: string) => Promise<string>,
   getMe: () => Promise<AxiosResponse<any, any>>,
-  getParticipants: () => Promise<AxiosResponse<any, any>>,
   searchParticipants: (terms: string) => Promise<AxiosResponse<any, any>>,
   clearIdentity: () => void,
   getIdentity: () => Identity | null,
@@ -49,7 +48,6 @@ export const useApi = (): ContextInterface => {
     register,
     registerGoogle,
     getMe,
-    getParticipants,
     searchParticipants,
     clearIdentity,
     getIdentity,
@@ -70,7 +68,6 @@ export const useApi = (): ContextInterface => {
     register,
     registerGoogle,
     getMe,
-    getParticipants,
     searchParticipants,
     clearIdentity,
     getIdentity,
@@ -345,12 +342,6 @@ export function AuthenticationProvider({ children }: { children: any }) {
     return await instance.get("/account/me");
   }
 
-  const getParticipants = async (): Promise<AxiosResponse<any, any>> => {
-    setIsMakingRequest(true);
-    
-    return await instance.get("/participant/list?pageIndex=0&pageSize=100");
-  }
-
   const searchParticipants = async (terms: string): Promise<AxiosResponse<any, any>> => {
     return await instance.post("/participant/search",
       new URLSearchParams({
@@ -370,7 +361,6 @@ export function AuthenticationProvider({ children }: { children: any }) {
       register,
       registerGoogle,
       getMe,
-      getParticipants,
       searchParticipants,
       clearIdentity,
       getIdentity,
