@@ -387,15 +387,36 @@ form.form-error .input-container label {
 }
 
 .table {
-  padding: 30px 50px 0 50px !important;
+  width: 100%;
+  padding: 0 50px 0 50px !important;
   font-size: 15px;  
+}
+
+.table .search-terms {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  border: solid 1px #333333;
+  border-radius: 3px;
+  outline: none;
+  width: 220px;
+  padding: 5px 10px 5px 10px
+}
+
+.table .search-terms:focus,
+.table .search-terms:focus-visible {
+ border: solid 1px #79b1ff;
+ outline: none;
+}
+
+.table table {
+  width: 100%;
 }
 
 .table table th span {
   cursor: pointer;
 }
 
-.table table th:hover  {
+.table table th span:hover  {
   color: #95A2FF;
 }
 

@@ -5,10 +5,12 @@ import moment from "moment";
 interface ITable {
     caption: string,
     columns: any[],
-    sourceData: any[]
+    sourceData: any[],
+    searchTerms: string,
+    onSearchTermsChanged: any
 }
 
-const Table = ({ caption, columns, sourceData }: ITable) => {
+const Table = ({ caption, columns, sourceData, searchTerms, onSearchTermsChanged }: ITable) => {
     const [sortField, setSortField] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
     const [data, setData] = useState<any>([]);
@@ -17,10 +19,9 @@ const Table = ({ caption, columns, sourceData }: ITable) => {
         setData(sourceData);
         if (!sortField)
             setSortField(columns[0].accessor);
-    }, []);
+    }, [sourceData]);
 
-    const sort = (newSortField: string, currentSortOrder: string) => {
-
+    const sort = (newSortField: string, currentSortOrder: string, type: string) => {
         let newSortOrder = currentSortOrder == "asc" ? "desc" : "asc";
 
         if (newSortField != sortField) 
@@ -34,11 +35,22 @@ const Table = ({ caption, columns, sourceData }: ITable) => {
                 if (a[newSortField] === null) return 1;
                 if (b[newSortField] === null) return -1;
                 if (a[newSortField] === null && b[newSortField] === null) return 0;
-                return (
-                    a[newSortField].toString().localeCompare(b[newSortField].toString(), "en", {
-                        numeric: true,
-                    }) * (newSortOrder === "asc" ? 1 : -1)                   
-                );
+
+                switch (type) {
+                    case "lastNameFirstName":
+                        return (
+                            (a.lastName + " " + a.firstName).toString().localeCompare((b.lastName + " " + b.firstName).toString(), "en") 
+                            * (newSortOrder === "asc" ? 1 : -1)                 
+                        );
+                        break;
+                    default:
+                        return (
+                            a[newSortField].toString().localeCompare(b[newSortField].toString(), "en", {
+                                numeric: true,
+                            }) * (newSortOrder === "asc" ? 1 : -1)                   
+                        );
+                        break;
+                }
             });
 
             setData(sorted);
@@ -46,10 +58,12 @@ const Table = ({ caption, columns, sourceData }: ITable) => {
     }
 
     return (
-        <table className="table">
+        <div className="table">
+        <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChanged}></input>        
+        <table>
             <thead>
                 <tr>
-                    {columns.map(({ label, accessor, sortable }) => {
+                    {columns.map(({ label, accessor, sortable, type }) => {
                         const cl = sortable !== false
                             ? sortField === accessor && sortOrder === "asc"
                                 ? "up"
@@ -58,7 +72,7 @@ const Table = ({ caption, columns, sourceData }: ITable) => {
                                     : "default"
                             : "";
                         return (
-                            <th key={accessor} className={cl} onClick={() => sort(accessor, sortOrder)}>
+                            <th key={accessor} className={cl} onClick={() => sort(accessor, sortOrder, type)}>
                                 <span>{label}</span>
                                 { sortField === accessor ? 
                                     <Icon name={`caret-${cl}`} className="sort-icon"></Icon>
@@ -84,7 +98,7 @@ const Table = ({ caption, columns, sourceData }: ITable) => {
                                             break;
                                         case "datetime":
                                             cell = moment(item[accessor]).format("MM/DD/YYYY [at] hh:mma");
-                                            break;
+                                            break;                                    
                                         default:
                                             cell = item[accessor];
                                             break;
@@ -98,6 +112,7 @@ const Table = ({ caption, columns, sourceData }: ITable) => {
                 })}
             </tbody>
         </table>
+        </div>
     )
 };
 

@@ -28,6 +28,7 @@ interface ContextInterface {
   registerGoogle: (credential: string, nonce: string) => Promise<string>,
   getMe: () => Promise<AxiosResponse<any, any>>,
   getParticipants: () => Promise<AxiosResponse<any, any>>,
+  searchParticipants: (terms: string) => Promise<AxiosResponse<any, any>>,
   clearIdentity: () => void,
   getIdentity: () => Identity | null,
   getProvider: () => string,
@@ -49,6 +50,7 @@ export const useApi = (): ContextInterface => {
     registerGoogle,
     getMe,
     getParticipants,
+    searchParticipants,
     clearIdentity,
     getIdentity,
     getProvider,
@@ -69,6 +71,7 @@ export const useApi = (): ContextInterface => {
     registerGoogle,
     getMe,
     getParticipants,
+    searchParticipants,
     clearIdentity,
     getIdentity,
     getProvider,
@@ -89,8 +92,6 @@ export function AuthenticationProvider({ children }: { children: any }) {
   });
 
   instance.interceptors.request.use((config) => {
-    setIsMakingRequest(true);
-
     const identity = getIdentity();
 
     if (identity != null) {
@@ -192,6 +193,8 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
   const authorize = async (emailAddress: string, password: string): Promise<string> => {
     console.log("authorizing...");
+    setIsMakingRequest(true);
+
     await instance.post(authEndPoint,
       new URLSearchParams({
         grant_type: "password",
@@ -211,6 +214,8 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
   const authorizeGoogle = async (credential: string, nonce: string): Promise<string> => {
     console.log("authorizing google...");
+    setIsMakingRequest(true);
+    
     const item = jwt<any>(credential);
     await instance.post(authEndPoint,
       new URLSearchParams({
@@ -236,6 +241,8 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
   const reauthorize = async (emailAddress: string, refreshToken: string): Promise<string> => {
     console.log("reauthorizing...");
+    setIsMakingRequest(true);
+    
     await instance.post(authEndPoint,
       new URLSearchParams({
         grant_type: "refresh_token",
@@ -252,6 +259,8 @@ export function AuthenticationProvider({ children }: { children: any }) {
   }
 
   const confirmAccount = async (emailAddress: string, token: string): Promise<AxiosResponse<any, any>> => {
+    setIsMakingRequest(true);
+    
     return await instance.post("/account/confirm",
       new URLSearchParams({
         emailAddress: emailAddress,
@@ -261,6 +270,8 @@ export function AuthenticationProvider({ children }: { children: any }) {
   }
 
   const requestPasswordReset = async (emailAddress: string): Promise<AxiosResponse<any, any>> => {
+    setIsMakingRequest(true);
+    
     return await instance.post("/account/password/reset",
       new URLSearchParams({
         emailAddress: emailAddress
@@ -269,6 +280,8 @@ export function AuthenticationProvider({ children }: { children: any }) {
   }
 
   const updatePassword = async (emailAddress: string, password: string, token: string): Promise<AxiosResponse<any, any>> => {
+    setIsMakingRequest(true);
+    
     return await instance.put("/account/password",
       new URLSearchParams({
         emailAddress: emailAddress,
@@ -279,6 +292,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
   }
 
   const register = async (firstName: string, lastName: string, emailAddress: string, password: string): Promise<AxiosResponse<any, any>> => {
+    setIsMakingRequest(true);
     setProvider("Local");
 
     if (password.length == 0) {
@@ -303,10 +317,11 @@ export function AuthenticationProvider({ children }: { children: any }) {
   }
 
   const registerGoogle = async (credential: string, nonce: string): Promise<string> => {
+    setIsMakingRequest(true);
     setProvider("Google");
     const item = jwt<any>(credential);
 
-    return await instance.post("/participant",
+    await instance.post("/participant",
       new URLSearchParams({
         firstName: item.given_name,
         lastName: item.family_name,
@@ -320,18 +335,29 @@ export function AuthenticationProvider({ children }: { children: any }) {
       }
       return "";
     }
-    ).catch(error => { throw error; });
-    ;
-  }
+    ).catch(error => { throw error;});
+    return ""; 
+ }
 
   const getMe = async (): Promise<AxiosResponse<any, any>> => {
+    setIsMakingRequest(true);
+    
     return await instance.get("/account/me");
   }
 
   const getParticipants = async (): Promise<AxiosResponse<any, any>> => {
+    setIsMakingRequest(true);
+    
     return await instance.get("/participant/list?pageIndex=0&pageSize=100");
   }
 
+  const searchParticipants = async (terms: string): Promise<AxiosResponse<any, any>> => {
+    return await instance.post("/participant/search",
+      new URLSearchParams({
+        terms: terms
+      }));
+  }
+  
   return (
     <AuthenticationContext.Provider value={{
       redirectUnauthenticated,
@@ -345,6 +371,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
       registerGoogle,
       getMe,
       getParticipants,
+      searchParticipants,
       clearIdentity,
       getIdentity,
       getProvider,
