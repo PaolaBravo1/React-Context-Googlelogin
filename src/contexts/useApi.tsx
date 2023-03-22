@@ -1,11 +1,11 @@
-import { createContext, FunctionComponent, PropsWithChildren, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect } from "react"
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import configSettings from "../../config.json";
-import jwt from 'jwt-decode'
-import { ErrorCode } from '@/helpers/errorcodes';
-import { Identity } from '@/models/identity';
+import jwt from "jwt-decode"
+import { ErrorCode } from "@/helpers/errorcodes";
+import { Identity } from "@/models/identity";
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";

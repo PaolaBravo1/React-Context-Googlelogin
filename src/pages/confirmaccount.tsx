@@ -1,9 +1,9 @@
-import 'bootstrap/dist/css/bootstrap.css'
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
-import { useApi } from '@/contexts/useApi';
-import { ErrorCode } from '@/helpers/errorcodes';
+import "bootstrap/dist/css/bootstrap.css"
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import LayoutUnauthenticated from "@/components/LayoutUnauthenticated"
+import { useApi } from "@/contexts/useApi"
+import { ErrorCode } from "@/helpers/errorcodes"
 
 const ConfirmAccount = () => {
   const [emailAddress, setEmailAddress] = useState("");

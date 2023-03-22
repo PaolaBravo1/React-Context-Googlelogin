@@ -1,5 +1,5 @@
 import { useApi } from "@/contexts/useApi";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ITextInput {
     label: string,

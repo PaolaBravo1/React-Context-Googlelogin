@@ -1,11 +1,11 @@
-import 'bootstrap/dist/css/bootstrap.css'
-import TextInput from '@/components/TextInput'
-import { useEffect, useState } from 'react'
-import { passwordRegex } from '@/helpers/constants'
-import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
-import Router from 'next/router';
-import { useApi } from '@/contexts/useApi';
-import { ErrorCode } from '@/helpers/errorcodes'
+import "bootstrap/dist/css/bootstrap.css"
+import TextInput from "@/components/TextInput"
+import { useEffect, useState } from "react"
+import { passwordRegex } from "@/helpers/constants"
+import LayoutUnauthenticated from "@/components/LayoutUnauthenticated"
+import Router from "next/router"
+import { useApi } from "@/contexts/useApi"
+import { ErrorCode } from "@/helpers/errorcodes"
 
 const SetPassword = () => {
   const [title , setTitle] = useState("");

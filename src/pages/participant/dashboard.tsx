@@ -1,9 +1,8 @@
-import Image from 'next/image'
-import 'bootstrap/dist/css/bootstrap.css'
-import { useEffect, useState } from 'react'
-import HTMLReactParser from 'html-react-parser'
-import { useApi } from '@/contexts/useApi'
-import LayoutAuthenticated from '@/components/LayoutAuthenticated'
+import "bootstrap/dist/css/bootstrap.css"
+import { useEffect, useState } from "react"
+import HTMLReactParser from "html-react-parser"
+import { useApi } from "@/contexts/useApi"
+import LayoutAuthenticated from "@/components/LayoutAuthenticated"
 
 const Dashboard = () => {  
   const [content, setContent] = useState("");

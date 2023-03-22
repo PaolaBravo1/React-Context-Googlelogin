@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 
 interface IStatusBar {
@@ -10,8 +9,8 @@ interface IStatusBar {
 
 const StatusBar = ({ id, icon, warningAt, complete }: IStatusBar) => {
   return (
-  <div className="status-bar" id={id}>
-    <Icon name={icon} className={(complete < warningAt) ? " strobe" : ""} />
+  <div className={`status-bar ${(complete < warningAt) ? " strobe" : ""}`} id={id}>
+    <Icon name={icon} />
     <span className="status-bar-complete" style={{width: complete + "%"}}></span>
   </div>
   )

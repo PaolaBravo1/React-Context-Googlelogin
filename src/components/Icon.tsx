@@ -1,7 +1,7 @@
-import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon, FontAwesomeIconProps } from "@fortawesome/react-fontawesome"
 const { library, config } = require('@fortawesome/fontawesome-svg-core');
-import { fas } from '@fortawesome/free-solid-svg-icons'
-import '@fortawesome/fontawesome-svg-core/styles.css'
+import { fas } from "@fortawesome/free-solid-svg-icons"
+import "@fortawesome/fontawesome-svg-core/styles.css"
 
 library.add(fas)
 config.autoAddCss = false

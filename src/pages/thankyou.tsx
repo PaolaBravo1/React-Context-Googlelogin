@@ -1,7 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.css'
-import { useEffect, useState } from 'react'
-import LayoutUnauthenticated from '@/components/LayoutUnauthenticated'
-import { useApi } from '@/contexts/useApi';
+import "bootstrap/dist/css/bootstrap.css"
+import LayoutUnauthenticated from "@/components/LayoutUnauthenticated"
 
 const ThankYou = () => {
   

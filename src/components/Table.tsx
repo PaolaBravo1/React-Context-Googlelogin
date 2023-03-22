@@ -59,59 +59,63 @@ const Table = ({ caption, columns, sourceData, searchTerms, onSearchTermsChanged
 
     return (
         <div className="table">
-        <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChanged}></input>        
-        <table>
-            <thead>
-                <tr>
-                    {columns.map(({ label, accessor, sortable, type }) => {
-                        const cl = sortable !== false
-                            ? sortField === accessor && sortOrder === "asc"
-                                ? "up"
-                                : sortField === accessor && sortOrder === "desc"
-                                    ? "down"
-                                    : "default"
-                            : "";
+            <div className="header">
+                <div className="caption">{caption}</div>
+                <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChanged}></input>   
+                <Icon name="search" className="search-terms-icon"></Icon>                
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        {columns.map(({ label, accessor, sortable, type }) => {
+                            const cl = sortable !== false
+                                ? sortField === accessor && sortOrder === "asc"
+                                    ? "up"
+                                    : sortField === accessor && sortOrder === "desc"
+                                        ? "down"
+                                        : "default"
+                                : "";
+                            return (
+                                <th key={accessor} className={cl} onClick={() => sort(accessor, sortOrder, type)}>
+                                    <span>{label}</span>
+                                    { sortField === accessor ? 
+                                        <Icon name={`caret-${cl}`} className="sort-icon"></Icon>
+                                        :
+                                        <></>
+                                    }
+                                </th>
+                            );
+                        })}
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((item: any) => {
                         return (
-                            <th key={accessor} className={cl} onClick={() => sort(accessor, sortOrder, type)}>
-                                <span>{label}</span>
-                                { sortField === accessor ? 
-                                    <Icon name={`caret-${cl}`} className="sort-icon"></Icon>
-                                    :
-                                    <></>
-                                }
-                            </th>
+                            <tr key={item.id}>
+                                {columns.map(({ accessor, type }) => {
+                                    let cell = "-";
+                                    
+                                    if (item[accessor]) {
+                                        switch (type) {
+                                            case "date":
+                                                cell = moment.utc(item[accessor]).format("MM/DD/YYYY");
+                                                break;
+                                            case "datetime":
+                                                cell = moment(item[accessor]).format("MM/DD/YYYY [at] hh:mma");
+                                                break;                                    
+                                            default:
+                                                cell = item[accessor];
+                                                break;
+                                        }                                    
+                                    }
+                                
+                                    return <td key={accessor}>{cell}</td>;
+                                })}
+                            </tr>
                         );
                     })}
-                </tr>
-            </thead>
-            <tbody>
-                {data.map((item: any) => {
-                    return (
-                        <tr key={item.id}>
-                            {columns.map(({ accessor, type }) => {
-                                let cell = "-";
-                                
-                                if (item[accessor]) {
-                                    switch (type) {
-                                        case "date":
-                                            cell = moment.utc(item[accessor]).format("MM/DD/YYYY");
-                                            break;
-                                        case "datetime":
-                                            cell = moment(item[accessor]).format("MM/DD/YYYY [at] hh:mma");
-                                            break;                                    
-                                        default:
-                                            cell = item[accessor];
-                                            break;
-                                    }                                    
-                                }
-                               
-                                return <td key={accessor}>{cell}</td>;
-                            })}
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         </div>
     )
 };

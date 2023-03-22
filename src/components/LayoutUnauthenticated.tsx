@@ -1,6 +1,5 @@
 import HTMLReactParser from "html-react-parser";
 import Head from "next/head";
-import configSettings from "../../config.json";
 import { useApi } from "@/contexts/useApi";
 
 interface ILayoutUnauthenticated {

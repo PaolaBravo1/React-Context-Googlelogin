@@ -180,35 +180,33 @@ form.form-error .input-container label {
   text-decoration: underline;
 }
 
-.top-bar {
+.top-bar {  
   width: 100%;
   height: 60px;
   min-height: 60px;
   background-color: #000000;
   color: #ffffff;
-  position: relative;
+  position: fixed;
 }
 
-.top-bar .status-bars {
-  margin-right: 30px;
+.side-bar .status-bars {
   position: absolute;
-  right: 0;
-  top: 13px;
+  right: 45px;
+  bottom: 20px;
 }
 
-.top-bar .status-bar {
+.side-bar .status-bar {
   height: 14px;
   min-height: 14px;
-  width: 150px;
-  background-color: #555555;
+  width: 135px;
+  background-color: #777777;
   position: relative;
-  margin-bottom: 7px;
+  margin-bottom: 20px;
 }
 
-
-.top-bar .status-bar .status-bar-complete
+.side-bar .status-bar .status-bar-complete
 {
-  background-color:#79b1ff;
+  background-color:#ffffff;
   position: absolute;
   left: 0;
   top: 0;
@@ -285,27 +283,45 @@ form.form-error .input-container label {
 
 .status-bar .icon {
   position: absolute;
-  left: -28px;
+  left: -33px;
   top: -4px;
   font-size: 15px;
-  color: #79b1ff;
+  color: #ffffff;
   width: 19px;
   text-align: right;
   transition: all 1s ease-in-out;  
 }
 
-.status-bar .icon svg.strobe {
-  
+.status-bar.strobe .status-bar-complete {  
+  animation: strobe-background 500ms ease-in-out infinite;
+}
+
+.status-bar.strobe .icon svg {  
   animation: strobe 500ms ease-in-out infinite;
 }
 
 @keyframes strobe {
   0% {
-    color: #79b1ff;
+    color: #999999;
   }  
   50% {
-    color: #555555;
+    color: #ffffff;
   }
+  100% {
+    color: #999999;
+  }  
+}
+
+@keyframes strobe-background {
+  0% {
+    background-color: #999999;
+  }  
+  50% {
+    background-color: #ffffff;
+  }
+  100% {
+    background-color: #999999;
+  }  
 }
 
 #social-login-buttons {
@@ -388,18 +404,16 @@ form.form-error .input-container label {
 
 .table {
   width: 100%;
-  padding: 0 50px 0 50px !important;
   font-size: 15px;  
 }
 
 .table .search-terms {
-  margin-top: 40px;
-  margin-bottom: 20px;
-  border: solid 1px #333333;
-  border-radius: 3px;
+  border: solid 1px #555555;
+  border-radius: 5px;
   outline: none;
-  width: 220px;
-  padding: 5px 10px 5px 10px
+  width: 20%;
+  padding: 5px 10px 5px 10px;
+  float: right;
 }
 
 .table .search-terms:focus,
@@ -412,8 +426,19 @@ form.form-error .input-container label {
   width: 100%;
 }
 
+.table table td {
+  font-size: 14px;
+  padding: 5px 0 5px 10px;
+}
+
 .table table th span {
   cursor: pointer;
+  padding: 5px 0 5px 10px;
+}
+
+.table table th span.icon {
+  
+  padding: 5px 0 5px 0;
 }
 
 .table table th span:hover  {
@@ -432,3 +457,121 @@ form.form-error .input-container label {
   background-color: #D7EEFF;
 }
 
+.table .header {
+  position: relative;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.table .header .caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  font-weight: 700;
+  font-size: 27px;
+}
+
+.table .header input {
+ 
+}
+
+.table .search-terms-icon {
+  position: absolute;
+  right: 3px;
+  top: 1px;
+}
+
+.side-bar {
+  position: fixed;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  padding: 0;
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .3);
+  z-index: 99;
+  background-color: #444444 !important;
+  color: #ffffff;
+  width: 250px !important;
+  display: block !important;
+  transition: 0.3s;
+  overflow: hidden;
+}
+
+.side-bar.collapsed {
+  left: -205px;
+}
+
+.side-bar.collapsed .collapse-button {
+   transform: rotate(180deg);
+}
+
+@media (max-width: 767.98px) {
+  .side-bar {
+    top: 11.5rem;
+    padding: 0;
+  }
+}
+
+.navbar {
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .1);
+}
+
+@media (min-width: 767.98px) {
+  .navbar {
+    top: 0;
+    position: sticky;
+    z-index: 999;
+  }
+}
+
+.side-bar .nav-link {
+  color: #ffffff;
+  position: relative;
+}
+
+.side-bar .nav-link .icon {
+  display: inline-block;
+  width: 40px;
+  text-align: center;
+  position: relative;
+  top: 1px;
+}
+
+.side-bar .nav-link:visited {
+  color: #ffffff;
+}
+
+.side-bar .nav-link.active {
+  color: #79b1ff;
+}
+
+.side-bar .nav-link:hover {
+  color: #79b1ff;
+}
+  
+.auth-container main {
+  padding-left: 285px;
+  padding-top: 55px;
+  padding-right: 30px;
+}
+
+.nav.flex-column {
+  padding-top: 20px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.side-bar .position-sticky {
+  padding-top: 10px !important;
+}
+
+.side-bar .collapse-button {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  cursor: pointer;
+  z-index: 999;
+  transition: .3s;
+}
