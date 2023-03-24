@@ -19,6 +19,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
   const [lastActiveTime, setLastActiveTime] = useState(Date.now());
   const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isPropertyBarCollapsed, setIsPropertyBarCollapsed] = useState(true);
   const [role, setRole] = useState("");
   
   const { redirectUnauthenticated, oauthAccessTokenLifeRemaining, clearIdentity, getIdentity, isMakingRequest } = useApi();
@@ -37,7 +38,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     }
     else {      
       setIsAuthenticated(false);
-      redirectUnauthenticated();
+      redirectUnauthenticated(true);
     }
   }, []);
 
@@ -74,12 +75,13 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
 
   const onIdlePopupClose = useCallback((isLogout: boolean) => {
     setIsIdlePopupOpen(false);
-
-    if (isLogout)
-      logout();
-    else 
-    {
-      clearInterval(idleTimer);
+    clearInterval(idleTimer);
+      
+    if (isLogout) {
+      clearIdentity();
+      redirectUnauthenticated(true);     
+    }
+    else {
       setLastActiveTime(Date.now());
     }
   }, []);
@@ -87,11 +89,15 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
   const logout = () => {
     clearIdentity();
     clearInterval(idleTimer);
-    redirectUnauthenticated();      
+    redirectUnauthenticated(false);      
   }
 
   const toggleIsSidebarCollapsed = () => {  
     setIsSidebarCollapsed(!isSidebarCollapsed);
+  }
+
+  const toggleIsPropertyBarCollapsed = () => {  
+    setIsPropertyBarCollapsed(!isPropertyBarCollapsed);
   }
 
   useEffect(() => {
@@ -130,7 +136,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
       <div className="top-bar">
         <div className="top-bar-buttons">
           <div className="icon-circle">
-          <Icon name="user"></Icon>
+            <Icon name="user"></Icon>
           </div>
          <button className="button is-danger" onClick={logout}>Logout</button>
         </div>
@@ -148,6 +154,11 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
               <StatusBar id="oauth-token-timeout" icon="cloud" warningAt={10 + configSettings.oauthAccessTokenRefreshMarginPercent} complete={oauthAccessTokenLifeRemaining}></StatusBar>
               <StatusBar id="idle-timeout" icon="bed" warningAt={10} complete={idleLifeRemaining}></StatusBar>          
             </div>    
+          </nav>
+          <nav id="property-bar" className={`side-bar property-bar${isPropertyBarCollapsed ? " collapsed" : ""}`}>
+            <div className="collapse-button" onClick={toggleIsPropertyBarCollapsed}>
+              <Icon name="angle-double-right"></Icon>
+            </div>
           </nav>             
         </div>
       </div>          

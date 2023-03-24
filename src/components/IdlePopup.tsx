@@ -24,9 +24,9 @@ const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
       setTime(configSettings.idlePopupDuration);
     }
     return () => {
-      if (mounted.current) {
+      if (mounted.current) 
         window.clearTimeout(mounted.current);
-      }
+
     };
   }, [isOpen, time]);
 

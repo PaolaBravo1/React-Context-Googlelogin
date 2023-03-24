@@ -7,7 +7,7 @@ import LayoutAuthenticated from "@/components/LayoutAuthenticated"
 const Dashboard = () => {  
   const [content, setContent] = useState("");
   
-  const { redirectUnauthenticated, getIdentity, getMe } = useApi();
+  const { getMe } = useApi();
   
   useEffect(() => {   
     const asyncGetDashboard = async () => {    

@@ -17,7 +17,7 @@ var authTimer: ReturnType<typeof setTimeout>;
 var authTimerCountdown: ReturnType<typeof setInterval>;
 
 interface ContextInterface {
-  redirectUnauthenticated: () => void,
+  redirectUnauthenticated: (includeRedirectParam: boolean) => void,
   authorize: (emailAddress: string, password: string) => Promise<string>,
   authorizeGoogle: (credential: string, nonce: string) => Promise<string>,
   reauthorize: (emailAddress: string, provider: string, refreshToken: string) => Promise<string>,
@@ -113,9 +113,9 @@ export function AuthenticationProvider({ children }: { children: any }) {
     return Promise.reject(error);
   });
 
-  const redirectUnauthenticated = () => {
-    if (Router.pathname.indexOf("/login") < 0)
-      Router.push("/login?" + encodeURIComponent(Router.pathname.toString()));
+  const redirectUnauthenticated = (includeRedirectParam: boolean) => {
+    if (includeRedirectParam && Router.pathname.indexOf("/login") < 0)
+      Router.push("/login?redirectTo=" + encodeURIComponent(Router.pathname.toString()));
     else
       Router.push("/login");
   }

@@ -443,12 +443,10 @@ form.form-error .input-container label {
   padding: 5px 0 5px 10px;
 }
 
-
 .table table th span {
   position: relative;
   left: -1px;
 }
-
 
 .table table th span {
   cursor: pointer;
@@ -520,12 +518,26 @@ form.form-error .input-container label {
   clip-path: inset(0px -12px 0px 0px);
 }
 
+.property-bar {
+  right: 0;
+  left: unset !important;
+  background-color: #f0f0f0 !important;
+  box-shadow: 0 0 12px rgba(0,0,0,0.75);
+  clip-path: inset(0px 0px 0px -12px);
+  width: 350px !important;
+  color: #333333;  
+}
+
 .side-bar.collapsed {
   left: -205px;
 }
 
 .side-bar.collapsed .collapse-button {
    transform: rotate(180deg);
+}
+
+.property-bar.collapsed {
+  right: -350px;
 }
 
 @media (max-width: 767.98px) {
@@ -591,6 +603,11 @@ form.form-error .input-container label {
   cursor: pointer;
   z-index: 999;
   transition: .3s;
+}
+
+.property-bar .collapse-button {
+  left: 16px;  
+  right: unset;
 }
 
 .top-bar-buttons {
