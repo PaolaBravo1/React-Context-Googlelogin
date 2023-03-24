@@ -7,6 +7,7 @@ import configSettings from "../../config.json";
 import StatusBar from "./StatusBar";
 import NavItem from "./NavItem";
 import Icon from "./Icon";
+import NavItemList from "./NavItemList";
 
 interface ILayoutAuthenticated {
   children: any
@@ -18,7 +19,8 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
   const [lastActiveTime, setLastActiveTime] = useState(Date.now());
   const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-    
+  const [role, setRole] = useState("");
+  
   const { redirectUnauthenticated, oauthAccessTokenLifeRemaining, clearIdentity, getIdentity, isMakingRequest } = useApi();
   
   const domEvents = ["click", "scroll", "keypress"];
@@ -31,7 +33,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
 
     if (validateIdentity()) {
       setIsAuthenticated(true);       
-      resetIdleTimer();
+      resetIdleTimer();      
     }
     else {      
       setIsAuthenticated(false);
@@ -39,12 +41,14 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     }
   }, []);
 
-  const validateIdentity = ()  => {
+  const validateIdentity = () => {
     const identity = getIdentity();
 
     if (!identity)
       return false;
-      
+    
+    setRole(identity.role);
+
     var parts = Router.pathname.split("/").slice(1);
 
     if (parts.length == 0)
@@ -71,16 +75,20 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
   const onIdlePopupClose = useCallback((isLogout: boolean) => {
     setIsIdlePopupOpen(false);
 
-    if (isLogout) {
-      clearIdentity();
-      clearInterval(idleTimer);
-      redirectUnauthenticated();      
-    } else 
+    if (isLogout)
+      logout();
+    else 
     {
       clearInterval(idleTimer);
       setLastActiveTime(Date.now());
     }
   }, []);
+
+  const logout = () => {
+    clearIdentity();
+    clearInterval(idleTimer);
+    redirectUnauthenticated();      
+  }
 
   const toggleIsSidebarCollapsed = () => {  
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -120,27 +128,29 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
     <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isMakingRequest ? "making-api-request" : ""}`}>
       <div className="top-bar">
-             
+        <div className="top-bar-buttons">
+          <div className="icon-circle">
+          <Icon name="user"></Icon>
+          </div>
+         <button className="button is-danger" onClick={logout}>Logout</button>
+        </div>
       </div>
       <div className="container-fluid">
         <div className="row">
           <nav id="side-bar" className={`side-bar${isSidebarCollapsed ? " collapsed" : ""}`}>
-              <div className="collapse-button" onClick={toggleIsSidebarCollapsed}>
-                <Icon name="angle-double-left"></Icon>
-              </div>
-              <div className="position-sticky pt-md-5">
-                <ul className="nav flex-column">
-                  <NavItem label="Dashboard" iconName="home" href="/administrator/dashboard"></NavItem>
-                  <NavItem label="Participants" iconName="users" href="/administrator/participants"></NavItem>                                
-                  </ul>
-                </div>
-                <div className="status-bars">
-                  <StatusBar id="oauth-token-timeout" icon="cloud" warningAt={10 + configSettings.oauthAccessTokenRefreshMarginPercent} complete={oauthAccessTokenLifeRemaining}></StatusBar>
-                  <StatusBar id="idle-timeout" icon="bed" warningAt={10} complete={idleLifeRemaining}></StatusBar>          
-                </div>    
-              </nav>             
-          </div>
-        </div>          
+            <div className="collapse-button" onClick={toggleIsSidebarCollapsed}>
+              <Icon name="angle-double-left"></Icon>
+            </div>
+            <div className="position-sticky pt-md-5">
+              <NavItemList role={role}></NavItemList>                
+            </div>
+            <div className="status-bars">
+              <StatusBar id="oauth-token-timeout" icon="cloud" warningAt={10 + configSettings.oauthAccessTokenRefreshMarginPercent} complete={oauthAccessTokenLifeRemaining}></StatusBar>
+              <StatusBar id="idle-timeout" icon="bed" warningAt={10} complete={idleLifeRemaining}></StatusBar>          
+            </div>    
+          </nav>             
+        </div>
+      </div>          
       <div className="container-fluid">          
         <main>{children}</main>        
       </div>

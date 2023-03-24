@@ -11,11 +11,11 @@ interface INavItem {
 
 const NavItem = ({ label, iconName, href }: INavItem) => {
   const [isActive, setIsActive] = useState(false);
-    
+  
   useEffect(() => {
     setIsActive(Router.pathname === href);
   }, []);
-
+  
   return (
     <li className="nav-item">
       <Link className={`nav-link${isActive ? " active" : ""}`} href={href}>

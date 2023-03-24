@@ -257,21 +257,33 @@ form.form-error .input-container label {
 {
   position: absolute;
   right: 20px;
-  top: 15px;
+  top: 13px;
 }
 
 .top-modal-buttons .button
 {
   display: inline;
-  border: solid 1px #ffffff;
+  border: solid 2px #ffffff;
   background-color: #ffffff;
   color: #79b1ff;
   border-radius: 4px;
+  padding: 5px 6px 6px 6px;
+  font-size: 14px;
+  font-weight: 600;
+  width: 130px;
+  transition: all .2s;
+  vertical-align: top;
+}
+
+.top-modal-buttons .button:hover
+{
+  background-color: #79b1ff;
+  color: #ffffff;
 }
 
 .top-modal-buttons .button:last-child {
   margin-left: .5em;
-  border: solid 1px #ffffff;
+  border: solid 2px #ffffff;
   background-color: #79b1ff;
   color: #ffffff;
 }
@@ -404,7 +416,7 @@ form.form-error .input-container label {
 
 .table {
   width: 100%;
-  font-size: 15px;  
+  font-size: 14px;  
 }
 
 .table .search-terms {
@@ -430,6 +442,13 @@ form.form-error .input-container label {
   font-size: 14px;
   padding: 5px 0 5px 10px;
 }
+
+
+.table table th span {
+  position: relative;
+  left: -1px;
+}
+
 
 .table table th span {
   cursor: pointer;
@@ -497,6 +516,8 @@ form.form-error .input-container label {
   display: block !important;
   transition: 0.3s;
   overflow: hidden;
+  box-shadow: 0 0 12px rgba(0,0,0,0.75);
+  clip-path: inset(0px -12px 0px 0px);
 }
 
 .side-bar.collapsed {
@@ -512,10 +533,6 @@ form.form-error .input-container label {
     top: 11.5rem;
     padding: 0;
   }
-}
-
-.navbar {
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .1);
 }
 
 @media (min-width: 767.98px) {
@@ -574,4 +591,63 @@ form.form-error .input-container label {
   cursor: pointer;
   z-index: 999;
   transition: .3s;
+}
+
+.top-bar-buttons {
+  position: absolute;
+  right: 20px;
+  top: 13px;
+}
+
+.top-bar-buttons button {
+  display: inline;
+  border: solid 2px #ffffff;
+  background-color: #000000;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 4px 6px 7px 6px;
+  font-size: 14px;
+  width: 100px;
+  transition: all .2s;  
+  vertical-align: top;
+  font-weight: 600;
+}
+
+.top-bar-buttons button:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.top-bar-buttons .icon-circle {
+  width: 37px;
+  height: 37px;
+  border: solid 2px #ffffff;
+  border-radius: 37px;
+  background-color: #ffffff;
+  display: inline-block;
+  transition: all .2s;
+  margin-right: 14px;
+}
+
+.top-bar-buttons span.icon {
+  position: relative;
+  display: inline-block;
+  font-size: 19px;
+  vertical-align: top;
+  cursor: pointer;
+  transition: all .2s;
+  color: #000000;
+  text-align: center;
+  width: 35px;
+  left: -1px;
+  top: 2px;
+  transition: all .2s;
+}
+
+.top-bar-buttons .icon-circle:hover {
+  background-color: #000000;
+}
+
+.top-bar-buttons .icon-circle:hover span.icon {
+  color: #ffffff;
 }
