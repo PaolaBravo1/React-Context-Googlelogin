@@ -189,13 +189,13 @@ form.form-error .input-container label {
   position: fixed;
 }
 
-.side-bar .status-bars {
+.nav-bar .status-bars {
   position: absolute;
   right: 45px;
   bottom: 20px;
 }
 
-.side-bar .status-bar {
+.nav-bar .status-bar {
   height: 14px;
   min-height: 14px;
   width: 135px;
@@ -204,7 +204,7 @@ form.form-error .input-container label {
   margin-bottom: 20px;
 }
 
-.side-bar .status-bar .status-bar-complete
+.nav-bar .status-bar .status-bar-complete
 {
   background-color:#ffffff;
   position: absolute;
@@ -499,7 +499,7 @@ form.form-error .input-container label {
   top: 1px;
 }
 
-.side-bar {
+.nav-bar {
   position: fixed;
   top: 60px;
   bottom: 0;
@@ -528,11 +528,11 @@ form.form-error .input-container label {
   color: #333333;  
 }
 
-.side-bar.collapsed {
+.nav-bar.collapsed {
   left: -205px;
 }
 
-.side-bar.collapsed .collapse-button {
+.nav-bar.collapsed .collapse-button {
    transform: rotate(180deg);
 }
 
@@ -541,7 +541,7 @@ form.form-error .input-container label {
 }
 
 @media (max-width: 767.98px) {
-  .side-bar {
+  .nav-bar {
     top: 11.5rem;
     padding: 0;
   }
@@ -555,12 +555,12 @@ form.form-error .input-container label {
   }
 }
 
-.side-bar .nav-link {
+.nav-bar .nav-link {
   color: #ffffff;
   position: relative;
 }
 
-.side-bar .nav-link .icon {
+.nav-bar .nav-link .icon {
   display: inline-block;
   width: 40px;
   text-align: center;
@@ -568,15 +568,15 @@ form.form-error .input-container label {
   top: 1px;
 }
 
-.side-bar .nav-link:visited {
+.nav-bar .nav-link:visited {
   color: #ffffff;
 }
 
-.side-bar .nav-link.active {
+.nav-bar .nav-link.active {
   color: #79b1ff;
 }
 
-.side-bar .nav-link:hover {
+.nav-bar .nav-link:hover {
   color: #79b1ff;
 }
   
@@ -592,11 +592,11 @@ form.form-error .input-container label {
   font-weight: 600;
 }
 
-.side-bar .position-sticky {
+.nav-bar .position-sticky {
   padding-top: 10px !important;
 }
 
-.side-bar .collapse-button {
+.nav-bar .collapse-button {
   position: absolute;
   top: 10px;
   right: 16px;
@@ -668,3 +668,35 @@ form.form-error .input-container label {
 .top-bar-buttons .icon-circle:hover span.icon {
   color: #ffffff;
 }
+
+.property-bar {
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.property-bar .input-container {
+  margin: 0 0 20px 0;
+}
+
+.property-bar .input-container label {
+  transform: translate(0, 18px) scale(1);
+  font-size: 17px;
+  left: 12px;
+  top: -4px;
+  padding: 0;
+}
+
+.property-bar .input-container:focus-within label {
+  transform: translate(-10px, 6px) scale(0.6); 
+}
+
+.property-bar .input-container .filled {
+  transform: translate(-10px, 6px) scale(0.6);
+}
+
+.property-bar .input-container input {
+  height: 48px;
+  xborder: none;
+  padding: 4px 10px 0px 12px;
+  font-size: 17px;
+ }

@@ -6,6 +6,7 @@ import configSettings from "../../config.json";
 import jwt from "jwt-decode"
 import { ErrorCode } from "@/helpers/errorcodes";
 import { Identity } from "@/models/identity";
+import { Participant } from "@/models/participant";
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";
@@ -27,7 +28,7 @@ interface ContextInterface {
   register: (firstName: string, lastName: string, emailAddress: string, password: string) => Promise<AxiosResponse<any, any>>,
   registerGoogle: (credential: string, nonce: string) => Promise<string>,
   getMe: () => Promise<AxiosResponse<any, any>>,
-  searchParticipants: (terms: string) => Promise<AxiosResponse<any, any>>,
+  searchParticipants: (terms: string) => Promise<AxiosResponse<Participant[], any>>,
   clearIdentity: () => void,
   getIdentity: () => Identity | null,
   getProvider: () => string,
@@ -342,7 +343,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     return await instance.get("/account/me");
   }
 
-  const searchParticipants = async (terms: string): Promise<AxiosResponse<any, any>> => {
+  const searchParticipants = async (terms: string): Promise<AxiosResponse<Participant[], any>> => {
     return await instance.post("/participant/search",
       new URLSearchParams({
         terms: terms

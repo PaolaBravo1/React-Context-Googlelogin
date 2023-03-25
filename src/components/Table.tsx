@@ -7,10 +7,11 @@ interface ITable {
     columns: any[],
     sourceData: any[],
     searchTerms: string,
-    onSearchTermsChanged: any
+    onSearchTermsChange: any,
+    onRowClick: any
 }
 
-const Table = ({ caption, columns, sourceData, searchTerms, onSearchTermsChanged }: ITable) => {
+const Table = ({ caption, columns, sourceData, searchTerms, onSearchTermsChange, onRowClick }: ITable) => {
     const [sortField, setSortField] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
     const [data, setData] = useState<any>([]);
@@ -61,7 +62,7 @@ const Table = ({ caption, columns, sourceData, searchTerms, onSearchTermsChanged
         <div className="table">
             <div className="header">
                 <div className="caption">{caption}</div>
-                <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChanged}></input>   
+                <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChange}></input>   
                 <Icon name="search" className="search-terms-icon"></Icon>                
             </div>
             <table>
@@ -91,7 +92,7 @@ const Table = ({ caption, columns, sourceData, searchTerms, onSearchTermsChanged
                 <tbody>
                     {data.map((item: any) => {
                         return (
-                            <tr key={item.id}>
+                            <tr key={item.id} onClick={() => onRowClick(item)}>
                                 {columns.map(({ accessor, type }) => {
                                     let cell = "-";
                                     

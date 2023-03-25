@@ -8,6 +8,8 @@ import StatusBar from "./StatusBar";
 import NavItem from "./NavItem";
 import Icon from "./Icon";
 import NavItemList from "./NavItemList";
+import NavBar from "./NavBar";
+import PropertyBar from "./PropertyBar";
 
 interface ILayoutAuthenticated {
   children: any
@@ -18,8 +20,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
   const [isIdlePopupOpen, setIsIdlePopupOpen] = useState(false);
   const [lastActiveTime, setLastActiveTime] = useState(Date.now());
   const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [isPropertyBarCollapsed, setIsPropertyBarCollapsed] = useState(true);
+  const [isPropertyBarVisible, setIsPropertyBarVisible] = useState(false);
   const [role, setRole] = useState("");
   
   const { redirectUnauthenticated, oauthAccessTokenLifeRemaining, clearIdentity, getIdentity, isMakingRequest } = useApi();
@@ -92,12 +93,8 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     redirectUnauthenticated(false);      
   }
 
-  const toggleIsSidebarCollapsed = () => {  
-    setIsSidebarCollapsed(!isSidebarCollapsed);
-  }
-
-  const toggleIsPropertyBarCollapsed = () => {  
-    setIsPropertyBarCollapsed(!isPropertyBarCollapsed);
+  const toggleIsPropertyBarvisible = () => {  
+    setIsPropertyBarVisible(!isPropertyBarVisible);
   }
 
   useEffect(() => {
@@ -143,23 +140,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
       </div>
       <div className="container-fluid">
         <div className="row">
-          <nav id="side-bar" className={`side-bar${isSidebarCollapsed ? " collapsed" : ""}`}>
-            <div className="collapse-button" onClick={toggleIsSidebarCollapsed}>
-              <Icon name="angle-double-left"></Icon>
-            </div>
-            <div className="position-sticky pt-md-5">
-              <NavItemList role={role}></NavItemList>                
-            </div>
-            <div className="status-bars">
-              <StatusBar id="oauth-token-timeout" icon="cloud" warningAt={10 + configSettings.oauthAccessTokenRefreshMarginPercent} complete={oauthAccessTokenLifeRemaining}></StatusBar>
-              <StatusBar id="idle-timeout" icon="bed" warningAt={10} complete={idleLifeRemaining}></StatusBar>          
-            </div>    
-          </nav>
-          <nav id="property-bar" className={`side-bar property-bar${isPropertyBarCollapsed ? " collapsed" : ""}`}>
-            <div className="collapse-button" onClick={toggleIsPropertyBarCollapsed}>
-              <Icon name="angle-double-right"></Icon>
-            </div>
-          </nav>             
+          <NavBar role={role} oauthAccessTokenLifeRemaining={oauthAccessTokenLifeRemaining} idleLifeRemaining={idleLifeRemaining}></NavBar>          
         </div>
       </div>          
       <div className="container-fluid">          
