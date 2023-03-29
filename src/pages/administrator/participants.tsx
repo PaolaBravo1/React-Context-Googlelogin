@@ -147,6 +147,7 @@ const Participants = () => {
       <PropertyBar isVisible={isPropertyBarVisible}>
         { (editableParticipant != undefined) ? 
         <> 
+        <div className="caption">{editableParticipant.fullName}</div>
         { fields.map((o, i) => {
             return <TextInput 
               key={o.accessor}

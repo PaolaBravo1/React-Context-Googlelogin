@@ -700,3 +700,10 @@ form.form-error .input-container label {
   padding: 4px 10px 0px 12px;
   font-size: 17px;
  }
+
+.property-bar .caption {
+  padding: 0;
+  font-weight: 700;
+  font-size: 27px;
+  margin-bottom: 20px;
+}

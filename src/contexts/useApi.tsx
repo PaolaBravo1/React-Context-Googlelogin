@@ -97,7 +97,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
         restartTimers(identity);
 
       config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;
-      config.headers[contentTypeHeaderKey] = "application/x-www-form-urlencoded";
+      config.headers[contentTypeHeaderKey] = "application/json";
     }
 
     return config;
@@ -260,33 +260,30 @@ export function AuthenticationProvider({ children }: { children: any }) {
     setIsMakingRequest(true);
     
     return await instance.post("/account/confirm",
-      new URLSearchParams({
-        emailAddress: emailAddress,
-        token: token
-      })
-    );
+      JSON.stringify({ 
+        emailAddress,
+        token
+      }));      
   }
 
   const requestPasswordReset = async (emailAddress: string): Promise<AxiosResponse<any, any>> => {
     setIsMakingRequest(true);
     
     return await instance.post("/account/password/reset",
-      new URLSearchParams({
-        emailAddress: emailAddress
-      })
-    );
+      JSON.stringify({ 
+        emailAddress
+      }));  
   }
 
-  const updatePassword = async (emailAddress: string, password: string, token: string): Promise<AxiosResponse<any, any>> => {
+  const updatePassword = async (emailAddress: string, newPassword: string, token: string): Promise<AxiosResponse<any, any>> => {
     setIsMakingRequest(true);
     
     return await instance.put("/account/password",
-      new URLSearchParams({
-        emailAddress: emailAddress,
-        newPassword: password,
-        token: token
-      })
-    );
+      JSON.stringify({ 
+        emailAddress,
+        newPassword,
+        token
+      }));     
   }
 
   const register = async (firstName: string, lastName: string, emailAddress: string, password: string): Promise<AxiosResponse<any, any>> => {
@@ -295,22 +292,20 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
     if (password.length == 0) {
       return await instance.post("/participant",
-        new URLSearchParams({
+        JSON.stringify({ 
           firstName,
           lastName,
           emailAddress
-        })
-      );
+        }));             
     }
     else {
       return await instance.post("/participant",
-        new URLSearchParams({
-          firstName,
-          lastName,
-          emailAddress,
-          password
-        })
-      );
+      JSON.stringify({ 
+        firstName,
+        lastName,
+        emailAddress,
+        password
+      }));   
     }
   }
 
@@ -320,12 +315,12 @@ export function AuthenticationProvider({ children }: { children: any }) {
     const item = jwt<any>(credential);
 
     await instance.post("/participant",
-      new URLSearchParams({
+      JSON.stringify({ 
         firstName: item.given_name,
         lastName: item.family_name,
         emailAddress: item.email,
         googleCredential: credential
-      })
+      })   
     ).then(async result => {
       if (nonce != item.nonce) {
         clearIdentity();
@@ -345,8 +340,8 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
   const searchParticipants = async (terms: string): Promise<AxiosResponse<Participant[], any>> => {
     return await instance.post("/participant/search",
-      new URLSearchParams({
-        terms: terms
+      JSON.stringify({ 
+        terms 
       }));
   }
   

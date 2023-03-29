@@ -13,6 +13,5 @@ export class Participant {
     public fullName: string;
     public dateOfBirth: Date | null;
     public authenticatedTimestamp: Date | null;
-
 }
 
