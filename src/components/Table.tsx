@@ -1,26 +1,60 @@
 import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import moment from "moment";
+import React from "react";
 
 interface ITable {
+    id: string,
     caption: string,
     columns: any[],
     sourceData: any[],
     searchTerms: string,
+    isPropertyBarVisible: boolean
     onSearchTermsChange: any,
     onRowClick: any
 }
 
-const Table = ({ caption, columns, sourceData, searchTerms, onSearchTermsChange, onRowClick }: ITable) => {
+const Table = ({ id, caption, columns, sourceData, searchTerms, isPropertyBarVisible, onSearchTermsChange, onRowClick }: ITable) => {
     const [sortField, setSortField] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
     const [data, setData] = useState<any>([]);
+    const [isHoverable, setIsHoverable] = useState(true);
 
     useEffect(() => {
         setData(sourceData);
+
         if (!sortField)
             setSortField(columns[0].accessor);
     }, [sourceData]);
+
+    const unselectAllRows = () => {
+        var elements = document.getElementById(id)!.getElementsByClassName("selected");
+        while(elements.length > 0){
+            elements[0].classList.remove("selected");
+        }
+    }
+
+    const selectRow = (id: any) => {
+        unselectAllRows();
+
+        const row = document.getElementById(`row-${id}`);
+
+        if (row)
+            row.classList.add("selected");
+    }
+
+    const handleRowClick = (item: any) => {
+        setIsHoverable(false);
+        selectRow(item.id);        
+        onRowClick(item);
+    }
+
+    const handleMouseMove = (e: any) => {
+        if (!isHoverable && !isPropertyBarVisible) {
+            unselectAllRows();
+            setIsHoverable(true);
+        }
+    }
 
     const sort = (newSortField: string, currentSortOrder: string, type: string) => {
         let newSortOrder = currentSortOrder == "asc" ? "desc" : "asc";
@@ -59,7 +93,7 @@ const Table = ({ caption, columns, sourceData, searchTerms, onSearchTermsChange,
     }
 
     return (
-        <div className="table">
+        <div className={`table${isHoverable ? " is-hoverable" : ""}`} id={id}>
             <div className="header">
                 <div className="caption">{caption}</div>
                 <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChange}></input>   
@@ -89,10 +123,10 @@ const Table = ({ caption, columns, sourceData, searchTerms, onSearchTermsChange,
                         })}
                     </tr>
                 </thead>
-                <tbody>
+                <tbody onMouseMove={(ev)=> handleMouseMove(ev)}>
                     {data.map((item: any) => {
                         return (
-                            <tr key={item.id} onClick={() => onRowClick(item)}>
+                            <tr id={`row-${item.id}`} key={item.id} onClick={() => handleRowClick(item)}>
                                 {columns.map(({ accessor, type }) => {
                                     let cell = "-";
                                     

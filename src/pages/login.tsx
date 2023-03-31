@@ -140,10 +140,10 @@ const Login = () => {
       <div className={`muted password-reset ${isPasswordResetLinkVisible ? "": "hidden"}`}>Forgot your password? <Link className="simple-link" href="/forgotpassword">Click here to request a passsword reset!</Link></div>
       <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>
         <div className="mb-3">
-          <TextInput type="text" label="Email address" name="email-address" value={emailAddress} onChange={(value:string) => setEmailAddress(value)}></TextInput>
+          <TextInput required={true} type="text" label="Email address" name="email-address" value={emailAddress} onChange={(value:string) => setEmailAddress(value)}></TextInput>
         </div>
         <div className="mb-3">
-          <TextInput type="password" label="Password" name="password" value={password} onChange={(value:string) => setPassword(value)}></TextInput>
+          <TextInput required={true} type="password" label="Password" name="password" value={password} onChange={(value:string) => setPassword(value)}></TextInput>
         </div>
         <div className="form-check">
           <input id="rememberPassword" type="checkbox" className="form-check-input" />

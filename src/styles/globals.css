@@ -187,6 +187,7 @@ form.form-error .input-container label {
   background-color: #000000;
   color: #ffffff;
   position: fixed;
+  z-index: 999;
 }
 
 .nav-bar .status-bars {
@@ -204,8 +205,7 @@ form.form-error .input-container label {
   margin-bottom: 20px;
 }
 
-.nav-bar .status-bar .status-bar-complete
-{
+.nav-bar .status-bar .status-bar-complete {
   background-color:#ffffff;
   position: absolute;
   left: 0;
@@ -425,7 +425,9 @@ form.form-error .input-container label {
   outline: none;
   width: 20%;
   padding: 5px 10px 5px 10px;
-  float: right;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .table .search-terms:focus,
@@ -435,7 +437,7 @@ form.form-error .input-container label {
 }
 
 .table table {
-  width: 100%;
+  width: 100%;  
 }
 
 .table table td {
@@ -459,7 +461,7 @@ form.form-error .input-container label {
 }
 
 .table table th span:hover  {
-  color: #95A2FF;
+  color: #79b1ff;
 }
 
 .table table tbody tr:nth-child(even) {
@@ -470,7 +472,11 @@ form.form-error .input-container label {
   cursor: pointer;
 }
 
-.table table tbody tr:hover {
+.table.is-hoverable table tbody tr:hover {
+  background-color: #D7EEFF;
+}
+
+.table table tbody tr.selected {
   background-color: #D7EEFF;
 }
 
@@ -481,10 +487,6 @@ form.form-error .input-container label {
 }
 
 .table .header .caption {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 0;
   font-weight: 700;
   font-size: 27px;
 }
@@ -524,7 +526,7 @@ form.form-error .input-container label {
   background-color: #f0f0f0 !important;
   box-shadow: 0 0 12px rgba(0,0,0,0.75);
   clip-path: inset(0px 0px 0px -12px);
-  width: 350px !important;
+  width: 400px !important;
   color: #333333;  
 }
 
@@ -537,21 +539,14 @@ form.form-error .input-container label {
 }
 
 .property-bar.collapsed {
-  right: -350px;
+  right: -400px;
+  box-shadow: none;
 }
 
 @media (max-width: 767.98px) {
   .nav-bar {
     top: 11.5rem;
     padding: 0;
-  }
-}
-
-@media (min-width: 767.98px) {
-  .navbar {
-    top: 0;
-    position: sticky;
-    z-index: 999;
   }
 }
 
@@ -696,7 +691,6 @@ form.form-error .input-container label {
 
 .property-bar .input-container input {
   height: 48px;
-  xborder: none;
   padding: 4px 10px 0px 12px;
   font-size: 17px;
  }
@@ -706,4 +700,85 @@ form.form-error .input-container label {
   font-weight: 700;
   font-size: 27px;
   margin-bottom: 20px;
+}
+
+.property-bar .buttons {
+  margin-top: 30px;
+}
+
+.property-bar .styled-button {
+  color: #ffffff;
+  background-color: #79b1ff;
+  padding: 1em 2.4em;
+  width: 100%;
+}
+
+.property-bar .styled-button:hover {
+  background-color: #ffffff;
+  color: #79b1ff;
+}
+
+.property-bar .styled-button.cancel {
+  background-color: #ffffff;
+  color: #79b1ff;
+  padding: 1em 2.4em;
+  width: 100%;
+}
+
+.property-bar .styled-button.cancel:hover {
+  background-color: #79b1ff;
+  color: #ffffff;
+}
+
+@keyframes flash {
+  10% {
+    background-color: #ffffff;
+  }
+  15% {
+    background-color: #79b1ff;
+  }  
+  25% {
+    background-color: #ffffff;
+  } 
+  30% {
+    background-color: #79b1ff;
+  } 
+  100% {
+    background-color: #ffffff;
+  } 
+}
+
+@keyframes flash-even {
+  10% {
+    background-color: #f3f3f3;
+  }
+  15% {
+    background-color: #79b1ff;
+  }  
+  25% {
+    background-color: #f3f3f3;
+  } 
+  30% {
+    background-color: #79b1ff;
+  } 
+  100% {
+    background-color: #f3f3f3;
+  } 
+}
+
+.table table tbody tr.flash-row:nth-child(odd) {
+  animation: flash 1s;
+}
+
+.table table tbody tr.flash-row:nth-child(even) {
+  animation: flash-even 1s;
+}
+
+.input-container.is-not-valid input {
+  border-bottom: solid 2px #aa0000 !important;
+  background-color: #ffeeee;
+}
+
+.input-container.is-not-valid label {
+  color: #aa0000 !important;
 }

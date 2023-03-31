@@ -29,6 +29,7 @@ interface ContextInterface {
   registerGoogle: (credential: string, nonce: string) => Promise<string>,
   getMe: () => Promise<AxiosResponse<any, any>>,
   searchParticipants: (terms: string) => Promise<AxiosResponse<Participant[], any>>,
+  updateParticipant: (participant: Participant) => Promise<AxiosResponse<any, any>>,
   clearIdentity: () => void,
   getIdentity: () => Identity | null,
   getProvider: () => string,
@@ -50,6 +51,7 @@ export const useApi = (): ContextInterface => {
     registerGoogle,
     getMe,
     searchParticipants,
+    updateParticipant,
     clearIdentity,
     getIdentity,
     getProvider,
@@ -70,6 +72,7 @@ export const useApi = (): ContextInterface => {
     registerGoogle,
     getMe,
     searchParticipants,
+    updateParticipant,
     clearIdentity,
     getIdentity,
     getProvider,
@@ -90,16 +93,18 @@ export function AuthenticationProvider({ children }: { children: any }) {
   });
 
   instance.interceptors.request.use((config) => {
+
     const identity = getIdentity();
 
     if (identity != null) {
       if (!authTimer)
         restartTimers(identity);
-
+    
       config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;
-      config.headers[contentTypeHeaderKey] = "application/json";
     }
-
+     
+    config.headers[contentTypeHeaderKey] = "application/json";
+    
     return config;
   }, (error) => {
     setIsMakingRequest(false);
@@ -239,15 +244,14 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
   const reauthorize = async (emailAddress: string, refreshToken: string): Promise<string> => {
     console.log("reauthorizing...");
-    setIsMakingRequest(true);
-    
+   
     await instance.post(authEndPoint,
       new URLSearchParams({
         grant_type: "refresh_token",
         username: emailAddress,
         refresh_token: refreshToken
       })
-    ).then(async result => {
+    ).then(async result => {      
       await saveIdentity(emailAddress, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       return result.data.access_token;
     }
@@ -268,10 +272,10 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
   const requestPasswordReset = async (emailAddress: string): Promise<AxiosResponse<any, any>> => {
     setIsMakingRequest(true);
-    
+
     return await instance.post("/account/password/reset",
       JSON.stringify({ 
-        emailAddress
+        emailAddress        
       }));  
   }
 
@@ -300,15 +304,19 @@ export function AuthenticationProvider({ children }: { children: any }) {
     }
     else {
       return await instance.post("/participant",
-      JSON.stringify({ 
-        firstName,
-        lastName,
-        emailAddress,
-        password
-      }));   
+        JSON.stringify({ 
+          firstName,
+          lastName,
+          emailAddress,
+          password
+        }));   
     }
   }
 
+  const updateParticipant = async (participant: Participant): Promise<AxiosResponse<any, any>> => {
+    return await instance.put("/participant/" + participant.id, participant);      
+  }
+  
   const registerGoogle = async (credential: string, nonce: string): Promise<string> => {
     setIsMakingRequest(true);
     setProvider("Google");
@@ -358,6 +366,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
       registerGoogle,
       getMe,
       searchParticipants,
+      updateParticipant,
       clearIdentity,
       getIdentity,
       getProvider,

@@ -14,7 +14,7 @@ const Participants = () => {
   const [editableParticipant, setEditableParticipant] = useState<Participant>();
   const [isPropertyBarVisible, setIsPropertyBarVisible] = useState(false);
   
-  const { searchParticipants } = useApi();
+  const { searchParticipants, updateParticipant } = useApi();
 
   const columns = useMemo(
     () => [
@@ -50,7 +50,8 @@ const Participants = () => {
       {
         label: "First name",
         accessor: "firstName",
-        type: "text"
+        type: "text",
+        required: true
       },
       {
         label: "Middle name",
@@ -60,7 +61,8 @@ const Participants = () => {
       {
         label: "Last name",
         accessor: "lastName",
-        type: "text"
+        type: "text",
+        required: true
       },
       {
         label: "Address",
@@ -80,12 +82,14 @@ const Participants = () => {
       {
         label: "Email address",
         accessor: "emailAddress",
-        type: "text"
+        type: "text",        
+        required: true
       },
       {
         label: "Date of birth",
         accessor: "dateOfBirth",
-        type: "date"
+        type: "date",        
+        required: true
       }
     ],
     [],
@@ -102,18 +106,23 @@ const Participants = () => {
   }
 
   const handleSearchTermsChange = (event: any) => {
-      setSearchTerms(event.target.value);
-      searchTermsDebouncer(event.target.value);
+    setSearchTerms(event.target.value);
+    searchTermsDebouncer(event.target.value);
   }
 
   const handleRowClick = (participant: Participant) => {
-    setEditableParticipant(participant);
+    let clone = { ...participant };
+    setEditableParticipant(clone);
     setIsPropertyBarVisible(true);
   }
 
-  function updateParticipant(prop: string, value: string) {
-    (editableParticipant as any)[prop] = value;
-    setEditableParticipant(editableParticipant);    
+  function updateParticipantProperty(prop: string, value: string) {
+    (editableParticipant as any)[prop] = value;    
+  }
+
+  const handleParticipantUpdate = async () => {    
+    await updateParticipant(editableParticipant!);
+    handleSearchTermsDebounce(searchTerms);
   }
 
   const searchTermsDebouncer = useCallback(debounce(handleSearchTermsDebounce, 250), []);
@@ -122,31 +131,26 @@ const Participants = () => {
     handleSearchTermsDebounce("");  
   }, []);
 
-  useEffect(() => {
-    if (editableParticipant)
-      console.log(editableParticipant.firstName);
-  }, [editableParticipant]);
-
   return (
     <LayoutAuthenticated>
       <div className="row no-gutter">
         {(participants == null) ?
           <></>
           :
-          <div className="table">
-            <Table 
-              caption={"Participant List"} 
-              columns={columns} 
-              sourceData={participants} 
-              searchTerms={searchTerms} 
-              onSearchTermsChange={handleSearchTermsChange}
-              onRowClick={handleRowClick} />
-          </div>
+          <Table 
+            id={"participant-table"}
+            caption={"Participants"} 
+            columns={columns} 
+            sourceData={participants} 
+            searchTerms={searchTerms} 
+            isPropertyBarVisible={isPropertyBarVisible}
+            onSearchTermsChange={handleSearchTermsChange}
+            onRowClick={handleRowClick} />
         }
       </div>
-      <PropertyBar isVisible={isPropertyBarVisible}>
+      <PropertyBar entityID={editableParticipant?.id ?? null} isVisible={isPropertyBarVisible} onSave={handleParticipantUpdate} onCancel={() => setIsPropertyBarVisible(false) }>
         { (editableParticipant != undefined) ? 
-        <> 
+        <>
         <div className="caption">{editableParticipant.fullName}</div>
         { fields.map((o, i) => {
             return <TextInput 
@@ -155,8 +159,9 @@ const Participants = () => {
               label={o.label} 
               name={o.accessor} 
               value={(editableParticipant as any)[o.accessor]} 
-              onChange={(value:string) => updateParticipant(o.accessor, value)}/>
-        })}          
+              required={o.required ?? false}
+              onChange={(value:string) => updateParticipantProperty(o.accessor, value)}/>
+        })}     
         </>
         : 
         <></>
