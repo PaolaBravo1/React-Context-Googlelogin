@@ -200,13 +200,13 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const authorize = async (emailAddress: string, password: string): Promise<string> => {
     console.log("authorizing...");
     setIsMakingRequest(true);
-
+   
     await instance.post(authEndPoint,
-      new URLSearchParams({
-        grant_type: "password",
-        username: emailAddress,
-        password: password
-      })
+      {
+        "grant_type": "password",
+        "username": emailAddress,
+        "password": password
+      }
     ).then(async result => {
       await saveIdentity(emailAddress, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       setProvider("Local");

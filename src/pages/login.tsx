@@ -80,7 +80,7 @@ const Login = () => {
       else
         Router.push(getIdentity()!.role.toLowerCase() + "/dashboard");      
     }
-    catch (error:any) { 
+    catch (error:any) {
         switch(error?.response?.data?.errorCode) {
           case ErrorCode.AccountCredentialsInvalid:
             setErrorMessage("The credentials you provided are invalid.  Please check your email address and password and try again to sign in.");
