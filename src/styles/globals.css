@@ -98,7 +98,8 @@
   padding: 3px;
 }
 
-.input-container input {
+.input-container input,
+.input-container select {
   height: 64px;
   border: none;
   padding: 12px 16px 2px 16px;
@@ -111,16 +112,19 @@
   transition: all 200ms ease-in;
 }
 
-.input-container input:focus {
+.input-container input:focus,
+.input-container select:focus {
   border-bottom: solid 3px #79b1ff;
 }
 
-form.form-error .input-container input {
+form.form-error .input-container input,
+form.form-error .input-container select {
   border-bottom: solid 3px #aa0000;
   background-color: #ffeeee;
 }
 
-form.form-error .input-container input {
+form.form-error .input-container input,
+form.form-error .input-container select {
   border-bottom: solid 2px #aa0000;
 }
 
@@ -520,16 +524,6 @@ form.form-error .input-container label {
   clip-path: inset(0px -12px 0px 0px);
 }
 
-.property-bar {
-  right: 0;
-  left: unset !important;
-  background-color: #f0f0f0 !important;
-  box-shadow: 0 0 12px rgba(0,0,0,0.75);
-  clip-path: inset(0px 0px 0px -12px);
-  width: 400px !important;
-  color: #333333;  
-}
-
 .nav-bar.collapsed {
   left: -205px;
 }
@@ -665,19 +659,26 @@ form.form-error .input-container label {
 }
 
 .property-bar {
-  padding: 40px;
+  padding: 40px 40px 0 40px;
   overflow-y: auto;
+  right: 0;
+  left: unset !important;
+  background-color: #f0f0f0 !important;
+  box-shadow: 0 0 12px rgba(0,0,0,0.75);
+  clip-path: inset(0px 0px 0px -12px);
+  width: 400px !important;
+  color: #333333;  
 }
 
 .property-bar .input-container {
-  margin: 0 0 20px 0;
+  margin: 0 0 10px 0;
 }
 
 .property-bar .input-container label {
   transform: translate(0, 18px) scale(1);
-  font-size: 17px;
+  font-size: 16px;
   left: 12px;
-  top: -4px;
+  top: -3px;
   padding: 0;
 }
 
@@ -689,7 +690,8 @@ form.form-error .input-container label {
   transform: translate(-10px, 6px) scale(0.6);
 }
 
-.property-bar .input-container input {
+.property-bar .input-container input,
+.property-bar .input-container select {
   height: 48px;
   padding: 4px 10px 0px 12px;
   font-size: 17px;
@@ -774,11 +776,26 @@ form.form-error .input-container label {
   animation: flash-even 1s;
 }
 
-.input-container.is-not-valid input {
+.input-container.not-valid input,
+.input-container.not-valid select,
+.input-container.group-not-valid input,
+.input-container.group-not-valid select {
   border-bottom: solid 2px #aa0000 !important;
   background-color: #ffeeee;
 }
 
-.input-container.is-not-valid label {
+.input-container.not-valid label,
+.input-container.group-not-valid label {
   color: #aa0000 !important;
+}
+
+.property-bar .input-container select {
+  padding: 3px 10px 0px 8px;
+  border: none;
+  border-right: 10px solid #ffffff;
+  outline: none;  
+}
+
+.empty-option {
+  color: #bbbbbb;
 }

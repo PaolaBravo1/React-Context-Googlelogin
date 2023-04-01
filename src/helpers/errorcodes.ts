@@ -48,5 +48,7 @@ export enum ErrorCode {
   GoogleOAuthTokenInvalid = 2200,
   GoogleOAuthNonceInvalid = 2201,
   ParticipantInternalIDCouldNotBeGenerated = 3000,
+  ParticipantDoesNotExist = 3001,
+  ParticipantAddressBlockIncomplete = 3002,
   EmailDeliveryFailed = 4000
 }

@@ -93,17 +93,20 @@ export function AuthenticationProvider({ children }: { children: any }) {
   });
 
   instance.interceptors.request.use((config) => {
-
     const identity = getIdentity();
 
-    if (identity != null) {
-      if (!authTimer)
-        restartTimers(identity);
+    if (config.url == authEndPoint) {
+      config.headers[contentTypeHeaderKey] = "application/x-www-form-urlencoded";
+    } else {
+      config.headers[contentTypeHeaderKey] = "application/json";
     
-      config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;
+      if (identity != null) {
+        if (!authTimer)
+          restartTimers(identity);
+      
+        config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;
+      }
     }
-     
-    config.headers[contentTypeHeaderKey] = "application/json";
     
     return config;
   }, (error) => {
@@ -221,11 +224,11 @@ export function AuthenticationProvider({ children }: { children: any }) {
     
     const item = jwt<any>(credential);
     await instance.post(authEndPoint,
-      new URLSearchParams({
-        grant_type: "password",
-        username: item.email,
-        google_credential: credential
-      })
+      {
+        "grant_type": "password",
+        "username": item.email,
+        "google_credential": credential
+      }
     ).then(async result => {
       if (nonce != item.nonce) {
         clearIdentity();
@@ -244,13 +247,12 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
   const reauthorize = async (emailAddress: string, refreshToken: string): Promise<string> => {
     console.log("reauthorizing...");
-   
     await instance.post(authEndPoint,
-      new URLSearchParams({
-        grant_type: "refresh_token",
-        username: emailAddress,
-        refresh_token: refreshToken
-      })
+      {
+        "grant_type": "refresh_token",
+        "username": emailAddress,
+        "refresh_token": refreshToken
+      }
     ).then(async result => {      
       await saveIdentity(emailAddress, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       return result.data.access_token;

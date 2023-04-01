@@ -6,8 +6,7 @@ import NavItemList from "./NavItemList";
 import StatusBar from "./StatusBar";
 import configSettings from "../../config.json";
 import HTMLReactParser from "html-react-parser";
-import { faShuttleSpace } from "@fortawesome/free-solid-svg-icons";
-import { validateConfig } from "next/dist/server/config-shared";
+import { ErrorCode } from "@/helpers/errorcodes";
 
 interface IPropertyBar {
   children: any,
@@ -30,15 +29,19 @@ const PropertyBar = ({ children, entityID, isVisible, onSave, onCancel }: IPrope
           flashRow(entityID!);    
           return true;
       }).catch((error: any) => { 
-        setErrorMessage(error.response?.data?.message); 
+        if (error.response)
+          setErrorMessage(error.response?.data?.message); 
+        else if (error == ErrorCode.ParticipantAddressBlockIncomplete) {
+          setErrorMessage("Please complete all fields in the address block, or leave the fields blank.");             
+        }
         return false;
       });
 
       return false;
   }
 
-  const validate = (): boolean => {
-    const invalidInputs = document.getElementsByClassName("is-not-valid");
+  const validate = (): boolean => {   
+    const invalidInputs = document.getElementsByClassName("not-valid");
         
     if (invalidInputs.length > 0) {
       setErrorMessage("Please complete all the required fields.")

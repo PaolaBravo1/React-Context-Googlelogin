@@ -7,13 +7,16 @@ import { debounce } from "lodash"
 import PropertyBar from "@/components/PropertyBar"
 import TextInput from "@/components/TextInput"
 import { Participant } from "@/models/participant"
+import { ErrorCode } from "@/helpers/errorcodes"
+import { postalCodeRegex } from "@/helpers/constants"
 
 const Participants = () => {
   const [participants, setParticipants] = useState<Participant[]>();
   const [searchTerms, setSearchTerms] = useState("");
-  const [editableParticipant, setEditableParticipant] = useState<Participant>();
+  const [participant, setParticipant] = useState<Participant>(Object);
   const [isPropertyBarVisible, setIsPropertyBarVisible] = useState(false);
-  
+  const [groupError, setGroupError] = useState("");
+
   const { searchParticipants, updateParticipant } = useApi();
 
   const columns = useMemo(
@@ -67,42 +70,62 @@ const Participants = () => {
       {
         label: "Address",
         accessor: "address",
-        type: "text"
+        type: "text",
+        group: "addressBlock"
       },
       {
         label: "Apartment, suite, etc.",
-        accessor: "Address2",
+        accessor: "address2",
         type: "text"
       },
       {
         label: "City",
-        accessor: "City",
-        type: "text"
+        accessor: "city",
+        type: "text",
+        group: "addressBlock"
+      },
+      {
+        label: "State",
+        accessor: "state",
+        type: "state",
+        group: "addressBlock"
+      },
+      {
+        label: "Postal code",
+        accessor: "postalCode",
+        type: "text",
+        regex: postalCodeRegex,
+        group: "addressBlock"
       },
       {
         label: "Email address",
         accessor: "emailAddress",
-        type: "text",        
+        type: "text",
         required: true
       },
       {
         label: "Date of birth",
         accessor: "dateOfBirth",
-        type: "date",        
+        type: "date",
         required: true
       }
     ],
     [],
   );
 
-  const handleSearchTermsDebounce = async (inputValue: string) => {   
-    await searchParticipants(inputValue) 
-      .then(result => {  
-        setParticipants(result.data);            
+  const handleCancel = () => {
+    setIsPropertyBarVisible(false);
+    setTimeout(() => { setParticipant(new Participant()); }, 500)
+  }
+
+  const handleSearchTermsDebounce = async (inputValue: string) => {
+    await searchParticipants(inputValue)
+      .then(result => {
+        setParticipants(result.data);
       })
       .catch(error => {
         console.log(JSON.stringify(error));
-      });   
+      });
   }
 
   const handleSearchTermsChange = (event: any) => {
@@ -110,25 +133,47 @@ const Participants = () => {
     searchTermsDebouncer(event.target.value);
   }
 
-  const handleRowClick = (participant: Participant) => {
-    let clone = { ...participant };
-    setEditableParticipant(clone);
+  const handleRowClick = (clickedParticipant: Participant) => {
+    setParticipant({ ...clickedParticipant });
     setIsPropertyBarVisible(true);
   }
 
-  function updateParticipantProperty(prop: string, value: string) {
-    (editableParticipant as any)[prop] = value;    
+  const updateParticipantProperty = (prop: string, value: string) => {
+    (participant as any)[prop] = value;
   }
 
-  const handleParticipantUpdate = async () => {    
-    await updateParticipant(editableParticipant!);
+  const validateParticipantAddressBlock = (): boolean => {
+    let completedAddressFields
+      = (participant.address?.length > 0 ? 1 : 0)
+      + (participant.city?.length > 0 ? 1 : 0)
+      + (participant.state?.trim()?.length > 0 ? 1 : 0)
+      + (participant.postalCode?.length > 0 ? 1 : 0);
+
+    if (completedAddressFields != 0 && completedAddressFields != 4)
+      return false;
+
+    if (((participant.address?.length ?? 0) == 0) && ((participant.address2?.length ?? 0) > 0))
+      return false;
+
+    return true;
+  }
+
+  const handleParticipantUpdate = async () => {
+    setGroupError("");
+
+    if (!validateParticipantAddressBlock()) {
+      setGroupError("addressBlock");
+      throw (ErrorCode.ParticipantAddressBlockIncomplete);
+    }
+
+    await updateParticipant(participant);
     handleSearchTermsDebounce(searchTerms);
   }
 
   const searchTermsDebouncer = useCallback(debounce(handleSearchTermsDebounce, 250), []);
 
   useEffect(() => {
-    handleSearchTermsDebounce("");  
+    handleSearchTermsDebounce("");
   }, []);
 
   return (
@@ -137,35 +182,35 @@ const Participants = () => {
         {(participants == null) ?
           <></>
           :
-          <Table 
+          <Table
             id={"participant-table"}
-            caption={"Participants"} 
-            columns={columns} 
-            sourceData={participants} 
-            searchTerms={searchTerms} 
+            caption={"Participants"}
+            columns={columns}
+            sourceData={participants}
+            searchTerms={searchTerms}
             isPropertyBarVisible={isPropertyBarVisible}
             onSearchTermsChange={handleSearchTermsChange}
             onRowClick={handleRowClick} />
         }
       </div>
-      <PropertyBar entityID={editableParticipant?.id ?? null} isVisible={isPropertyBarVisible} onSave={handleParticipantUpdate} onCancel={() => setIsPropertyBarVisible(false) }>
-        { (editableParticipant != undefined) ? 
+      <PropertyBar entityID={participant.id} isVisible={isPropertyBarVisible} onSave={handleParticipantUpdate} onCancel={handleCancel}>
         <>
-        <div className="caption">{editableParticipant.fullName}</div>
-        { fields.map((o, i) => {
-            return <TextInput 
+          <div className="caption">{participant.fullName}</div>
+          {fields.map((o, i) => {
+            return <TextInput
+              entityID={participant.id}
               key={o.accessor}
-              type={o.type} 
-              label={o.label} 
-              name={o.accessor} 
-              value={(editableParticipant as any)[o.accessor]} 
+              type={o.type}
+              label={o.label}
+              name={o.accessor}
+              value={(participant as any)[o.accessor]}
               required={o.required ?? false}
-              onChange={(value:string) => updateParticipantProperty(o.accessor, value)}/>
-        })}     
+              group={o.group as any}
+              groupError={groupError}
+              regex={o.regex as any}
+              onChange={(value: string) => updateParticipantProperty(o.accessor, value)} />
+          })}
         </>
-        : 
-        <></>
-        }
       </PropertyBar>
     </LayoutAuthenticated>
   );
