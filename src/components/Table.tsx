@@ -4,6 +4,7 @@ import moment from "moment";
 import React from "react";
 
 interface ITable {
+    children: any,
     id: string,
     caption: string,
     columns: any[],
@@ -14,7 +15,7 @@ interface ITable {
     onRowClick: any
 }
 
-const Table = ({ id, caption, columns, sourceData, searchTerms, isPropertyBarVisible, onSearchTermsChange, onRowClick }: ITable) => {
+const Table = ({ children, id, caption, columns, sourceData, searchTerms, isPropertyBarVisible, onSearchTermsChange, onRowClick }: ITable) => {
     const [sortField, setSortField] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
     const [data, setData] = useState<any>([]);
@@ -97,6 +98,9 @@ const Table = ({ id, caption, columns, sourceData, searchTerms, isPropertyBarVis
             <div className="header">
                 <div className="caption">{caption}</div>
                 <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChange}></input>   
+                <div className="context-icons">
+                { children }
+                </div>
                 <Icon name="search" className="search-terms-icon"></Icon>                
             </div>
             <table>

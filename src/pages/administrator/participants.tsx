@@ -9,6 +9,9 @@ import TextInput from "@/components/TextInput"
 import { Participant } from "@/models/participant"
 import { ErrorCode } from "@/helpers/errorcodes"
 import { postalCodeRegex } from "@/helpers/constants"
+import moment from "moment"
+import { faMonument } from "@fortawesome/free-solid-svg-icons"
+import Icon from "@/components/Icon"
 
 const Participants = () => {
   const [participants, setParticipants] = useState<Participant[]>();
@@ -138,8 +141,19 @@ const Participants = () => {
     setIsPropertyBarVisible(true);
   }
 
-  const updateParticipantProperty = (prop: string, value: string) => {
-    (participant as any)[prop] = value;
+  const updateParticipantProperty = (prop: string, value: string, type: string) => {  
+    switch (type) {
+      case "date":
+        try {
+          const date = moment.utc(value, "MM/DD/YYYY").format();
+          (participant as any)[prop] = value;
+        } catch {}
+        break;
+
+      default:
+        (participant as any)[prop] = value;
+        break; 
+    }
   }
 
   const validateParticipantAddressBlock = (): boolean => {
@@ -170,6 +184,16 @@ const Participants = () => {
     handleSearchTermsDebounce(searchTerms);
   }
 
+  const handleAddUser = () => {
+    setParticipant(Object);
+    setIsPropertyBarVisible(true);
+  }
+
+  const handleExport = () => {
+    setParticipant(Object);
+    setIsPropertyBarVisible(true);
+  }
+
   const searchTermsDebouncer = useCallback(debounce(handleSearchTermsDebounce, 250), []);
 
   useEffect(() => {
@@ -177,7 +201,7 @@ const Participants = () => {
   }, []);
 
   return (
-    <LayoutAuthenticated>
+    <LayoutAuthenticated>      
       <div className="row no-gutter">
         {(participants == null) ?
           <></>
@@ -190,13 +214,16 @@ const Participants = () => {
             searchTerms={searchTerms}
             isPropertyBarVisible={isPropertyBarVisible}
             onSearchTermsChange={handleSearchTermsChange}
-            onRowClick={handleRowClick} />
+            onRowClick={handleRowClick}>
+              <Icon toolTip="Add user" name="user-plus" onClick={handleAddUser} />
+              <Icon toolTip="Export list" name="download" onClick={handleExport} />
+            </Table>
         }
       </div>
       <PropertyBar entityID={participant.id} isVisible={isPropertyBarVisible} onSave={handleParticipantUpdate} onCancel={handleCancel}>
-        <>
-          <div className="caption">{participant.fullName}</div>
-          {fields.map((o, i) => {
+        <>        
+          <div className="caption">{participant.id == undefined ? "New participant" : participant.fullName}</div>
+          {fields.map((o, i) => {          
             return <TextInput
               entityID={participant.id}
               key={o.accessor}
@@ -208,7 +235,7 @@ const Participants = () => {
               group={o.group as any}
               groupError={groupError}
               regex={o.regex as any}
-              onChange={(value: string) => updateParticipantProperty(o.accessor, value)} />
+              onChange={(value: string) => updateParticipantProperty(o.accessor, value, o.type)} />
           })}
         </>
       </PropertyBar>

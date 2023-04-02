@@ -315,8 +315,12 @@ export function AuthenticationProvider({ children }: { children: any }) {
     }
   }
 
-  const updateParticipant = async (participant: Participant): Promise<AxiosResponse<any, any>> => {
-    return await instance.put("/participant/" + participant.id, participant);      
+  const updateParticipant = async (participant: Participant): Promise<AxiosResponse<any, any>> => {    
+
+    if (participant.id != undefined)
+      return await instance.put("/participant/" + participant.id, participant);   
+    else
+      return await instance.post("/participant", participant);         
   }
   
   const registerGoogle = async (credential: string, nonce: string): Promise<string> => {

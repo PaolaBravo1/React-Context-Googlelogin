@@ -432,6 +432,7 @@ form.form-error .input-container label {
   position: absolute;
   right: 0;
   top: 0;
+  z-index: 99;
 }
 
 .table .search-terms:focus,
@@ -495,16 +496,30 @@ form.form-error .input-container label {
   font-size: 27px;
 }
 
-.table .header input {
- 
+.table .context-icons {
+  position: absolute;
+  top: 5px;
+  width: 100%; 
+  text-align: right;
+  padding-right: 280px;
+}
+
+.table .context-icons .icon {
+  font-size: 18px;
+  transition: all .2s;  
+  cursor: pointer;
+}
+
+.table .context-icons .icon:hover {
+  color: #79b1ff;
 }
 
 .table .search-terms-icon {
   position: absolute;
   right: 3px;
   top: 1px;
+ 
 }
-
 .nav-bar {
   position: fixed;
   top: 60px;
@@ -683,6 +698,7 @@ form.form-error .input-container label {
 }
 
 .property-bar .input-container:focus-within label {
+  background-color: unset;
   transform: translate(-10px, 6px) scale(0.6); 
 }
 
@@ -796,10 +812,14 @@ form.form-error .input-container label {
   outline: none;  
 }
 
-.xxxproperty-bar .input-container label {
+.property-bar .input-container.type-date label {
   background-color: #ffffff;
   padding-right: 10px;
   padding-bottom: 2px;
+}
+
+.property-bar .input-container.type-date.not-valid label {
+  background-color: #ffeeee;
 }
 
 .empty-option {

@@ -8,13 +8,15 @@ config.autoAddCss = false
 
 interface IIcon {
   name: any,
-  className?: string
+  className?: string,
+  toolTip?: string,
+  onClick?: any
 }
 
-const Icon = ({ name, className }: IIcon) => {
+const Icon = ({ name, className, toolTip, onClick }: IIcon) => {
   return (
     <span className="icon">
-      <FontAwesomeIcon className={className} icon={name} />
+      <FontAwesomeIcon title={toolTip} className={className} icon={name} onClick={onClick} />
     </span>
   )
 }

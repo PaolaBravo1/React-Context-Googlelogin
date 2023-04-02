@@ -1,7 +1,9 @@
 import { useApi } from "@/contexts/useApi";
 import { States } from "@/helpers/states";
+import { eventListeners } from "@popperjs/core";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import InputMask from "react-input-mask";
 
 interface ITextInput {
     entityID?: number,
@@ -24,13 +26,29 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
   const { isMakingRequest } = useApi();
   
   useEffect(() => {  
-    if (value && value.length > 0) {
+    
+  }, []);
+
+  useEffect(() => {  
+    if (!value || value.length == 0) {
       setText("");
-      setText(value);
-      setIsValid(true);
+      return;
     }
-    else
-      setText("");   
+
+    switch (type) {
+      case "date":
+        try { 
+          const formatted = moment.utc(value).format("MM/DD/YYYY");
+          setText(formatted);
+          setIsValid(true);
+       } catch {}
+       break;
+
+      default:
+        setText(value);   
+        setIsValid(true);
+        break;      
+    }   
   }, [entityID]);
   
   useEffect(() => {  
@@ -51,19 +69,27 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
     }
   }
 
-  const handleBlur = (e:any) => {
+  const handleBlur = (e:any) => {    
     if (regex) {
       const val = e.target.value.trim();
       setText(val);
-      setIsValid(new RegExp(regex).test(val));
+
+      if (val.length == 0 && !required)
+        setIsValid(true);
+      else
+        setIsValid(new RegExp(regex).test(val));
     }
   }
   
   const handleChangeDate = (e:any) => {
     if (e.target.value.length == 0)
       return;
-
-    handleChange(e);
+    
+    setText(e.target.value);       
+    
+    if (typeof onChange === "function") {
+      onChange(e.target.value);
+    }
   }
 
   const handleBlurDate = (e:any) => {
@@ -73,9 +99,9 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
     handleBlur(e);
   }
 
-  const className = `input-container ${isValid ? "valid" : "not-valid"} ${isGroupValid ? "" : "group-not-valid"}`;
+  const className = `input-container ${isValid ? "valid" : "not-valid"}${isGroupValid ? "" : " group-not-valid"} type-${type}`;
   const groupName = group != null ? `group-${group}` : "";
-
+  
   switch (type) {
     case "state":
       return (
@@ -93,7 +119,7 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
     case "date":
       return (
         <div className={className}>
-          <input className={groupName} required={required!} disabled={isMakingRequest} name={name} type={type} value={moment.utc(text).format("YYYY-MM-DD")} onChange={handleChangeDate} onBlur={handleBlurDate} />
+          <InputMask className={groupName} required={required} disabled={isMakingRequest} name={name} placeholder="MM/DD/YYYY" mask="99/99/9999" value={text} onChange={handleChangeDate} onBlur={handleBlurDate} />
           <label className={text && "filled"} htmlFor={name}>{label}</label>
         </div>
       );
