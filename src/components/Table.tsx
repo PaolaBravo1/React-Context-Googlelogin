@@ -94,16 +94,16 @@ const Table = ({ children, id, caption, columns, sourceData, searchTerms, isProp
     }
 
     return (
-        <div className={`table${isHoverable ? " is-hoverable" : ""}`} id={id}>
+        <div className={`table${isHoverable ? " is-hoverable" : ""}`}>
             <div className="header">
                 <div className="caption">{caption}</div>
-                <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChange}></input>   
-                <div className="context-icons">
-                { children }
-                </div>
-                <Icon name="search" className="search-terms-icon"></Icon>                
+                <div className="table-options">
+                    { children }
+                    <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChange}></input>   
+                    <Icon name="search" className="search-terms-icon"></Icon>                
+                </div>                
             </div>
-            <table>
+            <table id={id}>
                 <thead>
                     <tr>
                         {columns.map(({ label, accessor, sortable, type }) => {

@@ -297,7 +297,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     setProvider("Local");
 
     if (password.length == 0) {
-      return await instance.post("/participant",
+      return await instance.post("/participant/register",
         JSON.stringify({ 
           firstName,
           lastName,
@@ -305,7 +305,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
         }));             
     }
     else {
-      return await instance.post("/participant",
+      return await instance.post("/participant/register",
         JSON.stringify({ 
           firstName,
           lastName,
@@ -318,7 +318,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const updateParticipant = async (participant: Participant): Promise<AxiosResponse<any, any>> => {    
 
     if (participant.id != undefined)
-      return await instance.put("/participant/" + participant.id, participant);   
+      return await instance.put(`/participant/${participant.id}` + participant.id, participant);   
     else
       return await instance.post("/participant", participant);         
   }

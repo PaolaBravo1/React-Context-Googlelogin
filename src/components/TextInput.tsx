@@ -106,7 +106,7 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
     case "state":
       return (
         <div className={className}>
-          <select className={groupName} required={required!} disabled={isMakingRequest} name={name} value={text} onChange={handleChangeDate} onBlur={handleBlurDate}>
+          <select className={groupName} required={required!} name={name} value={text} onChange={handleChangeDate} onBlur={handleBlurDate}>
             <option value=" " className="empty-option"></option>
             {States.map( (x,y) => 
             <option key={y} value={x.abbreviation}>{x.abbreviation} - {x.name}</option> )
@@ -119,7 +119,7 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
     case "date":
       return (
         <div className={className}>
-          <InputMask className={groupName} required={required} disabled={isMakingRequest} name={name} placeholder="MM/DD/YYYY" mask="99/99/9999" value={text} onChange={handleChangeDate} onBlur={handleBlurDate} />
+          <InputMask className={groupName} required={required} name={name} placeholder="MM/DD/YYYY" mask="99/99/9999" value={text} onChange={handleChangeDate} onBlur={handleBlurDate} />
           <label className={text && "filled"} htmlFor={name}>{label}</label>
         </div>
       );
@@ -127,7 +127,7 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
     default:
       return (
         <div className={className}>
-          <input className={groupName} required={required!} disabled={isMakingRequest} name={name} type={type} value={text} onChange={handleChange} onBlur={handleBlur} />
+          <input className={groupName} required={required!} name={name} type={type} value={text} onChange={handleChange} onBlur={handleBlur} />
           <label className={text && "filled"} htmlFor={name}>{label}</label>
         </div>
       );

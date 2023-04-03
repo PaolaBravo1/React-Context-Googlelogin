@@ -12,6 +12,7 @@ import { postalCodeRegex } from "@/helpers/constants"
 import moment from "moment"
 import { faMonument } from "@fortawesome/free-solid-svg-icons"
 import Icon from "@/components/Icon"
+var xlsx = require("xlsx")
 
 const Participants = () => {
   const [participants, setParticipants] = useState<Participant[]>();
@@ -190,8 +191,27 @@ const Participants = () => {
   }
 
   const handleExport = () => {
-    setParticipant(Object);
-    setIsPropertyBarVisible(true);
+    const data = participants?.map((o, i) => { return { 
+      "First name": o.firstName,
+      "Middle name": o.middleName,
+      "Last name": o.lastName,
+      "Address": o.address,
+      "Apartment/suite": o.address2,
+      "City": o.city,
+      "State": o.state,
+      "Postal code": o.postalCode,
+      "Internal ID": o.internalID,
+      "Email address": o.emailAddress,
+      "Date of birth": o.dateOfBirth == null ? null : moment.utc(o.dateOfBirth).format("MM/DD/YYYY"),
+      "Last login": o.authenticatedTimestamp == null ? null : moment(o.authenticatedTimestamp).format("MM/DD/YYYY hh:mmA")
+     }});
+
+    const ws = xlsx.utils.json_to_sheet(data);
+    const wb = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, "Participants");
+
+    const filename="Participants.xlsx";
+    xlsx.writeFile(wb, filename);    
   }
 
   const searchTermsDebouncer = useCallback(debounce(handleSearchTermsDebounce, 250), []);
@@ -215,8 +235,8 @@ const Participants = () => {
             isPropertyBarVisible={isPropertyBarVisible}
             onSearchTermsChange={handleSearchTermsChange}
             onRowClick={handleRowClick}>
-              <Icon toolTip="Add user" name="user-plus" onClick={handleAddUser} />
-              <Icon toolTip="Export list" name="download" onClick={handleExport} />
+              <Icon toolTip="Add user" className="context-icon" name="user-plus" onClick={handleAddUser} />
+              <Icon toolTip="Export list" className="context-icon" name="download" onClick={handleExport} />
             </Table>
         }
       </div>

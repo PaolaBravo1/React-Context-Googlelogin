@@ -27,7 +27,8 @@ const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reve
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&display=swap" />
       </noscript>
     </Head>
-    <div id={id} className={`unauth-container ${isMakingRequest ? "making-api-request" : ""}`}>
+    <div id="overlay" className={isMakingRequest ? "enabled" : ""}></div>
+    <div id={id} className={`unauth-container`}>
       <div className="container-fluid">
         <div className="row no-gutter">
           {reversed ? <></> :

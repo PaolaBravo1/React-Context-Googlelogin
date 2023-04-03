@@ -128,6 +128,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&display=swap" />
       </noscript>
     </Head>
+    <div id="overlay" className={isMakingRequest ? "enabled" : ""}></div>
     <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
     <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isMakingRequest ? "making-api-request" : ""}`}>
       <div className="top-bar">
