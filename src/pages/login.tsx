@@ -63,12 +63,20 @@ const Login = () => {
       return false;
     }
 
-    if (!new RegExp(emailAddressRegex).test(emailAddress)){
-      setErrorMessage("The email address you provided is not valid.");
-      return false;
+    let isValid = false;
+    const emailAddresses = emailAddress.split(":");
+    
+    if (emailAddresses.length == 2) {
+      if (new RegExp(emailAddressRegex).test(emailAddresses[0]) && new RegExp(emailAddressRegex).test(emailAddresses[1])) 
+        isValid = true;
     }
+    else if (new RegExp(emailAddressRegex).test(emailAddress))
+      isValid = true;
 
-    return true;
+    if (!isValid)
+      setErrorMessage("The email address you provided is not valid.");
+    
+    return isValid;
   }
 
   const login = async(authFunction: () => Promise<void>) => {        

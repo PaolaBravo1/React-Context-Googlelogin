@@ -119,7 +119,7 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
     case "date":
       return (
         <div className={className}>
-          <InputMask className={groupName} required={required} name={name} placeholder="MM/DD/YYYY" mask="99/99/9999" value={text} onChange={handleChangeDate} onBlur={handleBlurDate} />
+          <InputMask className={groupName} required={required!} name={name} placeholder="MM/DD/YYYY" mask="99/99/9999" value={text} onChange={handleChangeDate} onBlur={handleBlurDate} />
           <label className={text && "filled"} htmlFor={name}>{label}</label>
         </div>
       );

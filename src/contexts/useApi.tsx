@@ -183,11 +183,12 @@ export function AuthenticationProvider({ children }: { children: any }) {
   }
 
   const saveIdentity = async (emailAddress: string, role: string, accessToken: string, refreshToken: string, expiresInSeconds: number) => {
+    const emailAddresses = emailAddress.split(":");
     const expiration = new Date(new Date().getTime() + expiresInSeconds * 1000).toISOString();
     const expiresInDays = (expiresInSeconds) / 60 / 60 / 24;
     const params = { domain: configSettings.cookieDomain, secure: true, expires: expiresInDays };
 
-    var identity = new Identity(emailAddress, role, accessToken, refreshToken, null, expiration);
+    var identity = new Identity(emailAddresses[0], role, accessToken, refreshToken, null, expiration);
     Cookies.set(identityCookieName, JSON.stringify(identity), params);
 
     restartTimers(identity);
