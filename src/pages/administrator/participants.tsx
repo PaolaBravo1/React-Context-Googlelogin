@@ -16,7 +16,6 @@ var xlsx = require("xlsx")
 
 const Participants = () => {
   const [participants, setParticipants] = useState<Participant[]>();
-  const [searchTerms, setSearchTerms] = useState("");
   const [participant, setParticipant] = useState<Participant>(Object);
   const [isPropertyBarVisible, setIsPropertyBarVisible] = useState(false);
   const [groupError, setGroupError] = useState("");
@@ -132,9 +131,8 @@ const Participants = () => {
       });
   }
 
-  const handleSearchTermsChange = (event: any) => {
-    setSearchTerms(event.target.value);
-    searchTermsDebouncer(event.target.value);
+  const handleSearchTermsChange = (terms: string) => {
+    searchTermsDebouncer(terms);
   }
 
   const handleRowClick = (clickedParticipant: Participant) => {
@@ -182,7 +180,7 @@ const Participants = () => {
     }
 
     await updateParticipant(participant);
-    handleSearchTermsDebounce(searchTerms);
+    handleSearchTermsDebounce(""); 
   }
 
   const handleAddUser = () => {
@@ -231,7 +229,6 @@ const Participants = () => {
             caption={"Participants"}
             columns={columns}
             sourceData={participants}
-            searchTerms={searchTerms}
             isPropertyBarVisible={isPropertyBarVisible}
             onSearchTermsChange={handleSearchTermsChange}
             onRowClick={handleRowClick}>

@@ -9,8 +9,7 @@ var xlsx = require("xlsx")
 
 const AuthenticatedAccounts = () => {
   const [accounts, setAccounts] = useState<Account[]>();
-  const [searchTerms, setSearchTerms] = useState("");
-
+  
   const { getAuthenticatedAccounts } = useApi();
 
   const columns = useMemo(
@@ -72,10 +71,9 @@ const AuthenticatedAccounts = () => {
             caption={"Current sign-ins"}
             columns={columns}
             sourceData={accounts}
-            searchTerms={searchTerms}
             isPropertyBarVisible={false}
-            onSearchTermsChange={() => alert(1)}
-            onRowClick={() => alert(2)}>
+            onSearchTermsChange={null}
+            onRowClick={null}>
           </Table>
         }
       </div>

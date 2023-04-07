@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useImperativeHandle, useState } from "react";
 import Icon from "./Icon";
 import moment from "moment";
 import React from "react";
@@ -9,17 +9,17 @@ interface ITable {
     caption: string,
     columns: any[],
     sourceData: any[],
-    searchTerms: string,
     isPropertyBarVisible: boolean
-    onSearchTermsChange: any,
-    onRowClick: any
+    onSearchTermsChange: Function | null,
+    onRowClick: Function | null
 }
 
-const Table = ({ children, id, caption, columns, sourceData, searchTerms, isPropertyBarVisible, onSearchTermsChange, onRowClick }: ITable) => {
+const Table = ({ children, id, caption, columns, sourceData, isPropertyBarVisible, onSearchTermsChange, onRowClick }: ITable) => {
     const [sortField, setSortField] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
     const [data, setData] = useState<any>([]);
     const [isHoverable, setIsHoverable] = useState(true);
+    const [searchTerms, setSearchTerms] = useState("");
 
     useEffect(() => {
         setData(sourceData);
@@ -46,8 +46,40 @@ const Table = ({ children, id, caption, columns, sourceData, searchTerms, isProp
 
     const handleRowClick = (item: any) => {
         setIsHoverable(false);
-        selectRow(item.id);        
-        onRowClick(item);
+        selectRow(item.id); 
+        
+        if (onRowClick != null)
+            onRowClick(item);
+    }
+
+    const handleSearchTermsChange = (terms: string) => {
+        setSearchTerms(terms);
+        
+        if (onSearchTermsChange != null)
+            onSearchTermsChange(terms);
+        else if (terms.length == 0) {
+            sourceData.forEach((item) => {
+                item.isHidden = false;   
+            });                    
+        } 
+        else {
+            const termsLower = terms.toLowerCase().split(" ");
+           
+            sourceData.forEach((item) => {
+                let matchCount = 0;
+
+                termsLower.forEach((term) => {
+                    columns.every((column) => {
+                        if (item[column.accessor].toString().toLowerCase().indexOf(term) >= 0) {
+                            matchCount++;
+                            return false;
+                        }
+                    });
+                });
+                
+                item.isHidden = matchCount !== termsLower.length;
+            });
+        }
     }
 
     const handleMouseMove = (e: any) => {
@@ -99,7 +131,7 @@ const Table = ({ children, id, caption, columns, sourceData, searchTerms, isProp
                 <div className="caption">{caption}</div>
                 <div className="table-options">
                     { children }
-                    <input type="text" className="search-terms" value={searchTerms} onChange={onSearchTermsChange}></input>   
+                    <input type="text" className="search-terms" value={searchTerms} onChange={(e) => handleSearchTermsChange(e.target.value)}></input>   
                     <Icon name="search" className="search-terms-icon"></Icon>                
                 </div>                
             </div>
@@ -130,7 +162,7 @@ const Table = ({ children, id, caption, columns, sourceData, searchTerms, isProp
                 <tbody onMouseMove={(ev)=> handleMouseMove(ev)}>
                     {data.map((item: any) => {
                         return (
-                            <tr id={`row-${item.id}`} key={item.id} onClick={() => handleRowClick(item)}>
+                            <tr id={`row-${item.id}`} key={item.id} className={item.isHidden ? "hidden" : "" } onClick={() => handleRowClick(item)}>
                                 {columns.map(({ accessor, type }) => {
                                     let cell = "-";
                                     

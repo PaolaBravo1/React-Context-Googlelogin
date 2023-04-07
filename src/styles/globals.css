@@ -597,7 +597,8 @@ form.form-error .input-container label {
   color: #79b1ff;
 }
 
-.nav-bar .nav-link:hover {
+.nav-bar .nav-link:hover,
+.nav-bar .nav-link:active {
   color: #79b1ff;
 }
   
