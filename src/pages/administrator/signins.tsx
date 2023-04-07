@@ -73,7 +73,8 @@ const AuthenticatedAccounts = () => {
             sourceData={accounts}
             isPropertyBarVisible={false}
             onSearchTermsChange={null}
-            onRowClick={null}>
+            onRowClick={null} 
+            onExport={handleExport}>
           </Table>
         }
       </div>

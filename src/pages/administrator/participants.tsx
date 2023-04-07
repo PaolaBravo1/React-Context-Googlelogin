@@ -231,9 +231,9 @@ const Participants = () => {
             sourceData={participants}
             isPropertyBarVisible={isPropertyBarVisible}
             onSearchTermsChange={handleSearchTermsChange}
-            onRowClick={handleRowClick}>
+            onRowClick={handleRowClick}
+            onExport={handleExport}>
               <Icon toolTip="Add user" className="context-icon" name="user-plus" onClick={handleAddUser} />
-              <Icon toolTip="Export list" className="context-icon" name="download" onClick={handleExport} />
             </Table>
         }
       </div>

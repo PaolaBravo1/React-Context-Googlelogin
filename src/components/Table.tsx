@@ -9,12 +9,13 @@ interface ITable {
     caption: string,
     columns: any[],
     sourceData: any[],
-    isPropertyBarVisible: boolean
+    isPropertyBarVisible: boolean,
+    onExport: Function | null,
     onSearchTermsChange: Function | null,
     onRowClick: Function | null
 }
 
-const Table = ({ children, id, caption, columns, sourceData, isPropertyBarVisible, onSearchTermsChange, onRowClick }: ITable) => {
+const Table = ({ children, id, caption, columns, sourceData, isPropertyBarVisible, onExport, onSearchTermsChange, onRowClick }: ITable) => {
     const [sortField, setSortField] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
     const [data, setData] = useState<any>([]);
@@ -131,6 +132,7 @@ const Table = ({ children, id, caption, columns, sourceData, isPropertyBarVisibl
                 <div className="caption">{caption}</div>
                 <div className="table-options">
                     { children }
+                    <Icon toolTip="Export list" className="context-icon" name="download" onClick={onExport} />
                     <input type="text" className="search-terms" value={searchTerms} onChange={(e) => handleSearchTermsChange(e.target.value)}></input>   
                     <Icon name="search" className="search-terms-icon"></Icon>                
                 </div>                
