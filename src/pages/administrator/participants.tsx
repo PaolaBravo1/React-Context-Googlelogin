@@ -203,7 +203,7 @@ const Participants = () => {
       "Internal ID": o.internalID,
       "Email address": o.emailAddress,
       "Date of birth": o.dateOfBirth == null ? null : moment.utc(o.dateOfBirth).format("MM/DD/YYYY"),
-      "Last login": o.authenticatedTimestamp == null ? null : moment(o.authenticatedTimestamp).format("MM/DD/YYYY hh:mmA")
+      "Last sign-in": o.authenticatedTimestamp == null ? null : moment(o.authenticatedTimestamp).format("MM/DD/YYYY hh:mmA")
      }});
 
     const ws = xlsx.utils.json_to_sheet(data);

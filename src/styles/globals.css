@@ -146,7 +146,7 @@ form.form-error .input-container label {
   color: #aa0000;
 }
 
-.unauth-container .login,
+.unauth-container .sign-in,
 .unauth-container .image {
   min-height: 100vh;
 }

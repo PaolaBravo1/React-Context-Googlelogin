@@ -85,7 +85,7 @@ const SetPassword = () => {
           setIsSuccessful(true);
 
           setTimeout(() => {
-            Router.push("/login?emailAddress=" + encodeURIComponent(emailAddress));
+            Router.push("/signin?emailAddress=" + encodeURIComponent(emailAddress));
           }, 2000);
           
         }

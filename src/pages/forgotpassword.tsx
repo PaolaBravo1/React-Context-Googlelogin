@@ -24,7 +24,7 @@ const ForgotPassword = () => {
     if (!validate())
       return;
     
-    await attemptLogIn();    
+    await attemptSignin();    
   }
 
   const validate = () => {
@@ -41,7 +41,7 @@ const ForgotPassword = () => {
     return true;
   }
 
-  const attemptLogIn = async() => {    
+  const attemptSignin = async() => {    
     await requestPasswordReset(emailAddress)
     .then(result => {
       Router.push("/thankyou");
@@ -61,7 +61,7 @@ const ForgotPassword = () => {
             <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Reset</button>
           </div>
           <div className="not-registered text-muted">
-            <Link href="/login">Return to login page</Link>
+            <Link className="simple-link" href="/signin">Return to sign-in page</Link>
           </div>                                         
         </form>
     </LayoutUnauthenticated>                     

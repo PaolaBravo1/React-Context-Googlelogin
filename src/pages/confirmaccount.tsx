@@ -43,13 +43,13 @@ const ConfirmAccount = () => {
         // I don't want to have an un-authenticated method that allows bots
         // to browse for valid accounts
         setTitle("Account Confirmed!");
-        setMessage("Please click the button below to login and get started.")
+        setMessage("Please click the button below to sign in and get started.")
         setIsConfirmed(true);        
       })
       .catch(error => {
         switch (error?.response?.data?.errorCode) {
           case ErrorCode.AccountAlreadyConfirmed:
-            setMessage("Your account has already been confimed.  Click the button below to log in and get started!");
+            setMessage("Your account has already been confimed.  Click the button below to sign in and get started!");
             setIsConfirmed(true);
             return;
 
@@ -75,7 +75,7 @@ const ConfirmAccount = () => {
               { (isPasswordResetRequired) ?
                 <Link href={`/setpassword?emailAddress=${encodeURIComponent(emailAddress)}&token=${token}&isAccountConfirmed=false`} className="styled-button">Create new password</Link>                
               :
-                <Link href={`/login?emailAddress=${encodeURIComponent(emailAddress)}`} className="styled-button">Sign in</Link>                
+                <Link href={`/signin?emailAddress=${encodeURIComponent(emailAddress)}`} className="styled-button">Sign in</Link>                
               }
             </div>
           </div>

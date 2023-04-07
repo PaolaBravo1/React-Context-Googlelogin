@@ -35,7 +35,7 @@ const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reve
           <div className="col-md-6 d-none d-md-flex bg-image" style={{ backgroundImage: `url("/unauthenticated/${id}.jpg")` }}></div>
           }  
           <div className="col-md-6 bg-light-ex">
-            <div className="login d-flex align-items-center py-5">
+            <div className="sign-in d-flex align-items-center py-5">
               <div className="container">
                 <div className="row">
                   <div className="col-lg-10 col-xl-7 mx-auto">

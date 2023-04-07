@@ -7,6 +7,7 @@ import jwt from "jwt-decode"
 import { ErrorCode } from "@/helpers/errorcodes";
 import { Identity } from "@/models/identity";
 import { Participant } from "@/models/participant";
+import { Account } from "@/models/account";
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";
@@ -33,6 +34,7 @@ interface ContextInterface {
   clearIdentity: () => void,
   getIdentity: () => Identity | null,
   getProvider: () => string,
+  getAuthenticatedAccounts: () => Promise<AxiosResponse<Account[], any>>,
 
   oauthAccessTokenLifeRemaining: number,
   isMakingRequest: boolean
@@ -55,6 +57,7 @@ export const useApi = (): ContextInterface => {
     clearIdentity,
     getIdentity,
     getProvider,
+    getAuthenticatedAccounts,
 
     oauthAccessTokenLifeRemaining,
     isMakingRequest
@@ -76,6 +79,7 @@ export const useApi = (): ContextInterface => {
     clearIdentity,
     getIdentity,
     getProvider,
+    getAuthenticatedAccounts,
 
     oauthAccessTokenLifeRemaining,
     isMakingRequest
@@ -123,10 +127,10 @@ export function AuthenticationProvider({ children }: { children: any }) {
   });
 
   const redirectUnauthenticated = (includeRedirectParam: boolean) => {
-    if (includeRedirectParam && Router.pathname.indexOf("/login") < 0)
-      Router.push("/login?redirectTo=" + encodeURIComponent(Router.pathname.toString()));
+    if (includeRedirectParam && Router.pathname.indexOf("/signin") < 0)
+      Router.push("/signin?redirectTo=" + encodeURIComponent(Router.pathname.toString()));
     else
-      Router.push("/login");
+      Router.push("/signin");
   }
 
   const restartTimers = (identity: Identity) => {
@@ -329,7 +333,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     setProvider("Google");
     const item = jwt<any>(credential);
 
-    await instance.post("/participant",
+    await instance.post("/participant/register",
       JSON.stringify({ 
         firstName: item.given_name,
         lastName: item.family_name,
@@ -360,6 +364,10 @@ export function AuthenticationProvider({ children }: { children: any }) {
       }));
   }
   
+  const getAuthenticatedAccounts = async (): Promise<AxiosResponse<Account[], any>> => {
+    return await instance.get("/account/authenticated");
+  }
+  
   return (
     <AuthenticationContext.Provider value={{
       redirectUnauthenticated,
@@ -377,6 +385,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
       clearIdentity,
       getIdentity,
       getProvider,
+      getAuthenticatedAccounts,
 
       oauthAccessTokenLifeRemaining,
       isMakingRequest

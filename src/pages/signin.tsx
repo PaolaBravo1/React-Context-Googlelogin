@@ -11,7 +11,7 @@ import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
 import configSettings from "config.json"
 import { v4 } from "uuid"
 
-const Login = () => {
+const Signin = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [nonce, setNonce] = useState(v4());
@@ -41,7 +41,7 @@ const Login = () => {
     if (!validate())
       return;
 
-    await login(async () => { await authorize(emailAddress, password); } ); 
+    await signIn(async () => { await authorize(emailAddress, password); } ); 
   }
 
   const handleGoogleSubmit = async (credentialResponse: any) => {
@@ -50,7 +50,7 @@ const Login = () => {
       return;
     }
     
-    await login(async () => { await authorizeGoogle(credentialResponse.credential, nonce);  } );    
+    await signIn(async () => { await authorizeGoogle(credentialResponse.credential, nonce);  } );    
   }
 
   const handleGoogleError = async () => {
@@ -79,7 +79,7 @@ const Login = () => {
     return isValid;
   }
 
-  const login = async(authFunction: () => Promise<void>) => {        
+  const signIn = async(authFunction: () => Promise<void>) => {        
     try {    
       await authFunction();
       
@@ -100,12 +100,12 @@ const Login = () => {
               break;
           
           case ErrorCode.AccountEmailAddressNotConfirmed:
-            setErrorMessage("You cannot log in until you have confirmed your account.  Please check your email for the welcome message we sent when you registered.<br/><br/>If you have not received the welcome message, please use the link below to request a password reset.");
+            setErrorMessage("You cannot sign in until you have confirmed your account.  Please check your email for the welcome message we sent when you registered.<br/><br/>If you have not received the welcome message, please use the link below to request a password reset.");
             break;
 
           case ErrorCode.AccountLockedOut:
           case ErrorCode.AccountLockedOutOverride:
-            setErrorMessage("Your account has been locked due to too many failed login attempts.  Please wait for 30 minutes, then request a password reset.");
+            setErrorMessage("Your account has been locked due to too many failed sign-in attempts.  Please wait for 30 minutes, then request a password reset.");
             break;
 
           case ErrorCode.AccountTombstoned:
@@ -118,11 +118,11 @@ const Login = () => {
             break;
 
           case ErrorCode.AccountRequiresIdentityProviderLocal:
-            setErrorMessage("You created your account using an email address and password.  Please log in using these credentials rather than using the Google sign-in framework.");
+            setErrorMessage("You created your account using an email address and password.  Please sign in using these credentials rather than using the Google sign-in framework.");
             break;
 
           case ErrorCode.AccountRequiresIdentityProviderGoogle:
-            setErrorMessage("You created your account using your Google account, rather than using a standard email address and password.  Please log in using the Google sign-in button.");
+            setErrorMessage("You created your account using your Google account, rather than using a standard email address and password.  Please sign in using the Google sign-in button.");
             break;
 
           case ErrorCode.GoogleOAuthTokenInvalid:
@@ -144,7 +144,7 @@ const Login = () => {
   };
 
   return (
-    <LayoutUnauthenticated id="login" title="Welcome!" message="Please provide your user credentials in order to log in." errorMessage={errorMessage}>  
+    <LayoutUnauthenticated id="signin" title="Welcome!" message="Please provide your user credentials in order to sign in." errorMessage={errorMessage}>  
       <div className={`muted password-reset ${isPasswordResetLinkVisible ? "": "hidden"}`}>Forgot your password? <Link className="simple-link" href="/forgotpassword">Click here to request a passsword reset!</Link></div>
       <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -179,4 +179,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Signin

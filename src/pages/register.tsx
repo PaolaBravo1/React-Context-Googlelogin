@@ -170,7 +170,7 @@ const Register = () => {
             </div>          
           </div>       
           <div className="not-registered text-muted">
-            <Link className="simple-link" href="/login">Return to login page</Link>
+            <Link className="simple-link" href="/signin">Return to sign-in page</Link>
           </div>                                            
         </form>
     </LayoutUnauthenticated>     
