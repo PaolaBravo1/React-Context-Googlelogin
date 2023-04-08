@@ -138,13 +138,9 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
           </div>
          <button className="button is-danger" onClick={logout}>Logout</button>
         </div>
-      </div>
-      <div className="container-fluid">
-        <div className="row">
-          <NavBar role={role} oauthAccessTokenLifeRemaining={oauthAccessTokenLifeRemaining} idleLifeRemaining={idleLifeRemaining}></NavBar>          
-        </div>
-      </div>          
-      <div className="container-fluid">          
+      </div>             
+      <div className="outer">         
+        <NavBar role={role} oauthAccessTokenLifeRemaining={oauthAccessTokenLifeRemaining} idleLifeRemaining={idleLifeRemaining}></NavBar>           
         <main>{children}</main>        
       </div>
     </div>  

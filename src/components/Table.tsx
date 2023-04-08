@@ -150,12 +150,14 @@ const Table = ({ children, id, caption, columns, sourceData, isPropertyBarVisibl
                                 : "";
                             return (
                                 <th key={accessor} className={cl} onClick={() => sort(accessor, sortOrder, type)}>
-                                    <span>{label}</span>
-                                    { sortField === accessor ? 
-                                        <Icon name={`caret-${cl}`} className="sort-icon"></Icon>
-                                        :
-                                        <></>
-                                    }
+                                    <div>
+                                        <span>{label}</span>
+                                        { sortField === accessor ? 
+                                            <Icon name={`caret-${cl}`} className="sort-icon"></Icon>
+                                            :
+                                            <></>
+                                        }
+                                    </div>
                                 </th>
                             );
                         })}

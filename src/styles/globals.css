@@ -4,6 +4,10 @@
   font-family: "Open Sans";
 }
 
+html, body {
+  height: 100%;
+}
+
 #overlay {
   position: absolute;
   top: 0;
@@ -82,6 +86,11 @@
 .xmaking-api-request .styled-button {
   background-color: #aaaaaa;
   color: #ffffff;    
+}
+
+.outer {
+  display: flex;
+  padding-top: 60px;
 }
 
 .input-container {
@@ -211,7 +220,7 @@ form.form-error .input-container label {
 .nav-bar .status-bars {
   position: absolute;
   right: 45px;
-  bottom: 20px;
+  bottom: 80px;
 }
 
 .nav-bar .status-bar {
@@ -471,6 +480,12 @@ form.form-error .input-container label {
   padding: 5px 0 5px 10px;
 }
 
+.table table th div {
+  height: 23px;
+  overflow: hidden;
+  line-break: anywhere;
+}
+
 .table table th span {
   position: relative;
   left: -1px;
@@ -486,7 +501,7 @@ form.form-error .input-container label {
   padding: 5px 0 5px 0;
 }
 
-.table table th span:hover  {
+.table table th div:hover  {
   color: #79b1ff;
 }
 
@@ -538,34 +553,37 @@ form.form-error .input-container label {
 }
 
 .nav-bar {
-  position: fixed;
-  top: 60px;
-  bottom: 0;
-  left: 0;
+  position: relative;
+  flex-grow: 0; 
+  flex-shrink: 0;
+  flex-basis: 250px; 
+  flex: 0 0 250px;
   z-index: 100;
   padding: 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .3);
-  z-index: 99;
   background-color: #444444 !important;
   color: #ffffff;
-  width: 250px !important;
-  display: block !important;
-  transition: 0.3s;
+  transition: 0.3s all;
   overflow: hidden;
   box-shadow: 0 0 12px rgba(0,0,0,0.75);
   clip-path: inset(0px -12px 0px 0px);
 }
 
 .nav-bar.collapsed {
-  left: -205px;
+  flex-basis: 50px; 
+  flex: 0 0 50px;  
 }
 
 .nav-bar.collapsed .nav-link .icon {
-  left: 179px;
+  left: -5px;
+}
+
+.nav-bar.collapsed .nav-link .ml-2 {
+  opacity: 0;
 }
 
 .nav-bar.collapsed .collapse-button {
-   transform: rotate(180deg);
+   transform: rotate(180deg);   
 }
 
 .property-bar.collapsed {
@@ -576,6 +594,13 @@ form.form-error .input-container label {
 .nav-bar .nav-link {
   color: #ffffff;
   position: relative;
+  display: block;
+  height: 35px;
+  max-height: 35px;
+  overflow: hidden;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding-left: 10px;
 }
 
 .nav-bar .nav-link .icon {
@@ -583,9 +608,12 @@ form.form-error .input-container label {
   width: 40px;
   text-align: center;
   position: relative;
-  top: 1px;  
-  left: 0;
-  transition: all .15s;  
+  transition: all .25s;  
+}
+
+
+.nav-bar .nav-link .ml-2 { 
+  transition: all .25s;  
 }
 
 .nav-bar .nav-link:visited {
@@ -601,11 +629,14 @@ form.form-error .input-container label {
   color: #79b1ff;
 }
   
-.auth-container main {
-  padding-left: 285px;
-  padding-top: 55px;
-  padding-right: 30px;
-  transition: padding-left .2s;
+.auth-container main {  
+  padding-left: 50px;
+  padding-right: 50px;
+  transition: all .2s;
+  flex-grow: 1; /* grow wider by any factor */
+  flex-shrink: 1; /* grow smaller by any factor */
+  flex-basis: auto; /* auto-compute initial width */
+  flex: 1 1 auto;
 }
 
 .nav.flex-column {
@@ -621,7 +652,7 @@ form.form-error .input-container label {
 .nav-bar .collapse-button {
   position: absolute;
   top: 10px;
-  right: 16px;
+  right: 17px;
   cursor: pointer;
   z-index: 999;
   transition: .3s;
@@ -693,6 +724,7 @@ form.form-error .input-container label {
 
 .property-bar {
   padding: 40px 40px 0 40px;
+  top: 60px;
   overflow-y: auto;
   right: 0;
   left: unset !important;
@@ -851,11 +883,10 @@ form.form-error .input-container label {
   }
 }
 
-
 @media (max-width: 900px) {
-    
   .nav-bar {
-    left: -205px;
+    flex-basis: 50px; 
+    flex: 0 0 50px;  
   }
   
   .nav.flex-column {
@@ -863,11 +894,15 @@ form.form-error .input-container label {
   }
   
   .nav-bar .collapse-button {
-    display: none;;
+    display: none;
   }
 
   .nav-bar .nav-link .icon {
-    left: 179px;
+    left: -5px;
+  }
+  
+  .nav-bar .nav-link .ml-2 {
+    opacity: 0;
   }
 
   .auth-container main {
