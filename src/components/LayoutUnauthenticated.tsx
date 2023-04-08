@@ -32,9 +32,9 @@ const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reve
       <div className="container-fluid">
         <div className="row no-gutter">
           {reversed ? <></> :
-          <div className="col-md-6 d-none d-md-flex bg-image" style={{ backgroundImage: `url("/unauthenticated/${id}.jpg")` }}></div>
+          <div className="col-md-lg-6 d-none d-md-flex bg-image" style={{ backgroundImage: `url("/unauthenticated/${id}.jpg")` }}></div>
           }  
-          <div className="col-md-6 bg-light-ex">
+          <div className="col-md-lg-6 bg-light-ex">
             <div className="sign-in d-flex align-items-center py-5">
               <div className="container">
                 <div className="row">
@@ -49,7 +49,7 @@ const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reve
             </div>
           </div>
           {!reversed ? <></> :
-          <div className="col-md-6 d-none d-md-flex bg-image" style={{ background: `url("/unauthenticated/${id}.jpg")` }}></div>
+          <div className="col-md-lg-6 d-none d-md-flex bg-image" style={{ background: `url("/unauthenticated/${id}.jpg")` }}></div>
           }   
         </div>
       </div>
