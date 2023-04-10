@@ -29,8 +29,7 @@ const Dashboard = () => {
 
   return (
     <LayoutAuthenticated header="Dashboard">                      
-      <div className="row no-gutter">
-        {HTMLReactParser(content)}
+      <div className="row no-gutter">       
       </div>      
     </LayoutAuthenticated>  
   );

@@ -23,8 +23,13 @@ const AuthenticatedAccounts = () => {
         accessor: "role"
       },      
       {
-        label: "Last authenticated",
-        accessor: "authenticatedTimestamp",
+        label: "Signed in",
+        accessor: "sessionAuthenticatedTimestamp",
+        type: "datetime"
+      },
+      {
+        label: "Last active",
+        accessor: "lastActiveTimestamp",
         type: "datetime"
       }
     ],
@@ -49,7 +54,8 @@ const AuthenticatedAccounts = () => {
     const data = accounts?.map((o, i) => { return { 
       "Email address": o.emailAddress,
       "Role": o.role,
-      "Last sign-in": o.authenticatedTimestamp == null ? null : moment(o.authenticatedTimestamp).format("MM/DD/YYYY hh:mmA")
+      "Signed in": o.sessionAuthenticatedTimestamp == null ? null : moment(o.sessionAuthenticatedTimestamp).format("MM/DD/YYYY hh:mmA"),
+      "Last active": o.lastActiveTimestamp == null ? null : moment(o.lastActiveTimestamp).format("MM/DD/YYYY hh:mmA")
      }});
 
     const ws = xlsx.utils.json_to_sheet(data);
