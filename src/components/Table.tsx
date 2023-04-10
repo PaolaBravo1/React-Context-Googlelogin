@@ -6,7 +6,6 @@ import React from "react";
 interface ITable {
     children: any,
     id: string,
-    caption: string,
     columns: any[],
     sourceData: any[],
     isPropertyBarVisible: boolean,
@@ -15,7 +14,7 @@ interface ITable {
     onRowClick: Function | null
 }
 
-const Table = ({ children, id, caption, columns, sourceData, isPropertyBarVisible, onExport, onSearchTermsChange, onRowClick }: ITable) => {
+const Table = ({ children, id, columns, sourceData, isPropertyBarVisible, onExport, onSearchTermsChange, onRowClick }: ITable) => {
     const [sortField, setSortField] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
     const [data, setData] = useState<any>([]);
@@ -128,15 +127,12 @@ const Table = ({ children, id, caption, columns, sourceData, isPropertyBarVisibl
 
     return (
         <div className={`table${isHoverable ? " is-hoverable" : ""}`}>
-            <div className="header">
-                <div className="caption">{caption}</div>
-                <div className="table-options">
-                    { children }
-                    <Icon toolTip="Export list" className="context-icon" name="download" onClick={onExport} />
-                    <input type="text" className="search-terms" value={searchTerms} onChange={(e) => handleSearchTermsChange(e.target.value)}></input>   
-                    <Icon name="search" className="search-terms-icon"></Icon>                
-                </div>                
-            </div>
+            <div className="table-options">
+                { children }
+                <Icon toolTip="Export list" className="context-icon" name="download" onClick={onExport} />
+                <input type="text" className="search-terms" value={searchTerms} onChange={(e) => handleSearchTermsChange(e.target.value)}></input>   
+                <Icon name="search" className="search-terms-icon"></Icon>                
+            </div>                
             <table id={id}>
                 <thead>
                     <tr>

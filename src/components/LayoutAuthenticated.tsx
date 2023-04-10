@@ -9,18 +9,18 @@ import NavItem from "./NavItem";
 import Icon from "./Icon";
 import NavItemList from "./NavItemList";
 import NavBar from "./NavBar";
-import PropertyBar from "./PropertyBar";
 
 interface ILayoutAuthenticated {
+  header: string
   children: any
 }
   
-const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {    
+const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) => {    
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isIdlePopupOpen, setIsIdlePopupOpen] = useState(false);
+  const [isNavBarCollapsed, setIsNavBarCollapsed] = useState(false);
   const [lastActiveTime, setLastActiveTime] = useState(Date.now());
   const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
-  const [isPropertyBarVisible, setIsPropertyBarVisible] = useState(false);
   const [role, setRole] = useState("");
   
   const { redirectUnauthenticated, oauthAccessTokenLifeRemaining, clearIdentity, getIdentity, isMakingRequest } = useApi();
@@ -42,6 +42,10 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
       redirectUnauthenticated(true);
     }
   }, []);
+
+  const handleNavBarToggle = (isCollapsed: boolean) => {
+    setIsNavBarCollapsed(isCollapsed)
+  }
 
   const validateIdentity = () => {
     const identity = getIdentity();
@@ -93,10 +97,6 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     redirectUnauthenticated(false);      
   }
 
-  const toggleIsPropertyBarvisible = () => {  
-    setIsPropertyBarVisible(!isPropertyBarVisible);
-  }
-
   useEffect(() => {
     const id = setTimeout(() => {
       setIsIdlePopupOpen(true);
@@ -130,7 +130,7 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
     </Head>
     <div id="overlay" className={isMakingRequest ? "enabled" : ""}></div>
     <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
-    <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isMakingRequest ? "making-api-request" : ""}`}>
+    <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isMakingRequest ? "making-api-request" : ""} ${isNavBarCollapsed ? "nav-bar-collapsed" : ""}`}>
       <div className="top-bar">
         <div className="top-bar-buttons">
           <div className="icon-circle">
@@ -140,8 +140,11 @@ const LayoutAuthenticated = ({children}: ILayoutAuthenticated) => {
         </div>
       </div>             
       <div className="outer">         
-        <NavBar role={role} oauthAccessTokenLifeRemaining={oauthAccessTokenLifeRemaining} idleLifeRemaining={idleLifeRemaining}></NavBar>           
-        <main>{children}</main>        
+        <NavBar role={role} oauthAccessTokenLifeRemaining={oauthAccessTokenLifeRemaining} idleLifeRemaining={idleLifeRemaining} handleNavBarToggle={handleNavBarToggle}></NavBar>           
+        <main>
+          <div className="header">{header}</div>
+          {children}
+        </main>        
       </div>
     </div>  
     </>

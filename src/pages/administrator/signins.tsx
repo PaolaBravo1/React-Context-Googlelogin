@@ -61,14 +61,13 @@ const AuthenticatedAccounts = () => {
   }
 
   return (
-    <LayoutAuthenticated>      
-      <div className="row no-gutter">
+    <LayoutAuthenticated header="Current sign-ins">   
+      <div className="inner">
         {(accounts == null) ?
           <></>
           :
           <Table
             id={"sign-in-table"}
-            caption={"Current sign-ins"}
             columns={columns}
             sourceData={accounts}
             isPropertyBarVisible={false}

@@ -219,14 +219,13 @@ const Participants = () => {
   }, []);
 
   return (
-    <LayoutAuthenticated>      
-      <div className="row no-gutter">
+    <LayoutAuthenticated header="Participants">     
+      <div className="inner">
         {(participants == null) ?
           <></>
           :
           <Table
             id={"participant-table"}
-            caption={"Participants"}
             columns={columns}
             sourceData={participants}
             isPropertyBarVisible={isPropertyBarVisible}

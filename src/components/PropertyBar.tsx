@@ -66,8 +66,8 @@ const PropertyBar = ({ children, entityID, isVisible, onSave, onCancel }: IPrope
   }, [entityID]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <nav id="property-bar" className={`nav-bar property-bar${isVisible ? "" : " collapsed"}`}>
+    <nav id="property-bar" className={`property-bar${isVisible ? "" : " collapsed"}`}>
+      <form onSubmit={handleSubmit}>
         <div className="collapse-button" onClick={onCancel}>
           <Icon name="angle-double-right"></Icon>
         </div>
@@ -80,9 +80,10 @@ const PropertyBar = ({ children, entityID, isVisible, onSave, onCancel }: IPrope
             <button disabled={false} type="button" onClick={onCancel} className="styled-button cancel">Cancel</button> 
           </div>
         </div>
-        <div className="error-message">{HTMLReactParser(errorMessage)}</div>     
-      </nav>  
-    </form>
+        <div className="error-message">{HTMLReactParser(errorMessage)}</div>   
+      </form>  
+    </nav>  
+
   )
 }
 

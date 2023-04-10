@@ -9,19 +9,21 @@ import configSettings from "../../config.json";
 interface INavBar{
   role: string,
   oauthAccessTokenLifeRemaining: number,
-  idleLifeRemaining: number
+  idleLifeRemaining: number,
+  handleNavBarToggle: any
 }
 
-const NavBar = ({ role, oauthAccessTokenLifeRemaining, idleLifeRemaining }: INavBar) => {
-  const [isVisible, setIsVisible] = useState(true);
-    
-  const toggleIsVisible = () => {  
-    setIsVisible(!isVisible);
+const NavBar = ({ role, oauthAccessTokenLifeRemaining, idleLifeRemaining, handleNavBarToggle }: INavBar) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleIsCollapsed = () => {
+    handleNavBarToggle(!isCollapsed);
+    setIsCollapsed(!isCollapsed); 
   }
 
   return (
-    <nav id="nav-bar" className={`nav-bar${isVisible ? "" : " collapsed"}`}>
-      <div className="collapse-button" onClick={toggleIsVisible}>
+    <nav id="nav-bar" className="nav-bar">
+      <div className="collapse-button" onClick={toggleIsCollapsed}>
         <Icon name="angle-double-left"></Icon>
       </div>
       <div className="position-sticky pt-md-5">
@@ -34,5 +36,4 @@ const NavBar = ({ role, oauthAccessTokenLifeRemaining, idleLifeRemaining }: INav
     </nav>
   )
 }
-
 export default NavBar

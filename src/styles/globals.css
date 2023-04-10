@@ -4,7 +4,7 @@
   font-family: "Open Sans";
 }
 
-html, body {
+html, body, #__next {
   height: 100%;
 }
 
@@ -88,9 +88,10 @@ html, body {
   color: #ffffff;    
 }
 
-.outer {
+.auth-container .outer {
   display: flex;
   padding-top: 60px;
+  height: 100%;
 }
 
 .input-container {
@@ -217,10 +218,31 @@ form.form-error .input-container label {
   z-index: 999;
 }
 
+
+.nav-bar {
+  position: fixed;
+  flex-grow: 0; 
+  flex-shrink: 0;
+  width: 220px;
+  height: 100%;
+  flex-basis: 220px; 
+  flex: 0 0 220px;
+  z-index: 100;
+  padding: 0;
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .3);
+  background-color: #444444 !important;
+  color: #ffffff;
+  transition: 0.3s all;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0,0,0,0.75);
+  clip-path: inset(0px -12px 0px 0px);
+  padding-bottom: 30px;
+}
+
 .nav-bar .status-bars {
   position: absolute;
-  right: 45px;
-  bottom: 80px;
+  left: 52px;
+  bottom: 75px;
 }
 
 .nav-bar .status-bar {
@@ -322,7 +344,7 @@ form.form-error .input-container label {
 
 .status-bar .icon {
   position: absolute;
-  left: -33px;
+  left: -36px;
   top: -4px;
   font-size: 15px;
   color: #ffffff;
@@ -445,11 +467,12 @@ form.form-error .input-container label {
 .table {
   width: 100%;
   font-size: 14px;  
+  position: relative;
 }
 
 .table .table-options {
   position: absolute;
-  top: 2px;
+  top: -64px;
   right: 0;
   width: 100%;
   text-align: right;
@@ -521,25 +544,13 @@ form.form-error .input-container label {
   background-color: #D7EEFF;
 }
 
-.table .header {
-  position: relative;
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
-
-.table .header .caption {
-  font-weight: 700;
-  font-size: 27px;
-}
-
 .table .table-options .context-icon {
   font-size: 18px;
   transition: all .2s;  
   cursor: pointer;
   margin-right: 0px;
   position: relative;
-  top: 1px;
-  
+  top: 7px;
 }
 
 .table .table-options .context-icon:hover {
@@ -549,41 +560,29 @@ form.form-error .input-container label {
 .table .table-options .search-terms-icon {
   position: absolute;
   right: 3px;
-  top: -1px;
+  top: 9px;
 }
 
-.nav-bar {
-  position: relative;
-  flex-grow: 0; 
-  flex-shrink: 0;
-  flex-basis: 250px; 
-  flex: 0 0 250px;
-  z-index: 100;
-  padding: 0;
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .3);
-  background-color: #444444 !important;
-  color: #ffffff;
-  transition: 0.3s all;
-  overflow: hidden;
-  box-shadow: 0 0 12px rgba(0,0,0,0.75);
-  clip-path: inset(0px -12px 0px 0px);
-}
-
-.nav-bar.collapsed {
+.auth-container.nav-bar-collapsed .nav-bar {
+  width: 50px;
   flex-basis: 50px; 
   flex: 0 0 50px;  
 }
 
-.nav-bar.collapsed .nav-link .icon {
+.auth-container.nav-bar-collapsed .nav-bar .nav-link .icon {
   left: -5px;
 }
 
-.nav-bar.collapsed .nav-link .ml-2 {
+.auth-container.nav-bar-collapsed .nav-bar .nav-link .ml-2 {
   opacity: 0;
 }
 
-.nav-bar.collapsed .collapse-button {
+.auth-container.nav-bar-collapsed .nav-bar .collapse-button {
    transform: rotate(180deg);   
+}
+
+.auth-container.nav-bar-collapsed main {
+  margin-left: 40px;
 }
 
 .property-bar.collapsed {
@@ -594,13 +593,14 @@ form.form-error .input-container label {
 .nav-bar .nav-link {
   color: #ffffff;
   position: relative;
-  display: block;
+  display: inline-block;
   height: 35px;
   max-height: 35px;
   overflow: hidden;
   margin-top: 3px;
   margin-bottom: 3px;
   padding-left: 10px;
+  padding-right: 0;
 }
 
 .nav-bar .nav-link .icon {
@@ -608,12 +608,12 @@ form.form-error .input-container label {
   width: 40px;
   text-align: center;
   position: relative;
-  transition: all .25s;  
+  transition: all .35s;  
+  left: 0;
 }
 
-
 .nav-bar .nav-link .ml-2 { 
-  transition: all .25s;  
+  transition: all .35s;  
 }
 
 .nav-bar .nav-link:visited {
@@ -629,14 +629,28 @@ form.form-error .input-container label {
   color: #79b1ff;
 }
   
+.auth-container {
+  height: 100%;
+}
+
 .auth-container main {  
+  margin-left: 210px;
   padding-left: 50px;
-  padding-right: 50px;
+  padding-right: 40px;
   transition: all .2s;
   flex-grow: 1; /* grow wider by any factor */
   flex-shrink: 1; /* grow smaller by any factor */
   flex-basis: auto; /* auto-compute initial width */
   flex: 1 1 auto;
+  position: relative;
+  height: 100%;
+}
+
+.auth-container main .header {
+  padding-top: 30px;
+  padding-bottom: 20px;
+  font-weight: 700;
+  font-size: 27px;
 }
 
 .nav.flex-column {
@@ -659,8 +673,10 @@ form.form-error .input-container label {
 }
 
 .property-bar .collapse-button {
-  left: 16px;  
+  left: 16px;
   right: unset;
+  position: absolute;
+  top: 12px;
 }
 
 .top-bar-buttons {
@@ -723,16 +739,20 @@ form.form-error .input-container label {
 }
 
 .property-bar {
-  padding: 40px 40px 0 40px;
+  padding: 30px 40px 0 40px;
   top: 60px;
   overflow-y: auto;
-  right: 0;
   left: unset !important;
   background-color: #f0f0f0 !important;
   box-shadow: 0 0 12px rgba(0,0,0,0.75);
   clip-path: inset(0px 0px 0px -12px);
   width: 400px !important;
   color: #333333;  
+  position: fixed;
+  top: 60px;
+  right: 0;
+  transition: 0.3s all;
+  height: 100%;
 }
 
 .property-bar .input-container {
