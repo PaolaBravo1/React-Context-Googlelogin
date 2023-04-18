@@ -1,15 +1,10 @@
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import Router from "next/router";
-import Icon from "./Icon";
-import NavItem from "./NavItem";
+import { NavItem } from "./NavItem";
 
 interface INavItemList {
   role: string
 }
 
-const NavItemList = ({ role }: INavItemList) => {
-
+export const NavItemList = ({ role }: INavItemList) => {
   switch (role) {
     case "Administrator":
       return (
@@ -31,5 +26,3 @@ const NavItemList = ({ role }: INavItemList) => {
         return <></>
   }
 }
-
-export default NavItemList

@@ -1,13 +1,13 @@
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState } from "react"
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
-import Router from "next/router";
-import configSettings from "../../config.json";
+import { Route, useNavigate } from "react-router-dom";
+import configSettings from "config.json";
 import jwt from "jwt-decode"
-import { ErrorCode } from "@/helpers/errorcodes";
-import { Identity } from "@/models/identity";
-import { Participant } from "@/models/participant";
-import { Account } from "@/models/account";
+import { ErrorCode } from "helpers/errorcodes"
+import { Identity } from "models/identity";
+import { Participant } from "models/participant";
+import { Account } from "models/account";
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";
@@ -127,10 +127,12 @@ export function AuthenticationProvider({ children }: { children: any }) {
   });
 
   const redirectUnauthenticated = (includeRedirectParam: boolean) => {
-    if (includeRedirectParam && Router.pathname.indexOf("/signin") < 0)
-      Router.push("/signin?redirectTo=" + encodeURIComponent(Router.pathname.toString()));
+    const navigate = useNavigate();
+
+    if (includeRedirectParam && Route.name.indexOf("/signin") < 0)
+      navigate("/signin?redirectTo=" + encodeURIComponent(Route.name.toString()));
     else
-      Router.push("/signin");
+      navigate("/signin");
   }
 
   const restartTimers = (identity: Identity) => {

@@ -1,13 +1,12 @@
 import "bootstrap/dist/css/bootstrap.css"
-import TextInput from "@/components/TextInput"
+import { TextInput } from "components/TextInput"
 import { useEffect, useState } from "react"
-import Link from "next/link"
-import LayoutUnauthenticated from "@/components/LayoutUnauthenticated"
-import { emailAddressRegex } from "@/helpers/constants"
-import Router from "next/router"
-import { useApi } from "@/contexts/useApi"
+import { LayoutUnauthenticated } from "components/LayoutUnauthenticated"
+import { emailAddressRegex } from "helpers/constants"
+import { useApi } from "contexts/useApi"
+import { Link, useNavigate } from "react-router-dom"
 
-const ForgotPassword = () => {
+export const ForgotPassword = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
@@ -42,9 +41,11 @@ const ForgotPassword = () => {
   }
 
   const attemptSignin = async() => {    
+    const navigate = useNavigate(); 
+
     await requestPasswordReset(emailAddress)
     .then(result => {
-      Router.push("/thankyou");
+      navigate("/thankyou");
     })
     .catch(error => {
         setErrorMessage(error?.response?.data?.message ?? JSON.stringify(error));
@@ -61,12 +62,9 @@ const ForgotPassword = () => {
             <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Reset</button>
           </div>
           <div className="not-registered text-muted">
-            <Link className="simple-link" href="/signin">Return to sign-in page</Link>
+            <Link className="simple-link" to="/signin">Return to sign-in page</Link>
           </div>                                         
         </form>
     </LayoutUnauthenticated>                     
   )
 }
-
-
-export default ForgotPassword

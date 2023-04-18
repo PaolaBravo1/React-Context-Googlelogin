@@ -1,12 +1,7 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import Router from "next/router";
-import Icon from "./Icon";
-import NavItemList from "./NavItemList";
-import StatusBar from "./StatusBar";
-import configSettings from "../../config.json";
+import { Icon } from "./Icon";
 import HTMLReactParser from "html-react-parser";
-import { ErrorCode } from "@/helpers/errorcodes";
+import { ErrorCode } from "helpers/errorcodes";
 
 interface IPropertyBar {
   children: any,
@@ -16,7 +11,7 @@ interface IPropertyBar {
   onCancel: any
 }
 
-const PropertyBar = ({ children, entityID, isVisible, onSave, onCancel }: IPropertyBar) => {    
+export const PropertyBar = ({ children, entityID, isVisible, onSave, onCancel }: IPropertyBar) => {    
   const [errorMessage, setErrorMessage] = useState("");
   
   const handleSubmit = async (): Promise<boolean> => {  
@@ -83,9 +78,5 @@ const PropertyBar = ({ children, entityID, isVisible, onSave, onCancel }: IPrope
         <div className="error-message">{HTMLReactParser(errorMessage)}</div>   
       </form>  
     </nav>  
-
   )
 }
-
-export default PropertyBar
-

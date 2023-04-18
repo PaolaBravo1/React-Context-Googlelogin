@@ -1,6 +1,5 @@
-import { useApi } from "@/contexts/useApi";
-import { States } from "@/helpers/states";
-import { eventListeners } from "@popperjs/core";
+import { useApi } from "contexts/useApi";
+import { States } from "helpers/states";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
@@ -18,7 +17,7 @@ interface ITextInput {
     onChange: any    
 }
 
-const TextInput = ({entityID = 0, type = "text", required = false, label, name, value, group, groupError, regex, onChange} : ITextInput) => {     
+export const TextInput = ({entityID = 0, type = "text", required = false, label, name, value, group, groupError, regex, onChange} : ITextInput) => {     
   const [text, setText] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [isGroupValid, setIsGroupValid] = useState(true);
@@ -133,5 +132,3 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
       );
   }
 }
-
-export default TextInput

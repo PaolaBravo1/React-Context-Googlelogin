@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import configSettings from "../../config.json";
+import configSettings from "config.json";
 
 interface IIdlePopup {
   isOpen?: boolean;
   onClose: (isLogout: boolean) => void;
 }
 
-const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
+export const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
   const [time, setTime] = useState(configSettings.idlePopupDuration);
   const mounted = useRef(0);
 
@@ -48,5 +48,3 @@ const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
     </div>
   );
 };
-
-export default IdlePopup;

@@ -1,17 +1,16 @@
 import "bootstrap/dist/css/bootstrap.css"
-import TextInput from "@/components/TextInput"
+import { TextInput } from "components/TextInput"
 import { useEffect, useState } from "react"
-import Link from "next/link"
-import { emailAddressRegex, passwordRegex } from "@/helpers/constants"
-import LayoutUnauthenticated from "@/components/LayoutUnauthenticated"
-import Router from "next/router"
-import { useApi } from "@/contexts/useApi"
-import { ErrorCode } from "@/helpers/errorcodes"
+import { emailAddressRegex, passwordRegex } from "helpers/constants"
+import { LayoutUnauthenticated } from "components/LayoutUnauthenticated"
+import { useApi } from "contexts/useApi"
+import { ErrorCode } from "helpers/errorcodes"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
 import configSettings from "config.json"
 import { v4 } from "uuid"
+import { Link, useNavigate } from "react-router-dom"
 
-const Register = () => {
+export const Register = () => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   const [isPasswordAllowed, setIsPasswordAllowed] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -94,10 +93,10 @@ const Register = () => {
  
   const attemptRegister = async(registerFunction: () => Promise<void>) => {     
     await registerFunction()
-      .then(result => {                    
-          Router.push("/thankyou");
-        }
-      )
+      .then(result => {      
+        const navigate = useNavigate();              
+          navigate("/thankyou");
+      })
       .catch(error => {
         if (!error.response?.data?.errorCode) {
           setErrorMessage(JSON.stringify(error));
@@ -170,11 +169,9 @@ const Register = () => {
             </div>          
           </div>       
           <div className="not-registered text-muted">
-            <Link className="simple-link" href="/signin">Return to sign-in page</Link>
+            <Link className="simple-link" to="/signin">Return to sign-in page</Link>
           </div>                                            
         </form>
     </LayoutUnauthenticated>     
   )
 }
-
-export default Register

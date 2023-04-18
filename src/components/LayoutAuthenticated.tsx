@@ -1,21 +1,16 @@
-import Head from "next/head";
 import { useApi } from "../contexts/useApi";
 import { useCallback, useEffect, useState } from "react";
-import Router from "next/router";
-import IdlePopup from "./IdlePopup";
-import configSettings from "../../config.json";
-import StatusBar from "./StatusBar";
-import NavItem from "./NavItem";
-import Icon from "./Icon";
-import NavItemList from "./NavItemList";
-import NavBar from "./NavBar";
+import { IdlePopup } from "./IdlePopup";
+import configSettings from "config.json";
+import { Icon } from "./Icon";
+import { NavBar } from "./NavBar";
 
 interface ILayoutAuthenticated {
   header: string
   children: any
 }
   
-const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) => {    
+export const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) => {    
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isIdlePopupOpen, setIsIdlePopupOpen] = useState(false);
   const [isNavBarCollapsed, setIsNavBarCollapsed] = useState(false);
@@ -55,7 +50,7 @@ const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) => {
     
     setRole(identity.role);
 
-    var parts = Router.pathname.split("/").slice(1);
+    const parts = window.location.search.split("/").slice(1);
 
     if (parts.length == 0)
       return false;
@@ -117,7 +112,7 @@ const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) => {
   
   return (
     <>
-    <Head>
+    <head>
       <title>Hammerbeam</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.ico" />      
@@ -127,7 +122,7 @@ const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) => {
       <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&display=swap" />
       </noscript>
-    </Head>
+    </head>
     <div id="overlay" className={isMakingRequest ? "enabled" : ""}></div>
     <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
     <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isMakingRequest ? "making-api-request" : ""} ${isNavBarCollapsed ? "nav-bar-collapsed" : ""}`}>
@@ -150,6 +145,3 @@ const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) => {
     </>
     );
   }
-
-  export default LayoutAuthenticated
-  

@@ -1,10 +1,9 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useEffect, useState } from "react"
-import HTMLReactParser from "html-react-parser"
-import { useApi } from "@/contexts/useApi"
-import LayoutAuthenticated from "@/components/LayoutAuthenticated"
+import { useApi } from "contexts/useApi"
+import { LayoutAuthenticated } from "components/LayoutAuthenticated"
 
-const Dashboard = () => {  
+export const Dashboard = () => {  
   const [content, setContent] = useState("");
   
   const { getMe } = useApi();
@@ -35,5 +34,4 @@ const Dashboard = () => {
   );
 }
 
-export default Dashboard
 

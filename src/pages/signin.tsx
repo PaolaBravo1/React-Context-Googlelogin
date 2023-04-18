@@ -1,17 +1,16 @@
 import "bootstrap/dist/css/bootstrap.css"
-import TextInput from "@/components/TextInput"
+import { TextInput } from "components/TextInput"
 import { useEffect, useState } from "react"
-import Link from "next/link"
-import LayoutUnauthenticated from "@/components/LayoutUnauthenticated"
-import { emailAddressRegex } from "@/helpers/constants"
-import Router from "next/router"
-import { useApi } from "@/contexts/useApi"
-import { ErrorCode } from "@/helpers/errorcodes"
+import { LayoutUnauthenticated } from "components/LayoutUnauthenticated"
+import { emailAddressRegex } from "helpers/constants"
+import { useApi } from "contexts/useApi"
+import { ErrorCode } from "helpers/errorcodes"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
-import configSettings from "config.json"
+import configSettings from "config.json";
 import { v4 } from "uuid"
+import { Link, useNavigate } from "react-router-dom"
 
-const Signin = () => {
+export const Signin = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [nonce, setNonce] = useState(v4());
@@ -83,10 +82,14 @@ const Signin = () => {
     try {    
       await authFunction();
       
-      if (Router.query.redirectTo)
-        Router.push(decodeURIComponent(Router.query.redirectTo.toString()));
+      const params = new URLSearchParams(window.location.search);
+      const redirectTo = params.get("redirectTo");
+      const navigate = useNavigate();
+
+      if (redirectTo)
+        navigate(decodeURIComponent(redirectTo));
       else
-        Router.push(getIdentity()!.role.toLowerCase() + "/dashboard");      
+        navigate(getIdentity()!.role.toLowerCase() + "/dashboard");      
     }
     catch (error:any) {
         switch(error?.response?.data?.errorCode) {
@@ -145,7 +148,7 @@ const Signin = () => {
 
   return (
     <LayoutUnauthenticated id="signin" title="Welcome!" message="Please provide your user credentials in order to sign in." errorMessage={errorMessage}>  
-      <div className={`muted password-reset ${isPasswordResetLinkVisible ? "": "hidden"}`}>Forgot your password? <Link className="simple-link" href="/forgotpassword">Click here to request a passsword reset!</Link></div>
+      <div className={`muted password-reset ${isPasswordResetLinkVisible ? "": "hidden"}`}>Forgot your password? <Link className="simple-link" to="/forgotpassword">Click here to request a passsword reset!</Link></div>
       <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>
         <div className="mb-3">
           <TextInput required={true} type="text" label="Email address" name="email-address" value={emailAddress} onChange={(value:string) => setEmailAddress(value)}></TextInput>
@@ -172,11 +175,9 @@ const Signin = () => {
           </div>          
         </div>   
         <div className="not-registered text-muted">
-          Not registered yet?  <Link className="simple-link" href="/register">Click here to get started!</Link>
+          Not registered yet?  <Link className="simple-link" to="/register">Click here to get started!</Link>
         </div>                        
       </form>
     </LayoutUnauthenticated>
   )
 }
-
-export default Signin

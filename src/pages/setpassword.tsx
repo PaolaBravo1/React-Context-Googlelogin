@@ -1,13 +1,13 @@
 import "bootstrap/dist/css/bootstrap.css"
-import TextInput from "@/components/TextInput"
+import { TextInput } from "components/TextInput"
 import { useEffect, useState } from "react"
-import { passwordRegex } from "@/helpers/constants"
-import LayoutUnauthenticated from "@/components/LayoutUnauthenticated"
-import Router from "next/router"
-import { useApi } from "@/contexts/useApi"
-import { ErrorCode } from "@/helpers/errorcodes"
+import { passwordRegex } from "helpers/constants"
+import { LayoutUnauthenticated } from "components/LayoutUnauthenticated"
+import { useApi } from "contexts/useApi"
+import { ErrorCode } from "helpers/errorcodes"
+import { useNavigate } from "react-router-dom"
 
-const SetPassword = () => {
+export const SetPassword = () => {
   const [title , setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [emailAddress , setEmailAddress] = useState("");
@@ -85,7 +85,8 @@ const SetPassword = () => {
           setIsSuccessful(true);
 
           setTimeout(() => {
-            Router.push("/signin?emailAddress=" + encodeURIComponent(emailAddress));
+            const navigate = useNavigate();
+            navigate("/signin?emailAddress=" + encodeURIComponent(emailAddress));
           }, 2000);
           
         }
@@ -126,6 +127,3 @@ const SetPassword = () => {
     </LayoutUnauthenticated>
   )
 }
-
-
-export default SetPassword

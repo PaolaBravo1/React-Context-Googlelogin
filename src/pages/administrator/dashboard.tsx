@@ -1,10 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css"
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { useApi } from "@/contexts/useApi"
-import LayoutAuthenticated from "@/components/LayoutAuthenticated"
+import { LayoutAuthenticated } from "components/LayoutAuthenticated"
 
-const Dashboard = () => {
- 
+export const Dashboard = () => {
   return (
     <LayoutAuthenticated header="Dashboard">
       <div className="row no-gutter">
@@ -12,5 +9,3 @@ const Dashboard = () => {
     </LayoutAuthenticated>
   );
 }
-
-export default Dashboard

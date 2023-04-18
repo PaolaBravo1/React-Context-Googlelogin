@@ -1,6 +1,5 @@
 import HTMLReactParser from "html-react-parser";
-import Head from "next/head";
-import { useApi } from "@/contexts/useApi";
+import { useApi } from "contexts/useApi";
 
 interface ILayoutUnauthenticated {
     children: any,
@@ -11,12 +10,12 @@ interface ILayoutUnauthenticated {
     reversed?: boolean
 }
 
-const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reversed=false}: ILayoutUnauthenticated) => {    
+export const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reversed=false}: ILayoutUnauthenticated) => {    
   const { isMakingRequest } = useApi();
   
   return (
     <>
-    <Head>
+    <head>
       <title>Hammerbeam</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.ico" />      
@@ -26,7 +25,7 @@ const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reve
       <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&display=swap" />
       </noscript>
-    </Head>
+    </head>
     <div id="overlay" className={isMakingRequest ? "enabled" : ""}></div>
     <div id={id} className={`unauth-container`}>
       <div className="container-fluid">
@@ -57,5 +56,3 @@ const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reve
   </>
   );
 }
-
-export default LayoutUnauthenticated

@@ -4,7 +4,7 @@
   font-family: "Open Sans";
 }
 
-html, body, #__next {
+html, body {
   height: 100%;
 }
 
@@ -28,19 +28,6 @@ html, body, #__next {
   filter: alpha(opacity=50);  
   pointer-events:all;
  }
-
-.xmaking-api-request {
-  cursor: wait !important;
-  opacity: .4;
-}
-
-.xmaking-api-request button:hover {
-  cursor: wait !important;
-}
-
-.xmaking-api-request input {
-  pointer-events: none;
-}
 
 .error {
   color: #aa0000;
@@ -69,6 +56,7 @@ html, body, #__next {
     transition: all .2s ease-in;
     letter-spacing: 1px;
     cursor: pointer;
+    outline: none;
 }
 
 .styled-button:hover {
@@ -433,11 +421,11 @@ form.form-error .input-container label {
 }
 
 #google-login-override {
-  background-image: url("/social/google.png");
+  background-image: url("/public/social/google.png");
 }
 
 #apple-login-override {
-  background-image: url("/social/apple.png");
+  background-image: url("/public/social/apple.png");
 }
 
 .or-block { 

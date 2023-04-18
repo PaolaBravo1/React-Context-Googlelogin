@@ -12,5 +12,6 @@ export class Participant {
     public postalCode: string;
     public fullName: string;
     public dateOfBirth: Date | null;
+    public lastActiveTimestamp: Date | null;
 }
 

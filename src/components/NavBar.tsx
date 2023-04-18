@@ -1,19 +1,17 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import Router from "next/router";
-import Icon from "./Icon";
-import NavItemList from "./NavItemList";
-import StatusBar from "./StatusBar";
-import configSettings from "../../config.json";
+import { Icon } from "./Icon";
+import { NavItemList } from "./NavItemList";
+import { StatusBar } from "./StatusBar";
+import configSettings from "config.json";
 
-interface INavBar{
+interface INavBar {
   role: string,
   oauthAccessTokenLifeRemaining: number,
   idleLifeRemaining: number,
   handleNavBarToggle: any
 }
 
-const NavBar = ({ role, oauthAccessTokenLifeRemaining, idleLifeRemaining, handleNavBarToggle }: INavBar) => {
+export const NavBar = ({ role, oauthAccessTokenLifeRemaining, idleLifeRemaining, handleNavBarToggle }: INavBar) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleIsCollapsed = () => {
@@ -36,4 +34,3 @@ const NavBar = ({ role, oauthAccessTokenLifeRemaining, idleLifeRemaining, handle
     </nav>
   )
 }
-export default NavBar

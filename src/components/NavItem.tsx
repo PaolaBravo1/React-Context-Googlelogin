@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import Router from "next/router";
-import Icon from "./Icon";
+import { Link } from "react-router-dom";
+import { Icon } from "./Icon";
 
 interface INavItem {
   label: string,
@@ -9,21 +8,20 @@ interface INavItem {
   href: string;
 }
 
-const NavItem = ({ label, iconName, href }: INavItem) => {
+export const NavItem = ({ label, iconName, href }: INavItem) => {
   const [isActive, setIsActive] = useState(false);
   
   useEffect(() => {
-    setIsActive(Router.pathname === href);
+    const location = window.location.search;
+    setIsActive(location === href);
   }, []);
   
   return (
     <li className="nav-item">
-      <Link className={`nav-link${isActive ? " active" : ""}`} href={href}>
+      <Link className={`nav-link${isActive ? " active" : ""}`} to={href}>
         <Icon name={iconName} />
         <span className="ml-2">{label}</span>
       </Link>
     </li>
   )
 }
-
-export default NavItem

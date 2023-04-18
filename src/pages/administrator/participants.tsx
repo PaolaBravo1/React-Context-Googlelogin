@@ -1,20 +1,19 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useApi } from "@/contexts/useApi"
-import LayoutAuthenticated from "@/components/LayoutAuthenticated"
-import Table from "@/components/Table"
+import { useApi } from "contexts/useApi"
+import { LayoutAuthenticated } from "components/LayoutAuthenticated"
+import { Table } from "components/Table"
 import { debounce } from "lodash"
-import PropertyBar from "@/components/PropertyBar"
-import TextInput from "@/components/TextInput"
-import { Participant } from "@/models/participant"
-import { ErrorCode } from "@/helpers/errorcodes"
-import { postalCodeRegex } from "@/helpers/constants"
+import { PropertyBar } from "components/PropertyBar"
+import { TextInput } from "components/TextInput"
+import { Participant } from "models/participant"
+import { ErrorCode } from "helpers/errorcodes"
+import { postalCodeRegex } from "helpers/constants"
 import moment from "moment"
-import { faMonument } from "@fortawesome/free-solid-svg-icons"
-import Icon from "@/components/Icon"
+import { Icon } from "components/Icon"
 var xlsx = require("xlsx")
 
-const Participants = () => {
+export const Participants = () => {
   const [participants, setParticipants] = useState<Participant[]>();
   const [participant, setParticipant] = useState<Participant>(Object);
   const [isPropertyBarVisible, setIsPropertyBarVisible] = useState(false);
@@ -43,8 +42,8 @@ const Participants = () => {
         type: "date"
       },
       {
-        label: "Last authenticated",
-        accessor: "authenticatedTimestamp",
+        label: "Last active",
+        accessor: "lastActiveTimestamp",
         type: "datetime"
       }
     ],
@@ -201,7 +200,7 @@ const Participants = () => {
       "Internal ID": o.internalID,
       "Email address": o.emailAddress,
       "Date of birth": o.dateOfBirth == null ? null : moment.utc(o.dateOfBirth).format("MM/DD/YYYY"),
-      "Last sign-in": o.authenticatedTimestamp == null ? null : moment(o.authenticatedTimestamp).format("MM/DD/YYYY hh:mmA")
+      "Last active": o.lastActiveTimestamp == null ? null : moment(o.lastActiveTimestamp).format("MM/DD/YYYY hh:mmA")
      }});
 
     const ws = xlsx.utils.json_to_sheet(data);
@@ -258,5 +257,3 @@ const Participants = () => {
     </LayoutAuthenticated>
   );
 }
-
-export default Participants

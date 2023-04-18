@@ -1,11 +1,11 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useEffect, useState } from "react"
-import Link from "next/link"
-import LayoutUnauthenticated from "@/components/LayoutUnauthenticated"
-import { useApi } from "@/contexts/useApi"
-import { ErrorCode } from "@/helpers/errorcodes"
+import { LayoutUnauthenticated } from "components/LayoutUnauthenticated"
+import { useApi } from "contexts/useApi"
+import { ErrorCode } from "helpers/errorcodes"
+import { Link } from "react-router-dom"
 
-const ConfirmAccount = () => {
+export const ConfirmAccount = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [token, setToken] = useState("");
   const [isPasswordResetRequired, setIsPasswordResetRequired] = useState(false);
@@ -18,8 +18,8 @@ const ConfirmAccount = () => {
    
   useEffect(() => {
       const params = new URLSearchParams(window.location.search);
-      let paramToken = params.get("token");
-      let paramEmailAddress = params.get("emailAddress");
+      const paramToken = params.get("token");
+      const paramEmailAddress = params.get("emailAddress");
 
       if (paramToken === null || paramEmailAddress === null) {
         setErrorMessage("The link does not contain the required information in order to confirm your account.  Please try copying and pasting the link directly from the email you received.");
@@ -73,9 +73,9 @@ const ConfirmAccount = () => {
           <div>
             <div>
               { (isPasswordResetRequired) ?
-                <Link href={`/setpassword?emailAddress=${encodeURIComponent(emailAddress)}&token=${token}&isAccountConfirmed=false`} className="styled-button">Create new password</Link>                
+                <Link to={`/setpassword?emailAddress=${encodeURIComponent(emailAddress)}&token=${token}&isAccountConfirmed=false`} className="styled-button">Create new password</Link>                
               :
-                <Link href={`/signin?emailAddress=${encodeURIComponent(emailAddress)}`} className="styled-button">Sign in</Link>                
+                <Link to={`/signin?emailAddress=${encodeURIComponent(emailAddress)}`} className="styled-button">Sign in</Link>                
               }
             </div>
           </div>
@@ -84,5 +84,3 @@ const ConfirmAccount = () => {
     </LayoutUnauthenticated>  
   )
 }
-
-export default ConfirmAccount

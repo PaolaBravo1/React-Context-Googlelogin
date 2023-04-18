@@ -1,13 +1,13 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useEffect, useMemo, useState } from "react"
-import { useApi } from "@/contexts/useApi"
-import LayoutAuthenticated from "@/components/LayoutAuthenticated"
-import Table from "@/components/Table"
+import { useApi } from "contexts/useApi"
+import { LayoutAuthenticated } from "components/LayoutAuthenticated"
+import { Table } from "components/Table"
 import moment from "moment"
-import { Account } from "@/models/account"
+import { Account } from "models/account"
 var xlsx = require("xlsx")
 
-const AuthenticatedAccounts = () => {
+export const AuthenticatedAccounts = () => {
   const [accounts, setAccounts] = useState<Account[]>();
   
   const { getAuthenticatedAccounts } = useApi();
@@ -87,4 +87,3 @@ const AuthenticatedAccounts = () => {
   );
 }
 
-export default AuthenticatedAccounts
