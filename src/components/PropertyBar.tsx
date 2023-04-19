@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Icon } from "./Icon";
+import Icon from "./Icon";
 import HTMLReactParser from "html-react-parser";
 import { ErrorCode } from "helpers/errorcodes";
 
@@ -11,7 +11,7 @@ interface IPropertyBar {
   onCancel: any
 }
 
-export const PropertyBar = ({ children, entityID, isVisible, onSave, onCancel }: IPropertyBar) => {    
+const PropertyBar = ({ children, entityID, isVisible, onSave, onCancel }: IPropertyBar) => {    
   const [errorMessage, setErrorMessage] = useState("");
   
   const handleSubmit = async (): Promise<boolean> => {  
@@ -80,3 +80,5 @@ export const PropertyBar = ({ children, entityID, isVisible, onSave, onCancel }:
     </nav>  
   )
 }
+
+export default PropertyBar

@@ -17,7 +17,7 @@ interface ITextInput {
     onChange: any    
 }
 
-export const TextInput = ({entityID = 0, type = "text", required = false, label, name, value, group, groupError, regex, onChange} : ITextInput) => {     
+const TextInput = ({entityID = 0, type = "text", required = false, label, name, value, group, groupError, regex, onChange} : ITextInput) => {     
   const [text, setText] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [isGroupValid, setIsGroupValid] = useState(true);
@@ -132,3 +132,5 @@ export const TextInput = ({entityID = 0, type = "text", required = false, label,
       );
   }
 }
+
+export default TextInput

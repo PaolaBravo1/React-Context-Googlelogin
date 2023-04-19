@@ -1,19 +1,19 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useApi } from "contexts/useApi"
-import { LayoutAuthenticated } from "components/LayoutAuthenticated"
-import { Table } from "components/Table"
+import { LayoutAuthenticated } from "layouts/LayoutAuthenticated"
+import Table from "components/Table"
 import { debounce } from "lodash"
-import { PropertyBar } from "components/PropertyBar"
-import { TextInput } from "components/TextInput"
-import { Participant } from "models/participant"
+import PropertyBar from "components/PropertyBar"
+import TextInput from "components/TextInput"
+import { Participant } from "models/Participant"
 import { ErrorCode } from "helpers/errorcodes"
 import { postalCodeRegex } from "helpers/constants"
 import moment from "moment"
-import { Icon } from "components/Icon"
+import Icon from "components/Icon"
 var xlsx = require("xlsx")
 
-export const Participants = () => {
+const Participants = () => {
   const [participants, setParticipants] = useState<Participant[]>();
   const [participant, setParticipant] = useState<Participant>(Object);
   const [isPropertyBarVisible, setIsPropertyBarVisible] = useState(false);
@@ -257,3 +257,5 @@ export const Participants = () => {
     </LayoutAuthenticated>
   );
 }
+
+export default Participants

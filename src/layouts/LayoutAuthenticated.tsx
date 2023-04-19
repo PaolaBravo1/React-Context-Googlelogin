@@ -1,9 +1,10 @@
 import { useApi } from "../contexts/useApi";
 import { useCallback, useEffect, useState } from "react";
-import { IdlePopup } from "./IdlePopup";
+import IdlePopup from "../components/IdlePopup";
 import configSettings from "config.json";
-import { Icon } from "./Icon";
-import { NavBar } from "./NavBar";
+import Icon from "../components/Icon";
+import NavBar from "../components/NavBar";
+import { Helmet } from "react-helmet";
 
 interface ILayoutAuthenticated {
   header: string
@@ -50,8 +51,8 @@ export const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) =>
     
     setRole(identity.role);
 
-    const parts = window.location.search.split("/").slice(1);
-
+    const parts = window.location.pathname.split("/").slice(1);
+   
     if (parts.length == 0)
       return false;
 
@@ -112,17 +113,14 @@ export const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) =>
   
   return (
     <>
-    <head>
+    <Helmet>
       <title>Hammerbeam</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.ico" />      
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link href="https://fonts.googleapis.com/css2?family=Lato" rel="preload" as="style"/>
       <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet" media="print" />
-      <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&display=swap" />
-      </noscript>
-    </head>
+    </Helmet>
     <div id="overlay" className={isMakingRequest ? "enabled" : ""}></div>
     <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
     <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isMakingRequest ? "making-api-request" : ""} ${isNavBarCollapsed ? "nav-bar-collapsed" : ""}`}>

@@ -1,8 +1,8 @@
 import "bootstrap/dist/css/bootstrap.css"
-import { TextInput } from "components/TextInput"
+import TextInput from "components/TextInput"
 import { useEffect, useState } from "react"
 import { emailAddressRegex, passwordRegex } from "helpers/constants"
-import { LayoutUnauthenticated } from "components/LayoutUnauthenticated"
+import { LayoutUnauthenticated } from "layouts/LayoutUnauthenticated"
 import { useApi } from "contexts/useApi"
 import { ErrorCode } from "helpers/errorcodes"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
@@ -10,7 +10,7 @@ import configSettings from "config.json"
 import { v4 } from "uuid"
 import { Link, useNavigate } from "react-router-dom"
 
-export const Register = () => {
+const Register = () => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   const [isPasswordAllowed, setIsPasswordAllowed] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -23,6 +23,8 @@ export const Register = () => {
 
   const { register, registerGoogle } = useApi();
   
+  const navigate = useNavigate();              
+        
   useEffect(() => {    
     // renable this if you want participants to create passwords upon registration, rather than after email confirmation
     // const params = new URLSearchParams(window.location.search);
@@ -94,8 +96,7 @@ export const Register = () => {
   const attemptRegister = async(registerFunction: () => Promise<void>) => {     
     await registerFunction()
       .then(result => {      
-        const navigate = useNavigate();              
-          navigate("/thankyou");
+        navigate("/thankyou");
       })
       .catch(error => {
         if (!error.response?.data?.errorCode) {
@@ -123,9 +124,11 @@ export const Register = () => {
           default:
             if (error.message == "Network Error")
               setErrorMessage("The request could not be completed, the backend API may not be configured correctly.");  
+            else if (error?.response?.data) 
+              setErrorMessage(error.response.data.message);
             else
-              setErrorMessage(error?.response?.data?.message ?? JSON.stringify(error));
-            break;                
+              setErrorMessage(error);
+            break;                 
         }
       });
   };
@@ -175,3 +178,5 @@ export const Register = () => {
     </LayoutUnauthenticated>     
   )
 }
+
+export default Register

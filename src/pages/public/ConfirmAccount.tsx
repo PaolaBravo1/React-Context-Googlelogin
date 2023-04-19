@@ -1,11 +1,11 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useEffect, useState } from "react"
-import { LayoutUnauthenticated } from "components/LayoutUnauthenticated"
+import { LayoutUnauthenticated } from "layouts/LayoutUnauthenticated"
 import { useApi } from "contexts/useApi"
 import { ErrorCode } from "helpers/errorcodes"
 import { Link } from "react-router-dom"
 
-export const ConfirmAccount = () => {
+const ConfirmAccount = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [token, setToken] = useState("");
   const [isPasswordResetRequired, setIsPasswordResetRequired] = useState(false);
@@ -84,3 +84,5 @@ export const ConfirmAccount = () => {
     </LayoutUnauthenticated>  
   )
 }
+
+export default ConfirmAccount

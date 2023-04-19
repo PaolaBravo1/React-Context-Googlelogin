@@ -1,5 +1,5 @@
-import { useEffect, useImperativeHandle, useState } from "react";
-import { Icon } from "./Icon";
+import { useEffect, useState } from "react";
+import Icon from "./Icon";
 import moment from "moment";
 import React from "react";
 
@@ -14,7 +14,7 @@ interface ITable {
     onRowClick: Function | null
 }
 
-export const Table = ({ children, id, columns, sourceData, isPropertyBarVisible, onExport, onSearchTermsChange, onRowClick }: ITable) => {
+const Table = ({ children, id, columns, sourceData, isPropertyBarVisible, onExport, onSearchTermsChange, onRowClick }: ITable) => {
     const [sortField, setSortField] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
     const [data, setData] = useState<any>([]);
@@ -190,3 +190,5 @@ export const Table = ({ children, id, columns, sourceData, isPropertyBarVisible,
         </div>
     )
 };
+
+export default Table

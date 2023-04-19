@@ -1,18 +1,20 @@
 import "bootstrap/dist/css/bootstrap.css"
-import { TextInput } from "components/TextInput"
+import TextInput from "components/TextInput"
 import { useEffect, useState } from "react"
-import { LayoutUnauthenticated } from "components/LayoutUnauthenticated"
+import { LayoutUnauthenticated } from "layouts/LayoutUnauthenticated"
 import { emailAddressRegex } from "helpers/constants"
 import { useApi } from "contexts/useApi"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate,  } from "react-router-dom"
 
-export const ForgotPassword = () => {
+const ForgotPassword = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   
   const { requestPasswordReset } = useApi();
   
+  const navigate = useNavigate();              
+        
   useEffect(() => {    
     setIsSubmitButtonEnabled(emailAddress.length > 0);
   }, [emailAddress]);
@@ -41,8 +43,6 @@ export const ForgotPassword = () => {
   }
 
   const attemptSignin = async() => {    
-    const navigate = useNavigate(); 
-
     await requestPasswordReset(emailAddress)
     .then(result => {
       navigate("/thankyou");
@@ -68,3 +68,5 @@ export const ForgotPassword = () => {
     </LayoutUnauthenticated>                     
   )
 }
+
+export default ForgotPassword

@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css"
-import { LayoutAuthenticated } from "components/LayoutAuthenticated"
+import { LayoutAuthenticated } from "layouts/LayoutAuthenticated"
 
-export const Dashboard = () => {
+const Dashboard = () => {
   return (
     <LayoutAuthenticated header="Dashboard">
       <div className="row no-gutter">
@@ -9,3 +9,5 @@ export const Dashboard = () => {
     </LayoutAuthenticated>
   );
 }
+
+export default Dashboard

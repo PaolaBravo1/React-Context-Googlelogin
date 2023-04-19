@@ -1,10 +1,10 @@
-import { NavItem } from "./NavItem";
+import NavItem from "./NavItem";
 
 interface INavItemList {
   role: string
 }
 
-export const NavItemList = ({ role }: INavItemList) => {
+const NavItemList = ({ role }: INavItemList) => {
   switch (role) {
     case "Administrator":
       return (
@@ -26,3 +26,5 @@ export const NavItemList = ({ role }: INavItemList) => {
         return <></>
   }
 }
+
+export default NavItemList

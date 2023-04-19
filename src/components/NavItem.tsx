@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Icon } from "./Icon";
+import Icon from "./Icon";
 
 interface INavItem {
   label: string,
@@ -8,7 +8,7 @@ interface INavItem {
   href: string;
 }
 
-export const NavItem = ({ label, iconName, href }: INavItem) => {
+const NavItem = ({ label, iconName, href }: INavItem) => {
   const [isActive, setIsActive] = useState(false);
   
   useEffect(() => {
@@ -25,3 +25,5 @@ export const NavItem = ({ label, iconName, href }: INavItem) => {
     </li>
   )
 }
+
+export default NavItem

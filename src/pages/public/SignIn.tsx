@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.css"
-import { TextInput } from "components/TextInput"
+import TextInput from "components/TextInput"
 import { useEffect, useState } from "react"
-import { LayoutUnauthenticated } from "components/LayoutUnauthenticated"
+import { LayoutUnauthenticated } from "layouts/LayoutUnauthenticated"
 import { emailAddressRegex } from "helpers/constants"
 import { useApi } from "contexts/useApi"
 import { ErrorCode } from "helpers/errorcodes"
@@ -10,7 +10,7 @@ import configSettings from "config.json";
 import { v4 } from "uuid"
 import { Link, useNavigate } from "react-router-dom"
 
-export const Signin = () => {
+const SignIn = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [nonce, setNonce] = useState(v4());
@@ -19,7 +19,9 @@ export const Signin = () => {
   const [isPasswordResetLinkVisible, setIsPasswordResetLinkVisible] = useState(false);
 
   const { getIdentity, authorize, authorizeGoogle, clearIdentity, getProvider } = useApi();
-  
+
+  const navigate = useNavigate();
+
   useEffect(() => {    
     clearIdentity();
     const params = new URLSearchParams(window.location.search);  
@@ -81,15 +83,14 @@ export const Signin = () => {
   const signIn = async(authFunction: () => Promise<void>) => {        
     try {    
       await authFunction();
-      
+     
       const params = new URLSearchParams(window.location.search);
       const redirectTo = params.get("redirectTo");
-      const navigate = useNavigate();
-
+     
       if (redirectTo)
         navigate(decodeURIComponent(redirectTo));
       else
-        navigate(getIdentity()!.role.toLowerCase() + "/dashboard");      
+        navigate(`/${getIdentity()!.role.toLowerCase()}/dashboard`);      
     }
     catch (error:any) {
         switch(error?.response?.data?.errorCode) {
@@ -139,9 +140,10 @@ export const Signin = () => {
           default:
             if (error.message == "Network Error")
               setErrorMessage("The request could not be completed, the backend API may not be configured correctly.");  
+            else if (error?.response?.data) 
+              setErrorMessage(error.response.data.message);
             else
-              setErrorMessage(error?.response?.data?.message ?? JSON.stringify(error));
-            break;                
+              setErrorMessage(error);              
         }
       }
   };
@@ -181,3 +183,5 @@ export const Signin = () => {
     </LayoutUnauthenticated>
   )
 }
+
+export default SignIn

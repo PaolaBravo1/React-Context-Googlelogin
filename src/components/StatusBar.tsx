@@ -1,4 +1,4 @@
-import { Icon } from "./Icon";
+import Icon from "./Icon";
 
 interface IStatusBar {
   id: string,
@@ -7,7 +7,7 @@ interface IStatusBar {
   complete: number  
 }
 
-export const StatusBar = ({ id, icon, warningAt, complete }: IStatusBar) => {
+const StatusBar = ({ id, icon, warningAt, complete }: IStatusBar) => {
   return (
   <div className={`status-bar ${(complete < warningAt) ? " strobe" : ""}`} id={id}>
     <Icon name={icon} />
@@ -15,3 +15,5 @@ export const StatusBar = ({ id, icon, warningAt, complete }: IStatusBar) => {
   </div>
   )
 }
+
+export default StatusBar

@@ -13,10 +13,12 @@ interface IIcon {
   onClick?: any
 }
 
-export const Icon = ({ name, className, toolTip, onClick }: IIcon) => {
+const Icon = ({ name, className, toolTip, onClick }: IIcon) => {
   return (
     <span className={`icon ${className ?? ""}`}>
       <FontAwesomeIcon title={toolTip} icon={name} onClick={onClick} />
     </span>
   )
 }
+
+export default Icon

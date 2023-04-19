@@ -5,9 +5,9 @@ import { Route, useNavigate } from "react-router-dom";
 import configSettings from "config.json";
 import jwt from "jwt-decode"
 import { ErrorCode } from "helpers/errorcodes"
-import { Identity } from "models/identity";
-import { Participant } from "models/participant";
-import { Account } from "models/account";
+import { Identity } from "models/Identity";
+import { Participant } from "models/Participant";
+import { Account } from "models/Account";
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";
@@ -127,8 +127,8 @@ export function AuthenticationProvider({ children }: { children: any }) {
   });
 
   const redirectUnauthenticated = (includeRedirectParam: boolean) => {
-    const navigate = useNavigate();
-
+    const navigate = useNavigate();              
+        
     if (includeRedirectParam && Route.name.indexOf("/signin") < 0)
       navigate("/signin?redirectTo=" + encodeURIComponent(Route.name.toString()));
     else
@@ -217,7 +217,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     ).then(async result => {
       await saveIdentity(emailAddress, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
       setProvider("Local");
-
+      
       return result.data.access_token;
     }
     ).catch(error => { throw error; });

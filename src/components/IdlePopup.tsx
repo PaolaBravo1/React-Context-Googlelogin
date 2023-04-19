@@ -6,7 +6,7 @@ interface IIdlePopup {
   onClose: (isLogout: boolean) => void;
 }
 
-export const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
+const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
   const [time, setTime] = useState(configSettings.idlePopupDuration);
   const mounted = useRef(0);
 
@@ -48,3 +48,5 @@ export const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
     </div>
   );
 };
+
+export default IdlePopup
