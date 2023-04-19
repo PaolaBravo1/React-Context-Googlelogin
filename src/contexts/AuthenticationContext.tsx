@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { Route, useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { axiosRequest } from "api/api";
 const identityCookieName = "hammer_identity";
 const providerCookieName = "hammer_provider";
 const authEndPoint = "/oauth/authorize";
+const authLocalStorageKey = "hammer_oauth_timer";
 
 var authTimer: ReturnType<typeof setTimeout>;
 var authTimerCountdown: ReturnType<typeof setInterval>;
@@ -53,15 +54,17 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const [oauthAccessTokenLifeRemaining, setOAuthAccessTokenLifeRemaining] = useState(100);
   
   const navigate = useNavigate();              
+  
+  useEffect(() => {
+    // on page refresh we need to restart the oauth token timer
+    const oauthCountdown = Number(localStorage.getItem(authLocalStorageKey));
+    const identity = getIdentity();
+    
+    if (oauthAccessTokenLifeRemaining == 100 && identity?.emailAddress != null && !isNaN(oauthCountdown)) 
+      restartOAuthTimers(identity);
+  }, []);
 
-  const redirectUnauthenticated = (includeRedirectParam: boolean) => {
-    if (includeRedirectParam && Route.name.indexOf("/signin") < 0)
-      navigate("/signin?redirectTo=" + encodeURIComponent(Route.name.toString()));
-    else
-      navigate("/signin");
-  }
-
-  const restartTimers = (identity: Identity) => {
+  const restartOAuthTimers = (identity: Identity) => {
     clearTimeout(authTimer);
     clearInterval(authTimerCountdown);
 
@@ -71,10 +74,18 @@ export function AuthenticationProvider({ children }: { children: any }) {
       reauthorize(identity.emailAddress, identity.refreshToken);
     }, ttl);
 
-    authTimerCountdown = setInterval(function () {
+    authTimerCountdown = setInterval(() => {
       const countdown = (Date.parse(identity.expiration) - (new Date()).getTime()) / 1000;
       setOAuthAccessTokenLifeRemaining(100.0 * countdown / configSettings.oauthAccessTokenTimeout);
+      localStorage.setItem(authLocalStorageKey, countdown.toString());      
     }, 1000);
+  }
+  
+  const redirectUnauthenticated = (includeRedirectParam: boolean) => {
+    if (includeRedirectParam && Route.name.indexOf("/signin") < 0)
+      navigate("/signin?redirectTo=" + encodeURIComponent(Route.name.toString()));
+    else
+      navigate("/signin");
   }
 
   const getIdentity = (): Identity | null => {
@@ -123,7 +134,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     var identity = new Identity(emailAddresses[0], role, accessToken, refreshToken, null, expiration);
     Cookies.set(identityCookieName, JSON.stringify(identity), params);
     
-    restartTimers(identity);
+    restartOAuthTimers(identity);
   }
 
   const clearIdentity = () => {
@@ -133,8 +144,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const authorize = async (emailAddress: string, password: string): Promise<string> => {
     console.log("authorizing...");
     
-    await axiosRequest.post(authEndPoint,
-      {
+    await axiosRequest.post(authEndPoint, {
         "grant_type": "password",
         "username": emailAddress,
         "password": password
@@ -154,8 +164,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     console.log("authorizing google...");
     
     const item = jwt<any>(credential);
-    await axiosRequest.post(authEndPoint,
-      {
+    await axiosRequest.post(authEndPoint, {
         "grant_type": "password",
         "username": item.email,
         "google_credential": credential
@@ -178,8 +187,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
   const reauthorize = async (emailAddress: string, refreshToken: string): Promise<string> => {
     console.log("reauthorizing...");
-    await axiosRequest.post(authEndPoint,
-      {
+    await axiosRequest.post(authEndPoint, {
         "grant_type": "refresh_token",
         "username": emailAddress,
         "refresh_token": refreshToken
