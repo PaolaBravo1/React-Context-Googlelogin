@@ -2,13 +2,13 @@ import "bootstrap/dist/css/bootstrap.css"
 import TextInput from "components/TextInput"
 import { useEffect, useState } from "react"
 import { emailAddressRegex, passwordRegex } from "helpers/constants"
-import { LayoutUnauthenticated } from "layouts/LayoutUnauthenticated"
-import { useApi } from "contexts/useApi"
+import { UnauthenticatedLayout } from "layouts/UnauthenticatedLayout"
 import { ErrorCode } from "helpers/errorcodes"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
 import configSettings from "config.json"
 import { v4 } from "uuid"
 import { Link, useNavigate } from "react-router-dom"
+import { ParticipantContext } from "contexts/ParticipantContext"
 
 const Register = () => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
@@ -21,7 +21,7 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState("")
   const [nonce, setNonce] = useState(v4())
 
-  const { register, registerGoogle } = useApi();
+  const { register, registerGoogle } = ParticipantContext();
   
   const navigate = useNavigate();              
         
@@ -42,10 +42,10 @@ const Register = () => {
    
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+   
     if (!validate())
       return;
-
+   
     await attemptRegister(async () => { await register(firstName, lastName, emailAddress, password) });       
   }
   
@@ -93,17 +93,12 @@ const Register = () => {
     return true;
   }
  
-  const attemptRegister = async(registerFunction: () => Promise<void>) => {     
-    await registerFunction()
+  const attemptRegister = async(registerFunction: () => Promise<void>) => {
+     await registerFunction()
       .then(result => {      
         navigate("/thankyou");
       })
       .catch(error => {
-        if (!error.response?.data?.errorCode) {
-          setErrorMessage(JSON.stringify(error));
-          return;
-        }
-
         switch(error?.response?.data?.errorCode) {
           case ErrorCode.AccountEmailAddressInvalid:          
             setErrorMessage("The email address you provided is not valid.");              
@@ -124,39 +119,39 @@ const Register = () => {
           default:
             if (error.message == "Network Error")
               setErrorMessage("The request could not be completed, the backend API may not be configured correctly.");  
-            else if (error?.response?.data) 
+            else if (error?.response?.data !== undefined) 
               setErrorMessage(error.response.data.message);
             else
-              setErrorMessage(error);
+              setErrorMessage(error.toString());
             break;                 
         }
       });
   };
 
   return (
-    <LayoutUnauthenticated id="register" title="Register" message="Please enter your contact information below.  We'll send you an email confirming your account creation!" errorMessage={errorMessage} reversed={true}>
-      <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>
+      <UnauthenticatedLayout id="register" title="Register" message="Please enter your contact information below.  We'll send you an email confirming your account creation!" errorMessage={errorMessage} reversed={true}>
+        <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>
           <div className="row">
-              <div className="col-lg-6">
-                <TextInput type="text" label="First name" name="first-name" value={firstName} onChange={(value:string) => setFirstName(value)}></TextInput>
-              </div>   
-              <div className="col-lg-6">
-                <TextInput type="text" label="Last name" name="last-name" value={lastName} onChange={(value:string) => setLastName(value)}></TextInput>
-              </div>   
+            <div className="col-lg-6">
+              <TextInput type="text" label="First name" name="first-name" value={firstName} onChange={(value: string) => setFirstName(value)}></TextInput>
             </div>
+            <div className="col-lg-6">
+              <TextInput type="text" label="Last name" name="last-name" value={lastName} onChange={(value: string) => setLastName(value)}></TextInput>
+            </div>
+          </div>
           <div className="mb-3">
-            <TextInput type="text" label="Email address" name="email-address" value={emailAddress} onChange={(value:string) => setEmailAddress(value)}></TextInput>
-          </div>  
-          { !isPasswordAllowed ? <></> :  
-          <>
-            <div className="mb-3">
-              <TextInput type="password" label="Password" name="password" value={password} onChange={(value:string) => setPassword(value)}></TextInput>
-            </div> 
-            <div className="mb-3">
-              <TextInput type="password" label="Retype password" name="password2" value={password2} onChange={(value:string) => setPassword2(value)}></TextInput>
-            </div>     
-          </>   
-          }               
+            <TextInput type="text" label="Email address" name="email-address" value={emailAddress} onChange={(value: string) => setEmailAddress(value)}></TextInput>
+          </div>
+          {!isPasswordAllowed ? <></> :
+            <>
+              <div className="mb-3">
+                <TextInput type="password" label="Password" name="password" value={password} onChange={(value: string) => setPassword(value)}></TextInput>
+              </div>
+              <div className="mb-3">
+                <TextInput type="password" label="Retype password" name="password2" value={password2} onChange={(value: string) => setPassword2(value)}></TextInput>
+              </div>
+            </>
+          }
           <div className="d-grid gap-2 mt-2">
             <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Register</button>
           </div>
@@ -165,18 +160,18 @@ const Register = () => {
           </div>
           <div id="social-login-buttons">
             <div id="google-login-button">
-              <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}> 
-                <GoogleLogin nonce={nonce} theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
+              <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}>
+                <GoogleLogin nonce={nonce} theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />
               </GoogleOAuthProvider>
               <div id="google-login-override" className="styled-button">Register using Google</div>
-            </div>          
-          </div>       
+            </div>
+          </div>
           <div className="not-registered text-muted">
             <Link className="simple-link" to="/signin">Return to sign-in page</Link>
-          </div>                                            
+          </div>
         </form>
-    </LayoutUnauthenticated>     
-  )
+      </UnauthenticatedLayout>
+    )
 }
 
 export default Register

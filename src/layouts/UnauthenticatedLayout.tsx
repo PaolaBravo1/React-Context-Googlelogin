@@ -1,8 +1,8 @@
 import HTMLReactParser from "html-react-parser";
-import { useApi } from "contexts/useApi";
+import { AuthenticationContext } from "contexts/AuthenticationContext";
 import { HelmetProvider } from 'react-helmet-async';
 
-interface ILayoutUnauthenticated {
+interface IUnauthenticatedLayout {
     children: any,
     id: string,
     title: string,
@@ -11,9 +11,8 @@ interface ILayoutUnauthenticated {
     reversed?: boolean
 }
 
-export const LayoutUnauthenticated = ({children, id, title, message, errorMessage, reversed=false}: ILayoutUnauthenticated) => {    
-  const { isMakingRequest } = useApi();
-  
+export const UnauthenticatedLayout = ({children, id, title, message, errorMessage, reversed=false}: IUnauthenticatedLayout) => {    
+   
   return (
     <>
     <HelmetProvider>

@@ -1,12 +1,12 @@
 import "bootstrap/dist/css/bootstrap.css"
-import { LayoutAuthenticated } from "layouts/LayoutAuthenticated"
+import { AuthenticatedLayout } from "layouts/AuthenticatedLayout"
 
 const Dashboard = () => {
   return (
-    <LayoutAuthenticated header="Dashboard">
+    <AuthenticatedLayout header="Dashboard">
       <div className="row no-gutter">
       </div>
-    </LayoutAuthenticated>
+    </AuthenticatedLayout>
   );
 }
 

@@ -1,16 +1,17 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useEffect, useMemo, useState } from "react"
-import { useApi } from "contexts/useApi"
-import { LayoutAuthenticated } from "layouts/LayoutAuthenticated"
+import { AuthenticationContext } from "contexts/AuthenticationContext"
+import { AuthenticatedLayout } from "layouts/AuthenticatedLayout"
 import Table from "components/Table"
 import moment from "moment"
 import { Account } from "models/Account"
+import { AdministratorContext } from "contexts/AdministratorContext"
 var xlsx = require("xlsx")
 
 const SignIns = () => {
   const [accounts, setAccounts] = useState<Account[]>();
   
-  const { getAuthenticatedAccounts } = useApi();
+  const { getAuthenticatedAccounts } = AdministratorContext();
 
   const columns = useMemo(
     () => [      
@@ -67,7 +68,7 @@ const SignIns = () => {
   }
 
   return (
-    <LayoutAuthenticated header="Current sign-ins">   
+    <AuthenticatedLayout header="Current sign-ins">   
       <div className="inner">
         {(accounts == null) ?
           <></>
@@ -83,7 +84,7 @@ const SignIns = () => {
           </Table>
         }
       </div>
-    </LayoutAuthenticated>
+    </AuthenticatedLayout>
   );
 }
 

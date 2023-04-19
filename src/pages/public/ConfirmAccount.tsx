@@ -1,9 +1,9 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useEffect, useState } from "react"
-import { LayoutUnauthenticated } from "layouts/LayoutUnauthenticated"
-import { useApi } from "contexts/useApi"
+import { UnauthenticatedLayout } from "layouts/UnauthenticatedLayout"
 import { ErrorCode } from "helpers/errorcodes"
 import { Link } from "react-router-dom"
+import { AccountManagementContext } from "contexts/AccountManagementContext"
 
 const ConfirmAccount = () => {
   const [emailAddress, setEmailAddress] = useState("");
@@ -14,7 +14,7 @@ const ConfirmAccount = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isConfirmed, setIsConfirmed] = useState(false);
   
-  const { confirmAccount } = useApi();
+  const { confirmAccount } = AccountManagementContext();
    
   useEffect(() => {
       const params = new URLSearchParams(window.location.search);
@@ -67,7 +67,7 @@ const ConfirmAccount = () => {
   }
 
   return (
-    <LayoutUnauthenticated id='confirmaccount' title={title} message={message} errorMessage={errorMessage}>
+    <UnauthenticatedLayout id='confirmaccount' title={title} message={message} errorMessage={errorMessage}>
       {!isConfirmed ? <></> :
         <form>
           <div>
@@ -81,7 +81,7 @@ const ConfirmAccount = () => {
           </div>
         </form>
       }
-    </LayoutUnauthenticated>  
+    </UnauthenticatedLayout>  
   )
 }
 

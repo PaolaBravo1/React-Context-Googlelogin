@@ -1,9 +1,9 @@
 import "bootstrap/dist/css/bootstrap.css"
 import TextInput from "components/TextInput"
 import { useEffect, useState } from "react"
-import { LayoutUnauthenticated } from "layouts/LayoutUnauthenticated"
+import { UnauthenticatedLayout } from "layouts/UnauthenticatedLayout"
 import { emailAddressRegex } from "helpers/constants"
-import { useApi } from "contexts/useApi"
+import { AccountManagementContext } from "contexts/AccountManagementContext"
 import { Link, useNavigate,  } from "react-router-dom"
 
 const ForgotPassword = () => {
@@ -11,7 +11,7 @@ const ForgotPassword = () => {
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   
-  const { requestPasswordReset } = useApi();
+  const { requestPasswordReset } = AccountManagementContext();
   
   const navigate = useNavigate();              
         
@@ -53,7 +53,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <LayoutUnauthenticated id='forgotpassword' title="Forgot Password" message="Please enter your email address and click the Reset button.  We'll send you an email with instructions for resetting your password." errorMessage={errorMessage} reversed={true}>
+    <UnauthenticatedLayout id='forgotpassword' title="Forgot Password" message="Please enter your email address and click the Reset button.  We'll send you an email with instructions for resetting your password." errorMessage={errorMessage} reversed={true}>
       <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>
           <div className="mb-3">
             <TextInput type="text" label="Email address" name="email-address" value={emailAddress} onChange={(value:string) => setEmailAddress(value)}></TextInput>
@@ -65,7 +65,7 @@ const ForgotPassword = () => {
             <Link className="simple-link" to="/signin">Return to sign-in page</Link>
           </div>                                         
         </form>
-    </LayoutUnauthenticated>                     
+    </UnauthenticatedLayout>                     
   )
 }
 

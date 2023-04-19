@@ -1,9 +1,9 @@
 import "bootstrap/dist/css/bootstrap.css"
 import TextInput from "components/TextInput"
 import { useEffect, useState } from "react"
-import { LayoutUnauthenticated } from "layouts/LayoutUnauthenticated"
+import { UnauthenticatedLayout } from "layouts/UnauthenticatedLayout"
 import { emailAddressRegex } from "helpers/constants"
-import { useApi } from "contexts/useApi"
+import { AuthenticationContext } from "contexts/AuthenticationContext"
 import { ErrorCode } from "helpers/errorcodes"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
 import configSettings from "config.json";
@@ -13,13 +13,13 @@ import { Link, useNavigate } from "react-router-dom"
 const SignIn = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [nonce, setNonce] = useState(v4());
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   const [isPasswordResetLinkVisible, setIsPasswordResetLinkVisible] = useState(false);
 
-  const { getIdentity, authorize, authorizeGoogle, clearIdentity, getProvider } = useApi();
+  const { getIdentity, authorize, authorizeGoogle, clearIdentity, getProvider } = AuthenticationContext();
 
+  const nonce = v4();
   const navigate = useNavigate();
 
   useEffect(() => {    
@@ -140,16 +140,16 @@ const SignIn = () => {
           default:
             if (error.message == "Network Error")
               setErrorMessage("The request could not be completed, the backend API may not be configured correctly.");  
-            else if (error?.response?.data) 
+            else if (error?.response?.data !== undefined) 
               setErrorMessage(error.response.data.message);
             else
-              setErrorMessage(error);              
+              setErrorMessage(error.toString());             
         }
       }
   };
 
   return (
-    <LayoutUnauthenticated id="signin" title="Welcome!" message="Please provide your user credentials in order to sign in." errorMessage={errorMessage}>  
+    <UnauthenticatedLayout id="signin" title="Welcome!" message="Please provide your user credentials in order to sign in." errorMessage={errorMessage}>  
       <div className={`muted password-reset ${isPasswordResetLinkVisible ? "": "hidden"}`}>Forgot your password? <Link className="simple-link" to="/forgotpassword">Click here to request a passsword reset!</Link></div>
       <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -180,7 +180,7 @@ const SignIn = () => {
           Not registered yet?  <Link className="simple-link" to="/register">Click here to get started!</Link>
         </div>                        
       </form>
-    </LayoutUnauthenticated>
+    </UnauthenticatedLayout>
   )
 }
 

@@ -1,12 +1,13 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useEffect, useState } from "react"
-import { useApi } from "contexts/useApi"
-import { LayoutAuthenticated } from "layouts/LayoutAuthenticated"
+import { AuthenticationContext } from "contexts/AuthenticationContext"
+import { AuthenticatedLayout } from "layouts/AuthenticatedLayout"
+import { AccountManagementContext } from "contexts/AccountManagementContext"
 
 const Dashboard = () => {  
   const [content, setContent] = useState("");
   
-  const { getMe } = useApi();
+  const { getMe } = AccountManagementContext();
   
   useEffect(() => {   
     const asyncGetDashboard = async () => {    
@@ -27,10 +28,10 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <LayoutAuthenticated header="Dashboard">                      
+    <AuthenticatedLayout header="Dashboard">                      
       <div className="row no-gutter">       
       </div>      
-    </LayoutAuthenticated>  
+    </AuthenticatedLayout>  
   );
 }
 

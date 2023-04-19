@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { useApi } from "contexts/useApi"
-import { LayoutAuthenticated } from "layouts/LayoutAuthenticated"
+import { AuthenticatedLayout } from "layouts/AuthenticatedLayout"
 import Table from "components/Table"
 import { debounce } from "lodash"
 import PropertyBar from "components/PropertyBar"
@@ -11,6 +10,7 @@ import { ErrorCode } from "helpers/errorcodes"
 import { postalCodeRegex } from "helpers/constants"
 import moment from "moment"
 import Icon from "components/Icon"
+import { ParticipantContext } from "contexts/ParticipantContext"
 var xlsx = require("xlsx")
 
 const Participants = () => {
@@ -19,7 +19,7 @@ const Participants = () => {
   const [isPropertyBarVisible, setIsPropertyBarVisible] = useState(false);
   const [groupError, setGroupError] = useState("");
 
-  const { searchParticipants, updateParticipant } = useApi();
+  const { search, update } = ParticipantContext();
 
   const columns = useMemo(
     () => [
@@ -121,12 +121,9 @@ const Participants = () => {
   }
 
   const handleSearchTermsDebounce = async (inputValue: string) => {
-    console.log("start");
-    await searchParticipants(inputValue)
+    await search(inputValue)
       .then(result => {
-        console.log("end");
         setParticipants(result.data);
-        console.log("rendered");
       })
       .catch(error => {
         console.log(JSON.stringify(error));
@@ -181,7 +178,7 @@ const Participants = () => {
       throw (ErrorCode.ParticipantAddressBlockIncomplete);
     }
 
-    await updateParticipant(participant);
+    await update(participant);
     handleSearchTermsDebounce(""); 
   }
 
@@ -221,7 +218,7 @@ const Participants = () => {
   }, []);
 
   return (
-    <LayoutAuthenticated header="Participants">     
+    <AuthenticatedLayout header="Participants">     
       <div className="inner">
         {(participants == null) ?
           <></>
@@ -257,7 +254,7 @@ const Participants = () => {
           })}
         </>
       </PropertyBar>
-    </LayoutAuthenticated>
+    </AuthenticatedLayout>
   );
 }
 

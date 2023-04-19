@@ -1,4 +1,4 @@
-import { useApi } from "../contexts/useApi";
+import { AuthenticationContext } from "../contexts/AuthenticationContext";
 import { useCallback, useEffect, useState } from "react";
 import IdlePopup from "../components/IdlePopup";
 import configSettings from "config.json";
@@ -6,12 +6,12 @@ import Icon from "../components/Icon";
 import NavBar from "../components/NavBar";
 import { HelmetProvider } from 'react-helmet-async';
 
-interface ILayoutAuthenticated {
+interface IAuthenticatedLayout {
   header: string
   children: any
 }
   
-export const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) => {    
+export const AuthenticatedLayout = ({header, children}: IAuthenticatedLayout) => {    
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isIdlePopupOpen, setIsIdlePopupOpen] = useState(false);
   const [isNavBarCollapsed, setIsNavBarCollapsed] = useState(false);
@@ -19,7 +19,7 @@ export const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) =>
   const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
   const [role, setRole] = useState("");
   
-  const { redirectUnauthenticated, oauthAccessTokenLifeRemaining, clearIdentity, getIdentity, isMakingRequest } = useApi();
+  const { redirectUnauthenticated, oauthAccessTokenLifeRemaining, clearIdentity, getIdentity } = AuthenticationContext();
   
   const domEvents = ["click", "scroll", "keypress"];
   //cconst domEvents = ["click", "scroll", "keypress", "mousemove"];
@@ -136,7 +136,7 @@ export const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) =>
         <NavBar role={role} oauthAccessTokenLifeRemaining={oauthAccessTokenLifeRemaining} idleLifeRemaining={idleLifeRemaining} handleNavBarToggle={handleNavBarToggle}></NavBar>           
         <main>
           <div className="header">{header}</div>
-          {children}
+         {children}
         </main>        
       </div>
     </div>  

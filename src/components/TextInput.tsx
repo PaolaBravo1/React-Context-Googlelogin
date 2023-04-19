@@ -1,4 +1,4 @@
-import { useApi } from "contexts/useApi";
+import { AuthenticationContext } from "contexts/AuthenticationContext";
 import { States } from "helpers/states";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -21,8 +21,6 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
   const [text, setText] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [isGroupValid, setIsGroupValid] = useState(true);
-  
-  const { isMakingRequest } = useApi();
   
   useEffect(() => {  
     

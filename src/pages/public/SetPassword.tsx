@@ -2,8 +2,8 @@ import "bootstrap/dist/css/bootstrap.css"
 import TextInput from "components/TextInput"
 import { useEffect, useState } from "react"
 import { passwordRegex } from "helpers/constants"
-import { LayoutUnauthenticated } from "layouts/LayoutUnauthenticated"
-import { useApi } from "contexts/useApi"
+import { UnauthenticatedLayout } from "layouts/UnauthenticatedLayout"
+import { AccountManagementContext } from "contexts/AccountManagementContext"
 import { ErrorCode } from "helpers/errorcodes"
 import { useNavigate } from "react-router-dom"
 
@@ -18,7 +18,7 @@ const SetPassword = () => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
   
-  const { updatePassword } = useApi();
+  const { updatePassword } = AccountManagementContext();
   
   const navigate = useNavigate();              
         
@@ -113,7 +113,7 @@ const SetPassword = () => {
   };
 
   return (
-    <LayoutUnauthenticated id="setpassword" title={title} message={message} errorMessage={errorMessage} reversed={true}>
+    <UnauthenticatedLayout id="setpassword" title={title} message={message} errorMessage={errorMessage} reversed={true}>
       <form className={(errorMessage.length > 0 ? "form-error" : "") + (isSuccessful ? "hidden" : "")} onSubmit={handleSubmit}>                        
         <div className="mb-3">
           <TextInput type="password" label="Password" name="password" value={password} onChange={(value:string) => setPassword(value)}></TextInput>
@@ -125,7 +125,7 @@ const SetPassword = () => {
           <button disabled={!isSubmitButtonEnabled} type="submit" className="styled-button">Submit</button>
         </div>                                                                
       </form>
-    </LayoutUnauthenticated>
+    </UnauthenticatedLayout>
   )
 }
 
