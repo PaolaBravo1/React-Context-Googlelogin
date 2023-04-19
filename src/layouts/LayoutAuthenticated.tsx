@@ -4,7 +4,7 @@ import IdlePopup from "../components/IdlePopup";
 import configSettings from "config.json";
 import Icon from "../components/Icon";
 import NavBar from "../components/NavBar";
-import { Helmet } from "react-helmet";
+import { HelmetProvider } from 'react-helmet-async';
 
 interface ILayoutAuthenticated {
   header: string
@@ -113,17 +113,17 @@ export const LayoutAuthenticated = ({header, children}: ILayoutAuthenticated) =>
   
   return (
     <>
-    <Helmet>
+    <HelmetProvider>
       <title>Hammerbeam</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/favicon.ico" />      
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link href="https://fonts.googleapis.com/css2?family=Lato" rel="preload" as="style"/>
       <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet" media="print" />
-    </Helmet>
-    <div id="overlay" className={isMakingRequest ? "enabled" : ""}></div>
+    </HelmetProvider>
+    <div id="overlay"></div>
     <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
-    <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isMakingRequest ? "making-api-request" : ""} ${isNavBarCollapsed ? "nav-bar-collapsed" : ""}`}>
+    <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isNavBarCollapsed ? "nav-bar-collapsed" : ""}`}>
       <div className="top-bar">
         <div className="top-bar-buttons">
           <div className="icon-circle">

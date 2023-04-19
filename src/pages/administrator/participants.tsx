@@ -121,9 +121,12 @@ const Participants = () => {
   }
 
   const handleSearchTermsDebounce = async (inputValue: string) => {
+    console.log("start");
     await searchParticipants(inputValue)
       .then(result => {
+        console.log("end");
         setParticipants(result.data);
+        console.log("rendered");
       })
       .catch(error => {
         console.log(JSON.stringify(error));

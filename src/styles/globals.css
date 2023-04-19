@@ -19,7 +19,6 @@ html, body {
   filter: alpha(opacity=0);
   pointer-events: none;
   transition: all 200ms;
-  transition-delay: .5s;
   z-index: 99999;
  }
 
@@ -69,11 +68,6 @@ html, body {
   color: #ffffff !important;
   background-color: #aaaaaa;
   cursor: wait; 
-}
-
-.xmaking-api-request .styled-button {
-  background-color: #aaaaaa;
-  color: #ffffff;    
 }
 
 .auth-container .outer {

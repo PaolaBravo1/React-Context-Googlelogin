@@ -18,27 +18,25 @@ import ParticipantDashboard from "./participant/Dashboard";
 const App = () => {
   return (
     <AuthenticationProvider>
-      <BrowserRouter>
         <Routes>
-          <Route path="/" element={ <Navigate to="/signin" /> } />           
-          <Route path="confirmaccount" element={<ConfirmAccount />} />
-          <Route path="forgotpassword" element={<ForgotPassword />} />
-          <Route path="register" element={<Register />} />
-          <Route path="setpassword" element={<SetPassword />} />
-          <Route path="signin" element={<SignIn />} />
-          <Route path="thankyou" element={<ThankYou />} />      
+        <Route path="/" element={ <Navigate to="/signin" /> } />           
+        <Route path="confirmaccount" element={<ConfirmAccount />} />
+        <Route path="forgotpassword" element={<ForgotPassword />} />
+        <Route path="register" element={<Register />} />
+        <Route path="setpassword" element={<SetPassword />} />
+        <Route path="signin" element={<SignIn />} />
+        <Route path="thankyou" element={<ThankYou />} />      
 
-          <Route path="participant">
-            <Route path="dashboard" element={ <ParticipantDashboard />} ></Route>
-          </Route>     
+        <Route path="participant">
+          <Route path="dashboard" element={ <ParticipantDashboard />} ></Route>
+        </Route>     
 
-          <Route path="administrator">
-            <Route path="dashboard" element={ <AdministratorDashboard />} ></Route>
-            <Route path="participants" element={ <Participants />} ></Route>
-            <Route path="signins" element={ <SignIns />} ></Route>
-          </Route>    
-        </Routes>
-      </BrowserRouter>
+        <Route path="administrator">
+          <Route path="dashboard" element={ <AdministratorDashboard />} ></Route>
+          <Route path="participants" element={ <Participants />} ></Route>
+          <Route path="signins" element={ <SignIns />} ></Route>
+        </Route>    
+      </Routes>    
     </AuthenticationProvider>
   );
 }

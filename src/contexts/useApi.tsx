@@ -8,6 +8,7 @@ import { ErrorCode } from "helpers/errorcodes"
 import { Identity } from "models/Identity";
 import { Participant } from "models/Participant";
 import { Account } from "models/Account";
+import { axiosRequest } from "api/api";
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";
@@ -85,50 +86,16 @@ export const useApi = (): ContextInterface => {
     isMakingRequest
   };
 }
-
+    
 export const AuthenticationContext = createContext({} as ContextInterface);
 
 export function AuthenticationProvider({ children }: { children: any }) {
   const [oauthAccessTokenLifeRemaining, setOAuthAccessTokenLifeRemaining] = useState(100);
   const [isMakingRequest, setIsMakingRequest] = useState(false);
-
-  let instance = axios.create({
-    baseURL: configSettings.apiRootUrl
-  });
-
-  instance.interceptors.request.use((config) => {
-    const identity = getIdentity();
-
-    if (config.url == authEndPoint) {
-      config.headers[contentTypeHeaderKey] = "application/x-www-form-urlencoded";
-    } else {
-      config.headers[contentTypeHeaderKey] = "application/json";
-    
-      if (identity != null) {
-        if (!authTimer)
-          restartTimers(identity);
-      
-        config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;
-      }
-    }
-    
-    return config;
-  }, (error) => {
-    setIsMakingRequest(false);
-    return Promise.reject(error);
-  });
-
-  instance.interceptors.response.use((config) => {
-    setIsMakingRequest(false);
-    return config;
-  }, (error) => {
-    setIsMakingRequest(false);
-    return Promise.reject(error);
-  });
+  
+  const navigate = useNavigate();              
 
   const redirectUnauthenticated = (includeRedirectParam: boolean) => {
-    const navigate = useNavigate();              
-        
     if (includeRedirectParam && Route.name.indexOf("/signin") < 0)
       navigate("/signin?redirectTo=" + encodeURIComponent(Route.name.toString()));
     else
@@ -208,7 +175,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     console.log("authorizing...");
     setIsMakingRequest(true);
    
-    await instance.post(authEndPoint,
+    await axiosRequest.post(authEndPoint,
       {
         "grant_type": "password",
         "username": emailAddress,
@@ -230,7 +197,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     setIsMakingRequest(true);
     
     const item = jwt<any>(credential);
-    await instance.post(authEndPoint,
+    await axiosRequest.post(authEndPoint,
       {
         "grant_type": "password",
         "username": item.email,
@@ -254,7 +221,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
   const reauthorize = async (emailAddress: string, refreshToken: string): Promise<string> => {
     console.log("reauthorizing...");
-    await instance.post(authEndPoint,
+    await axiosRequest.post(authEndPoint,
       {
         "grant_type": "refresh_token",
         "username": emailAddress,
@@ -272,7 +239,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const confirmAccount = async (emailAddress: string, token: string): Promise<AxiosResponse<any, any>> => {
     setIsMakingRequest(true);
     
-    return await instance.post("/account/confirm",
+    return await axiosRequest.post("/account/confirm",
       JSON.stringify({ 
         emailAddress,
         token
@@ -282,7 +249,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const requestPasswordReset = async (emailAddress: string): Promise<AxiosResponse<any, any>> => {
     setIsMakingRequest(true);
 
-    return await instance.post("/account/password/reset",
+    return await axiosRequest.post("/account/password/reset",
       JSON.stringify({ 
         emailAddress        
       }));  
@@ -291,7 +258,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const updatePassword = async (emailAddress: string, newPassword: string, token: string): Promise<AxiosResponse<any, any>> => {
     setIsMakingRequest(true);
     
-    return await instance.put("/account/password",
+    return await axiosRequest.put("/account/password",
       JSON.stringify({ 
         emailAddress,
         newPassword,
@@ -304,7 +271,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     setProvider("Local");
 
     if (password.length == 0) {
-      return await instance.post("/participant/register",
+      return await axiosRequest.post("/participant/register",
         JSON.stringify({ 
           firstName,
           lastName,
@@ -312,7 +279,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
         }));             
     }
     else {
-      return await instance.post("/participant/register",
+      return await axiosRequest.post("/participant/register",
         JSON.stringify({ 
           firstName,
           lastName,
@@ -325,9 +292,9 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const updateParticipant = async (participant: Participant): Promise<AxiosResponse<any, any>> => {    
 
     if (participant.id != undefined)
-      return await instance.put(`/participant/${participant.id}` + participant.id, participant);   
+      return await axiosRequest.put(`/participant/${participant.id}` + participant.id, participant);   
     else
-      return await instance.post("/participant", participant);         
+      return await axiosRequest.post("/participant", participant);         
   }
   
   const registerGoogle = async (credential: string, nonce: string): Promise<string> => {
@@ -335,7 +302,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     setProvider("Google");
     const item = jwt<any>(credential);
 
-    await instance.post("/participant/register",
+    await axiosRequest.post("/participant/register",
       JSON.stringify({ 
         firstName: item.given_name,
         lastName: item.family_name,
@@ -356,18 +323,18 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const getMe = async (): Promise<AxiosResponse<any, any>> => {
     setIsMakingRequest(true);
     
-    return await instance.get("/account/me");
+    return await axiosRequest.get("/account/me");
   }
 
   const searchParticipants = async (terms: string): Promise<AxiosResponse<Participant[], any>> => {
-    return await instance.post("/participant/search",
+    return await axiosRequest.post("/participant/search",
       JSON.stringify({ 
         terms 
-      }));
+      }));     
   }
   
   const getAuthenticatedAccounts = async (): Promise<AxiosResponse<Account[], any>> => {
-    return await instance.get("/account/authenticated");
+    return await axiosRequest.get("/account/authenticated");
   }
   
   return (
