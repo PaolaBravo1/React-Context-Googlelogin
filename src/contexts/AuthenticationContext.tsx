@@ -71,7 +71,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     const ttl = getOAuthTokenTtl(Date.parse(identity.expiration));
 
     authTimer = setTimeout(() => {
-      reauthorize(identity.emailAddress, identity.refreshToken);
+      reauthorize(identity.emailAddress);
     }, ttl);
 
     authTimerCountdown = setInterval(() => {
@@ -82,8 +82,8 @@ export function AuthenticationProvider({ children }: { children: any }) {
   }
   
   const redirectUnauthenticated = (includeRedirectParam: boolean) => {
-    if (includeRedirectParam && Route.name.indexOf("/signin") < 0)
-      navigate("/signin?redirectTo=" + encodeURIComponent(Route.name.toString()));
+    if (includeRedirectParam && window.location.pathname.indexOf("/signin") < 0)
+      navigate("/signin?redirectTo=" + encodeURIComponent(window.location.pathname));
     else
       navigate("/signin");
   }
@@ -125,20 +125,20 @@ export function AuthenticationProvider({ children }: { children: any }) {
     return ttl;
   }
 
-  const saveIdentity = (emailAddress: string, role: string, accessToken: string, refreshToken: string, expiresInSeconds: number) => {
+  const saveIdentity = (emailAddress: string, role: string, expiresInSeconds: number) => {
     const emailAddresses = emailAddress.split(":");
     const expiration = new Date(new Date().getTime() + expiresInSeconds * 1000).toISOString();
     const expiresInDays = (expiresInSeconds) / 60 / 60 / 24;
     const params = { domain: configSettings.cookieDomain, secure: true, expires: expiresInDays };
-
-    var identity = new Identity(emailAddresses[0], role, accessToken, refreshToken, null, expiration);
+    
+    var identity = new Identity(emailAddresses[0], role, null, expiration);
     Cookies.set(identityCookieName, JSON.stringify(identity), params);
     
     restartOAuthTimers(identity);
   }
 
   const clearIdentity = () => {
-    Cookies.remove(identityCookieName);
+    Cookies.remove(identityCookieName);    
   }
 
   const authorize = async (emailAddress: string, password: string): Promise<string> => {
@@ -150,7 +150,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
         "password": password
       }
     ).then(async result => {
-      saveIdentity(emailAddress, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      saveIdentity(emailAddress, result.data.role, result.data.expires_in);
       saveProvider("Local");
       
       return result.data.access_token;
@@ -175,7 +175,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
         throw { response: { data: { errorCode: 2201, errorCodeName: ErrorCode.GoogleOAuthNonceInvalid } } };
       }
 
-      saveIdentity(item.email, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      saveIdentity(item.email, result.data.role, result.data.expires_in);
       saveProvider("Google");
 
       return result.data.access_token;
@@ -185,15 +185,15 @@ export function AuthenticationProvider({ children }: { children: any }) {
     return "";
   }
 
-  const reauthorize = async (emailAddress: string, refreshToken: string): Promise<string> => {
+  const reauthorize = async (emailAddress: string): Promise<string> => {
     console.log("reauthorizing...");
     await axiosRequest.post(authEndPoint, {
         "grant_type": "refresh_token",
         "username": emailAddress,
-        "refresh_token": refreshToken
+        "refresh_token": "_"
       }
     ).then(async result => {      
-      await saveIdentity(emailAddress, result.data.role, result.data.access_token, result.data.refresh_token, result.data.expires_in);
+      await saveIdentity(emailAddress, result.data.role, result.data.expires_in);
       return result.data.access_token;
     }
     ).catch(error => { throw error; });

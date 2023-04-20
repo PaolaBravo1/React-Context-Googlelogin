@@ -1,3 +1,4 @@
+import { faClosedCaptioning } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import configSettings from "config.json";
 import Cookies from "js-cookie";
@@ -13,7 +14,8 @@ const providerCookieName = "hammer_provider";
 var overlayTimer: ReturnType<typeof setTimeout>;
 
 export const axiosRequest = axios.create({
-  baseURL: configSettings.apiRootUrl
+  baseURL: configSettings.apiRootUrl,
+  withCredentials: true
 });
 
 export const restartIdentityTimer = () => {
@@ -34,7 +36,7 @@ export const getIdentity = (): Identity | null => {
   return null;
 }
 
-const setIsMakingRequest = (isMakingRequest: boolean) => {
+const showOverlay = (isMakingRequest: boolean) => {
   // right place for this?
   const overlay = document.getElementById("overlay");
 
@@ -53,28 +55,33 @@ const setIsMakingRequest = (isMakingRequest: boolean) => {
 
 axiosRequest.interceptors.request.use((config) => {
   const identity = getIdentity();
+  let isShowOverlay = true;
 
   if (config.url == authEndPoint) {
     config.headers[contentTypeHeaderKey] = "application/x-www-form-urlencoded";
   } else {
     config.headers[contentTypeHeaderKey] = "application/json";
-
-    if (identity)
-      config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;
+    ////if (identity) .. todo removed with server-side cookies
+    ////  config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;
   } 
- 
-  setIsMakingRequest(true); 
+
+  if (config.url == authEndPoint && config?.data?.refresh_token !== undefined)
+    isShowOverlay = false;
+    
+  console.log("Show overlay: " + isShowOverlay);
+
+  showOverlay(isShowOverlay); 
   return config;
 }, (error) => {
-  setIsMakingRequest(false);
+  showOverlay(false);
   return Promise.reject(error);
 });
 
 axiosRequest.interceptors.response.use((config) => {
-  setIsMakingRequest(false);
+  showOverlay(false);
   return config;
 }, (error) => {
-  setIsMakingRequest(false);
+  showOverlay(false);
   return Promise.reject(error);
 });
 
