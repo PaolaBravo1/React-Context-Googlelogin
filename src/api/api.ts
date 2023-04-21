@@ -67,9 +67,7 @@ axiosRequest.interceptors.request.use((config) => {
 
   if (config.url == authEndPoint && config?.data?.refresh_token !== undefined)
     isShowOverlay = false;
-    
-  console.log("Show overlay: " + isShowOverlay);
-
+   
   showOverlay(isShowOverlay); 
   return config;
 }, (error) => {

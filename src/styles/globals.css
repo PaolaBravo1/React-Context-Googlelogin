@@ -186,7 +186,6 @@ form.form-error .input-container label {
 }
 
 .simple-link:hover {
-  xcolor: #2d6cc5;
   text-decoration: underline;
 }
 
@@ -197,9 +196,8 @@ form.form-error .input-container label {
   background-color: #000000;
   color: #ffffff;
   position: fixed;
-  z-index: 999;
+  z-index: 99;
 }
-
 
 .nav-bar {
   position: fixed;

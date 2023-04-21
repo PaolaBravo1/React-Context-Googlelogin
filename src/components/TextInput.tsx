@@ -23,10 +23,6 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
   const [isGroupValid, setIsGroupValid] = useState(true);
   
   useEffect(() => {  
-    
-  }, []);
-
-  useEffect(() => {  
     if (!value || value.length == 0) {
       setText("");
       return;
@@ -53,7 +49,7 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
       setIsGroupValid(false); 
     else
       setIsGroupValid(true);             
-  }, [groupError]);
+  }, [group, text, groupError]);
     
   const handleChange = (e:any) => {
     setText(e.target.value);   
