@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { Route, useNavigate } from "react-router-dom";
-import configSettings from "config.json";
+import configSettings from "settings/config.json";
 import jwt from "jwt-decode"
 import { ErrorCode } from "helpers/errorcodes"
 import { Identity } from "models/Identity";

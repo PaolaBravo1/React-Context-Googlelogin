@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import NavItemList from "./NavItemList";
 import StatusBar from "./StatusBar";
-import configSettings from "config.json";
+import configSettings from "settings/config.json";
 
 interface INavBar {
   role: string,

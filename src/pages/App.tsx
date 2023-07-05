@@ -11,7 +11,7 @@ import ThankYou from "./public/ThankYou";
 
 import AdministratorDashboard from "./administrator/Dashboard";
 import Participants from "./administrator/Participants";
-import SignIns from "./administrator/SignIns";
+import SignIns from "./administrator/Signins";
 
 import ParticipantDashboard from "./participant/Dashboard";
 import { ParticipantProvider } from "contexts/ParticipantContext";

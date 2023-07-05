@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url("https://fonts.googleapis.com/css?family=Lato");
 
 * {
-  font-family: "Open Sans";
+  font-family: "Lato";
 }
 
 html, body {
@@ -741,7 +741,7 @@ form.form-error .input-container label {
 
 .property-bar .input-container label {
   transform: translate(0, 18px) scale(1);
-  font-size: 16px;
+  font-size: 17px;
   left: 12px;
   top: -3px;
   padding: 0;
@@ -864,7 +864,7 @@ form.form-error .input-container label {
 
 .property-bar .input-container.type-date label {
   background-color: #ffffff;
-  padding-right: 10px;
+  padding-right: 16px;
   padding-bottom: 2px;
 }
 

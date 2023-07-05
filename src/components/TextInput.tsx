@@ -31,8 +31,10 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
     switch (type) {
       case "date":
         try { 
+          console.log(value);
           const formatted = moment.utc(value).format("MM/DD/YYYY");
           setText(formatted);
+          console.log(formatted);
           setIsValid(true);
        } catch {}
        break;

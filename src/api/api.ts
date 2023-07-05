@@ -1,6 +1,6 @@
 import { faClosedCaptioning } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import configSettings from "config.json";
+import configSettings from "settings/config.json";
 import Cookies from "js-cookie";
 import { Identity } from "models/Identity";
 import { setTimers } from "react-idle-timer/dist/utils/timers";

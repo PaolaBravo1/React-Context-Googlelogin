@@ -6,7 +6,7 @@ import { emailAddressRegex } from "helpers/constants"
 import { AuthenticationContext } from "contexts/AuthenticationContext"
 import { ErrorCode } from "helpers/errorcodes"
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
-import configSettings from "config.json";
+import configSettings from "settings/config.json";
 import { v4 } from "uuid"
 import { Link, useNavigate } from "react-router-dom"
 

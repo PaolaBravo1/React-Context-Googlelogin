@@ -1,7 +1,7 @@
 import { AuthenticationContext } from "../contexts/AuthenticationContext";
 import { useCallback, useEffect, useState } from "react";
 import IdlePopup from "../components/IdlePopup";
-import configSettings from "config.json";
+import configSettings from "settings/config.json";
 import Icon from "../components/Icon";
 import NavBar from "../components/NavBar";
 import { HelmetProvider } from 'react-helmet-async';

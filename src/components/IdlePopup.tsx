@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import configSettings from "config.json";
+import configSettings from "settings/config.json";
 
 interface IIdlePopup {
   isOpen?: boolean;
