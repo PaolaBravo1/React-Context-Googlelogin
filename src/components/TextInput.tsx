@@ -31,10 +31,8 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
     switch (type) {
       case "date":
         try { 
-          console.log(value);
           const formatted = moment.utc(value).format("MM/DD/YYYY");
           setText(formatted);
-          console.log(formatted);
           setIsValid(true);
        } catch {}
        break;
@@ -115,7 +113,7 @@ const TextInput = ({entityID = 0, type = "text", required = false, label, name, 
       return (
         <div className={className}>
           <InputMask className={groupName} required={required!} name={name} placeholder="MM/DD/YYYY" mask="99/99/9999" value={text} onChange={handleChangeDate} onBlur={handleBlurDate} />
-          <label className={text && "filled"} htmlFor={name}>{label}</label>
+          <label className="filled" htmlFor={name}>{label}</label>
         </div>
       );
 

@@ -12,8 +12,12 @@ export class Identity {
     }
     
     static parse(json: string) {
-        const data = JSON.parse(json);
-        return new Identity(data.emailAddress, data.role, data.nonce, data.expiration);
+        try {
+            const data = JSON.parse(json);
+            return new Identity(data.emailAddress, data.role, data.nonce, data.expiration);
+        } catch (e) {
+            return null;
+        }
     }
 }
 

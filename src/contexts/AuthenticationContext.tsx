@@ -91,7 +91,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
   const getIdentity = (): Identity | null => {
     const identityCookie = Cookies.get(identityCookieName);
 
-    if (identityCookie) {
+    if (identityCookie != undefined) {
       const identity = Identity.parse(identityCookie);
 
       if (identity)
@@ -132,6 +132,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     const params = { domain: configSettings.cookieDomain, secure: true, expires: expiresInDays };
     
     var identity = new Identity(emailAddresses[0], role, null, expiration);
+
     Cookies.set(identityCookieName, JSON.stringify(identity), params);
     
     restartOAuthTimers(identity);

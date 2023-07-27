@@ -575,11 +575,6 @@ form.form-error .input-container {
   }
 }
 
-.property-bar.collapsed {
-  right: -400px;
-  box-shadow: none;
-}
-
 .nav-bar .nav-link {
   color: $whiteColor;
   position: relative;
@@ -639,7 +634,6 @@ form.form-error .input-container {
 }
 
 .nav.flex-column {
-  padding-top: 25px;
   font-size: 15px;
   font-weight: 600;
 }
@@ -650,18 +644,11 @@ form.form-error .input-container {
 
 .nav-bar .collapse-button {
   position: absolute;
-  top: 10px;
-  right: 17px;
+  top: 18px;
+  right: 22px;
   cursor: pointer;
   z-index: 999;
   transition: .3s;
-}
-
-.property-bar .collapse-button {
-  left: 16px;
-  right: unset;
-  position: absolute;
-  top: 12px;
 }
 
 .top-bar-buttons {
@@ -738,24 +725,34 @@ form.form-error .input-container {
   right: 0;
   transition: 0.3s all;
   height: 100%;
+  padding-top: 40px;
+  
+  &.collapsed {
+    right: -400px;
+    box-shadow: none;
+  }
+
+  .collapse-button {
+    top: 18px;
+    left: 22px;
+    right: unset;
+    position: absolute; 
+    display: none;
+  }
 
   .input-container {
     margin: 0 0 10px 0;
  
     label {
-      transform: translate(0, 18px) scale(1);
-      font-size: 17px;
-      left: 12px;
-      top: -3px;
-      padding: 0;
+      font-size: 20px;      
     }
 
     &:focus-within label {
       background-color: unset;
-      transform: translate(-10px, 6px) scale(0.6); 
+      xtransform: translate(-8px, 7px) scale(0.7); 
       
-      .filled {
-        transform: translate(-10px, 6px) scale(0.6);
+      &.filled {
+        xtransform: translate(-8px, 7px) scale(0.7);
       }
 
       input, select {
@@ -764,41 +761,43 @@ form.form-error .input-container {
         font-size: 17px;
       }
     }
+  }
 
-    .caption {
-      padding: 0;
-      font-weight: 700;
-      font-size: 27px;
-      margin-bottom: 20px;
-    }
+  .caption {
+    padding: 0;
+    font-weight: 600;
+    font-size: 16px;
+    position: absolute;
+    top: 18px;
+    display: none;
+  }
 
-    .buttons {
-      margin-top: 30px;
-    }
+  .buttons {
+    margin-top: 30px;
+  }
 
-    .styled-button {
-      color: $whiteColor;
-      background-color: $primaryColor;
-      padding: 1em 2.4em;
-      width: 100%;
-    }
+  .styled-button {
+    color: $whiteColor;
+    background-color: $primaryColor;
+    padding: 1em 2.4em;
+    width: 100%;
+  }
 
-    &:hover {
-      background-color: $whiteColor;
-      color: $primaryColor;
-    }
+  &:hover {
+    background-color: $whiteColor;
+    color: $primaryColor;
+  }
 
-    &.cancel {
-      background-color: $whiteColor;
-      color: $primaryColor;
-      padding: 1em 2.4em;
-      width: 100%;
-    }
+  &.cancel {
+    background-color: $whiteColor;
+    color: $primaryColor;
+    padding: 1em 2.4em;
+    width: 100%;
+  }
 
-    &.cancel:hover {
-      background-color: $primaryColor;
-      color: $whiteColor;
-    }
+  &.cancel:hover {
+    background-color: $primaryColor;
+    color: $whiteColor;
   }
 }
 
@@ -860,25 +859,6 @@ form.form-error .input-container {
   .not-valid label,
   .group-not-valid label {
     color: $errorColor !important;
-  }
-}
-
-.property-bar .input-container {
-  select {
-    padding: 3px 10px 0px 8px;
-    border: none;
-    border-right: 10px solid $whiteColor;
-    outline: none;  
-  }
-
-  &.type-date label {
-    background-color: $whiteColor;
-    padding-right: 16px;
-    padding-bottom: 2px;
-  }
-
-  &.type-date.not-valid label {
-    background-color: $errorBackgroundColor;
   }
 }
 

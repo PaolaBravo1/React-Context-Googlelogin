@@ -25,8 +25,8 @@ export const restartIdentityTimer = () => {
 
 export const getIdentity = (): Identity | null => {
   const identityCookie = Cookies.get(identityCookieName);
-
-  if (identityCookie) {
+  
+  if (identityCookie != undefined) {
     const identity = Identity.parse(identityCookie);
 
     if (identity)

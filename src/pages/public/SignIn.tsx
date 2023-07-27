@@ -89,8 +89,10 @@ const SignIn = () => {
      
       if (redirectTo)
         navigate(decodeURIComponent(redirectTo));
-      else
+      else {
+        const identity = getIdentity();
         navigate(`/${getIdentity()!.role.toLowerCase()}/dashboard`);      
+      }
     }
     catch (error:any) {
         switch(error?.response?.data?.errorCode) {
