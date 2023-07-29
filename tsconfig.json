@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
     "target": "es5",
-    "lib": ["dom", "dom.iterable"],
+    "lib": [
+      "dom",
+      "dom.iterable"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -10,15 +12,19 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./src/*"],
-    "include": ["src"]
+      "@/*": ["*"]
     }
-  }
+  },
+  "include": [
+    "src"
+  ]
 }

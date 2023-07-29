@@ -4,11 +4,10 @@ import { useEffect, useState } from "react"
 import { emailAddressRegex, passwordRegex } from "helpers/constants"
 import { UnauthenticatedLayout } from "layouts/UnauthenticatedLayout"
 import { ErrorCode } from "helpers/errorcodes"
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
-import configSettings from "settings/config.json"
 import { v4 } from "uuid"
 import { Link, useNavigate } from "react-router-dom"
 import { ParticipantContext } from "contexts/ParticipantContext"
+import { GoogleLogin } from "@react-oauth/google"
 
 const Register = () => {
   const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
@@ -160,9 +159,7 @@ const Register = () => {
           </div>
           <div id="social-login-buttons">
             <div id="google-login-button">
-              <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}>
-                <GoogleLogin nonce={nonce} theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />
-              </GoogleOAuthProvider>
+              <GoogleLogin nonce={nonce} onSuccess={credentialResponse => { handleGoogleSubmit(credentialResponse); }} onError={handleGoogleError}></GoogleLogin>
               <div id="google-login-override" className="styled-button">Register using Google</div>
             </div>
           </div>

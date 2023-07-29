@@ -12,7 +12,6 @@ interface IUnauthenticatedLayout {
 }
 
 export const UnauthenticatedLayout = ({children, id, title, message, errorMessage, reversed=false}: IUnauthenticatedLayout) => {    
-   
   return (
     <>
     <HelmetProvider>

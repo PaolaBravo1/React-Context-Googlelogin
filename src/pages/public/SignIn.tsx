@@ -5,8 +5,7 @@ import { UnauthenticatedLayout } from "layouts/UnauthenticatedLayout"
 import { emailAddressRegex } from "helpers/constants"
 import { AuthenticationContext } from "contexts/AuthenticationContext"
 import { ErrorCode } from "helpers/errorcodes"
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
-import configSettings from "settings/config.json";
+import { GoogleLogin } from "@react-oauth/google"
 import { v4 } from "uuid"
 import { Link, useNavigate } from "react-router-dom"
 
@@ -172,9 +171,7 @@ const SignIn = () => {
         </div>
         <div id="social-login-buttons">
           <div id="google-login-button">
-            <GoogleOAuthProvider clientId={configSettings.googleOAuthClientID}> 
-              <GoogleLogin nonce={nonce} theme="filled_black" shape="circle" size="large" width="400" onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
-            </GoogleOAuthProvider>
+              <GoogleLogin nonce={nonce} onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
             <div id="google-login-override" className="styled-button">Sign in using Google</div>
           </div>          
         </div>   
