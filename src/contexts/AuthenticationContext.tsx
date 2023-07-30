@@ -6,7 +6,7 @@ import jwt from "jwt-decode"
 import { ErrorCode } from "helpers/errorcodes"
 import { Identity } from "models/Identity";
 import { axiosRequest } from "api/api";
-
+import configSettings from "settings/config.json";
 const identityCookieName = "hammer_identity";
 const providerCookieName = "hammer_provider";
 const authEndPoint = "/oauth/authorize";
@@ -75,7 +75,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
 
     authTimerCountdown = setInterval(() => {
       const countdown = (Date.parse(identity.expiration) - (new Date()).getTime()) / 1000;
-      setOAuthAccessTokenLifeRemaining(100.0 * countdown / Number(process.env.REACT_APP_OAUTH_ACCESS_TOKEN_TIMEOUT));
+      setOAuthAccessTokenLifeRemaining(100.0 * countdown / Number(configSettings.AccessTokenTimeout));
       localStorage.setItem(authLocalStorageKey, countdown.toString());      
     }, 1000);
   }
@@ -110,15 +110,15 @@ export function AuthenticationProvider({ children }: { children: any }) {
   }
 
   const saveProvider = (provider: string) => {
-    const params = { domain: process.env.REACT_APP_COOKIE_DOMAIN, secure: true, expires: 365 };
+    const params = { domain: configSettings.CookieDomain, secure: true, expires: 365 };
     Cookies.set(providerCookieName, provider, params);
   }
 
   const getOAuthTokenTtl = (expiration: number): number => {
-    let margin = Number(process.env.REACT_APP_OAUTH_ACCESS_TOKEN_TIMEOUT) * Number(process.env.REACT_APP_OAUTH_ACCESS_TOKEN_REFRESH_MARGIN_PERCENT) / 100;
+    let margin = Number(configSettings.AccessTokenTimeout) * Number(configSettings.AccessTokenRefreshMarginPercent) / 100;
 
-    if (margin < Number(process.env.REACT_APP_OAUTH_ACCESS_TOKEN_MINIMUM_REFRESH_MARGIN))
-      margin = Number(process.env.REACT_APP_OAUTH_ACCESS_TOKEN_MINIMUM_REFRESH_MARGIN);
+    if (margin < Number(configSettings.AccessTokenMinimumRefreshMargin))
+      margin = Number(configSettings.AccessTokenMinimumRefreshMargin);
 
     const ttl = (expiration - margin * 1000) - new Date().getTime();
     return ttl;
@@ -128,7 +128,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     const emailAddresses = emailAddress.split(":");
     const expiration = new Date(new Date().getTime() + expiresInSeconds * 1000).toISOString();
     const expiresInDays = (expiresInSeconds) / 60 / 60 / 24;
-    const params = { domain: process.env.REACT_APP_COOKIE_DOMAIN, secure: true, expires: expiresInDays };
+    const params = { domain: configSettings.CookieDomain, secure: true, expires: expiresInDays };
     
     var identity = new Identity(emailAddresses[0], role, null, expiration);
 

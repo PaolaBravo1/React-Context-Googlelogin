@@ -1,4 +1,5 @@
-config.json
+config.dev.json
+config.prod.json
 
 # dependencies
 /node_modules

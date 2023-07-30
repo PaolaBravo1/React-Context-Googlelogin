@@ -4,6 +4,7 @@ import IdlePopup from "../components/IdlePopup";
 import Icon from "../components/Icon";
 import NavBar from "../components/NavBar";
 import { HelmetProvider } from 'react-helmet-async';
+import configSettings from "settings/config.json";
 
 interface IAuthenticatedLayout {
   header: string
@@ -67,8 +68,8 @@ export const AuthenticatedLayout = ({header, children}: IAuthenticatedLayout) =>
     clearInterval(idleTimer);
 
     idleTimer = setInterval(() => {
-      const secondsRemaining = Number(process.env.REACT_APP_IDLE_TIMEOUT) - Math.round((Date.now() - now) / 1000);
-      const precentTimeRemaining = 100 * secondsRemaining / Number(process.env.REACT_APP_IDLE_TIMEOUT);
+      const secondsRemaining = Number(configSettings.IdleTimeout) - Math.round((Date.now() - now) / 1000);
+      const precentTimeRemaining = 100 * secondsRemaining / Number(configSettings.IdleTimeout);
       setIdleLifeRemaining(precentTimeRemaining);
     }, 1000);    
   }, []);
@@ -95,7 +96,7 @@ export const AuthenticatedLayout = ({header, children}: IAuthenticatedLayout) =>
   useEffect(() => {
     const id = setTimeout(() => {
       setIsIdlePopupOpen(true);
-    }, Number(process.env.REACT_APP_IDLE_TIMEOUT) * 1000);
+    }, Number(configSettings.IdleTimeout) * 1000);
 
     return clearTimeout.bind(null, id);
   }, [lastActiveTime]);

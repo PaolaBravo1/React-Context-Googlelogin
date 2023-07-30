@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { Identity } from "models/Identity";
 import { setTimers } from "react-idle-timer/dist/utils/timers";
+import configSettings from "settings/config.json";
 
 const authHeaderKey = "Authorization";
 const contentTypeHeaderKey = "Content-Type";
@@ -13,7 +14,7 @@ const providerCookieName = "hammer_provider";
 var overlayTimer: ReturnType<typeof setTimeout>;
 
 export const axiosRequest = axios.create({
-  baseURL: process.env.REACT_APP_API_ROOT_URL,
+  baseURL: configSettings.ApiRootUrl,
   withCredentials: true
 });
 

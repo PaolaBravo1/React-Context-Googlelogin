@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import NavItemList from "./NavItemList";
 import StatusBar from "./StatusBar";
+import configSettings from "settings/config.json";
 
 interface INavBar {
   role: string,
@@ -27,7 +28,7 @@ const NavBar = ({ role, oauthAccessTokenLifeRemaining, idleLifeRemaining, handle
         <NavItemList role={role}></NavItemList>                
       </div>
       <div className="status-bars">
-        <StatusBar id="oauth-token-timeout" icon="cloud" warningAt={10 + Number(process.env.REACT_APP_OAUTH_ACCESS_TOKEN_REFRESH_MARGIN_PERCENT)} complete={oauthAccessTokenLifeRemaining}></StatusBar>
+        <StatusBar id="oauth-token-timeout" icon="cloud" warningAt={10 + Number(configSettings.AccessTokenRefreshMarginPercent)} complete={oauthAccessTokenLifeRemaining}></StatusBar>
         <StatusBar id="idle-timeout" icon="bed" warningAt={10} complete={idleLifeRemaining}></StatusBar>          
       </div>    
     </nav>

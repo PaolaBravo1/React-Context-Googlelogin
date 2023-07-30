@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import configSettings from "settings/config.json";
 
 interface IIdlePopup {
   isOpen?: boolean;
@@ -6,7 +7,7 @@ interface IIdlePopup {
 }
 
 const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
-  const [time, setTime] = useState(Number(process.env.REACT_APP_IDLE_POPUP_DURATION));
+  const [time, setTime] = useState(Number(configSettings.IdlePopupDuration));
   const mounted = useRef(0);
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const IdlePopup = ({ isOpen, onClose }: IIdlePopup) => {
       }
       mounted.current = window.setTimeout(() => setTime(time - 1),1000);
     } else {
-      setTime(Number(process.env.REACT_APP_IDLE_POPUP_DURATION));
+      setTime(Number(configSettings.IdlePopupDuration));
     }
     return () => {
       if (mounted.current) 

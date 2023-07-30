@@ -8,6 +8,7 @@ import { ErrorCode } from "helpers/errorcodes"
 import { GoogleLogin } from "@react-oauth/google"
 import { v4 } from "uuid"
 import { Link, useNavigate } from "react-router-dom"
+import configSettings from "settings/config.json";
 
 const SignIn = () => {
   const [emailAddress, setEmailAddress] = useState("");
@@ -29,7 +30,7 @@ const SignIn = () => {
     if (provider == "Local")
       setEmailAddress(params.get("emailAddress") ?? ""); 
 
-    console.log(JSON.stringify(process.env));
+    console.log(JSON.stringify(configSettings));
   }, []);
     
   useEffect(() => {    
