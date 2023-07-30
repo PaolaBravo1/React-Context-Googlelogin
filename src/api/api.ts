@@ -1,7 +1,7 @@
 import { faClosedCaptioning } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Identity } from "@/models/_Identity";
+import { Identity } from "@/models/Identity";
 import { setTimers } from "react-idle-timer/dist/utils/timers";
 
 const authHeaderKey = "Authorization";
