@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { Route, useNavigate } from "react-router-dom";
 import jwt from "jwt-decode"
 import { ErrorCode } from "helpers/errorcodes"
-import { Identity } from "@/models/Identity";
+import { Identity } from "models/Identity";
 import { axiosRequest } from "api/api";
 
 const identityCookieName = "hammer_identity";

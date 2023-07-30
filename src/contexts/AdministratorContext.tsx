@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react"
 import { AxiosResponse } from "axios";
 import { axiosRequest } from "api/api";
-import { Account } from "@/models/Account";
+import { Account } from "models/Account";
 
 interface IAdministratorContext {
     getAuthenticatedAccounts: () => Promise<AxiosResponse<Account[], any>>
