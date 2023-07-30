@@ -1,6 +1,5 @@
 {
     "ApiRootUrl": "https://api.hammerbeam.com",
-    "CookieDomain": "hammerbeam.com",
     "AccessTokenTimeout": 600,
     "AccessTokenMinimumRefreshMargin": 30,
     "AccessTokenRefreshMarginPercent": 10,

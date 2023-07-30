@@ -110,7 +110,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
   }
 
   const saveProvider = (provider: string) => {
-    const params = { domain: configSettings.CookieDomain, secure: true, expires: 365 };
+    const params = { domain: window.location.hostname, secure: true, expires: 365 };
     Cookies.set(providerCookieName, provider, params);
   }
 
@@ -128,7 +128,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     const emailAddresses = emailAddress.split(":");
     const expiration = new Date(new Date().getTime() + expiresInSeconds * 1000).toISOString();
     const expiresInDays = (expiresInSeconds) / 60 / 60 / 24;
-    const params = { domain: configSettings.CookieDomain, secure: true, expires: expiresInDays };
+    const params = { domain: window.location.hostname, secure: true, expires: expiresInDays };
     
     var identity = new Identity(emailAddresses[0], role, null, expiration);
 
