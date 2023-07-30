@@ -6,6 +6,7 @@
     "start": "env-cmd -f .env.dev react-scripts start",
     "build:dev": "env-cmd -f .env.dev react-scripts build",
     "build:prod": "env-cmd -f .env.prod react-scripts build",
+    "build": "env-cmd -f .env.prod react-scripts build",
     "test": "react-scripts test"
   },
   "dependencies": {
