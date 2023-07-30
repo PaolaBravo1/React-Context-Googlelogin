@@ -27,7 +27,9 @@ const SignIn = () => {
     const provider = getProvider();
     
     if (provider == "Local")
-      setEmailAddress(params.get("emailAddress") ?? "");   
+      setEmailAddress(params.get("emailAddress") ?? ""); 
+      
+    console.log(process.env);
   }, []);
     
   useEffect(() => {    

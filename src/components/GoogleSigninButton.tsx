@@ -1,13 +1,11 @@
-import configSettings from "settings/config.json";
-
 const GoogleSigninButton = () => {
   return (
     <div id="google-login-button">            
       <div id="g_id_onload"
-        data-client_id={configSettings.googleOAuthClientID}
+        data-client_id={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
         data-context="signin"
         data-ux_mode="popup"
-        data-login_uri={configSettings.googleOAuthCallbackUrl}
+        data-login_uri={process.env.REACT_APP_GOOGLE_OAUTH_CALLBACK_URL}
         data-nonce=""
         data-auto_prompt="false">
       </div>

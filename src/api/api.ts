@@ -1,6 +1,5 @@
 import { faClosedCaptioning } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import configSettings from "settings/config.json";
 import Cookies from "js-cookie";
 import { Identity } from "models/Identity";
 import { setTimers } from "react-idle-timer/dist/utils/timers";
@@ -14,7 +13,7 @@ const providerCookieName = "hammer_provider";
 var overlayTimer: ReturnType<typeof setTimeout>;
 
 export const axiosRequest = axios.create({
-  baseURL: configSettings.apiRootUrl,
+  baseURL: process.env.REACT_APP_API_ROOT_URL,
   withCredentials: true
 });
 
