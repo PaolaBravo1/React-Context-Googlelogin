@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react"
 import { AxiosResponse } from "axios";
 import jwt from "jwt-decode"
 import { ErrorCode } from "helpers/errorcodes"
-import { Participant } from "models/Participant";
+import { Participant } from "@/models/_Participant";
 import { axiosRequest } from "api/api";
 
 interface IParticipantContext {

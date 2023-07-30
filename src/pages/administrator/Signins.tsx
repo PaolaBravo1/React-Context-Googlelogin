@@ -4,7 +4,7 @@ import { AuthenticationContext } from "contexts/AuthenticationContext"
 import { AuthenticatedLayout } from "layouts/AuthenticatedLayout"
 import Table from "components/Table"
 import moment from "moment"
-import { Account } from "models/Account"
+import { Account } from "@/models/_Account"
 import { AdministratorContext } from "contexts/AdministratorContext"
 var xlsx = require("xlsx")
 
