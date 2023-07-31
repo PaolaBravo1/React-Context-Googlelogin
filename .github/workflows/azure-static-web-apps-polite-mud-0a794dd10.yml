@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: web-03.hammerbeam.com CI/CD
 
 on:
   push:
