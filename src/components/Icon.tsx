@@ -15,7 +15,7 @@ interface IIcon {
 
 const Icon = ({ name, className, toolTip, onClick }: IIcon) => {
   return (
-    <span className={`icon ${className ?? ""}`}>
+    <span className={`icon ${className ?? ""} icon-${name}`}>
       <FontAwesomeIcon title={toolTip} icon={name} onClick={onClick} />
     </span>
   )

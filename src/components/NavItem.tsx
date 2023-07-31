@@ -4,23 +4,22 @@ import Icon from "./Icon";
 
 interface INavItem {
   label: string,
-  iconName: string,
-  href: string;
+  icon: string,
+  href?: string;
 }
 
-const NavItem = ({ label, iconName, href }: INavItem) => {
+const NavItem = ({ label, icon, href=""}: INavItem) => {
   const [isActive, setIsActive] = useState(false);
   
   useEffect(() => {
-    const location = window.location.search;
+    const location = window.location.pathname;
     setIsActive(location === href);
   }, []);
   
   return (
     <li className="nav-item">
-      <Link className={`nav-link${isActive ? " active" : ""}`} to={href}>
-        <Icon name={iconName} />
-        <span className="ml-2">{label}</span>
+      <Link className={`nav-link${isActive ? " active" : ""}${href == "" ? " disabled-links": "" }`} to={href}>
+        <Icon toolTip={label} name={icon} />
       </Link>
     </li>
   )

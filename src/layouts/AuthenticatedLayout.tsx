@@ -14,7 +14,6 @@ interface IAuthenticatedLayout {
 export const AuthenticatedLayout = ({header, children}: IAuthenticatedLayout) => {    
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isIdlePopupOpen, setIsIdlePopupOpen] = useState(false);
-  const [isNavBarCollapsed, setIsNavBarCollapsed] = useState(false);
   const [lastActiveTime, setLastActiveTime] = useState(Date.now());
   const [idleLifeRemaining, setIdleLifeRemaining] = useState(100);
   const [role, setRole] = useState("");
@@ -38,10 +37,6 @@ export const AuthenticatedLayout = ({header, children}: IAuthenticatedLayout) =>
       redirectUnauthenticated(true);
     }
   }, []);
-
-  const handleNavBarToggle = (isCollapsed: boolean) => {
-    setIsNavBarCollapsed(isCollapsed)
-  }
 
   const validateIdentity = () => {
     const identity = getIdentity();
@@ -123,7 +118,7 @@ export const AuthenticatedLayout = ({header, children}: IAuthenticatedLayout) =>
     </HelmetProvider>
     <div id="overlay"></div>
     <IdlePopup isOpen={isIdlePopupOpen} onClose={onIdlePopupClose}></IdlePopup>
-    <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"} ${isNavBarCollapsed ? "nav-bar-collapsed" : ""}`}>
+    <div className={`auth-container ${isAuthenticated ? "" : "not-authenticated"}`}>
       <div className="top-bar">
         <div className="top-bar-buttons">
           <div className="icon-circle">
@@ -133,7 +128,7 @@ export const AuthenticatedLayout = ({header, children}: IAuthenticatedLayout) =>
         </div>
       </div>             
       <div className="outer">         
-        <NavBar role={role} oauthAccessTokenLifeRemaining={oauthAccessTokenLifeRemaining} idleLifeRemaining={idleLifeRemaining} handleNavBarToggle={handleNavBarToggle}></NavBar>           
+        <NavBar role={role} oauthAccessTokenLifeRemaining={oauthAccessTokenLifeRemaining} idleLifeRemaining={idleLifeRemaining}></NavBar>           
         <main>
           <div className="header">{header}</div>
          {children}

@@ -236,7 +236,7 @@ const Participants = () => {
         }
       </div>
       <PropertyBar entityID={participant.id} isVisible={isPropertyBarVisible} onSave={handleParticipantUpdate} onCancel={handleCancel}>
-        <>        
+        <>                  
           <div className="caption">{participant.id == undefined ? "New participant" : participant.fullName}</div>
           {fields.map((o, i) => {          
             return <TextInput

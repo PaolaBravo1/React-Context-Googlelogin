@@ -9,16 +9,16 @@ const NavItemList = ({ role }: INavItemList) => {
     case "Administrator":
       return (
         <ul className="nav flex-column">
-          <NavItem label="Dashboard" iconName="home" href="/administrator/dashboard"></NavItem>
-          <NavItem label="Participants" iconName="users" href="/administrator/participants"></NavItem>
-          <NavItem label="Sign-ins" iconName="sign-in" href="/administrator/signins"></NavItem>
+          <NavItem label="Dashboard" icon="home" href="/administrator/dashboard"></NavItem>
+          <NavItem label="Participants" icon="users" href="/administrator/participants"></NavItem>
+          <NavItem label="Sign-ins" icon="network-wired" href="/administrator/signins"></NavItem>   
         </ul>
       )
 
     case "Participant":
       return (
         <ul className="nav flex-column">
-          <NavItem label="Dashboard" iconName="users" href="/participant/dashboard"></NavItem>
+          <NavItem label="Dashboard" icon="users"></NavItem>
         </ul>
       )
     

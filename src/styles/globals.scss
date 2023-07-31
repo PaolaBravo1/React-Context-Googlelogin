@@ -8,6 +8,8 @@ $disabledBackgroundColor: #aaaaaa;
 $flashCellColor: #ffffff;
 $flashCellEvenColor: #f3f3f3;
 $whiteColor: #ffffff;
+$blackColor: #000000;
+$navbarColor: #444444;
 
 * {
   font-family: "Lato";
@@ -202,53 +204,207 @@ form.form-error .input-container {
   width: 100%;
   height: 60px;
   min-height: 60px;
-  background-color: #000000;
+  background-color: $blackColor;;
   color: $whiteColor;
   position: fixed;
   z-index: 99;
+
+  .top-bar-buttons {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+
+    button {
+      display: inline;
+      border: solid 2px $whiteColor;
+      background-color: $blackColor;
+      color: $whiteColor;
+      border-radius: 4px;
+      padding: 4px 6px 7px 6px;
+      font-size: 14px;
+      width: 100px;
+      transition: all .2s;  
+      vertical-align: top;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background-color: $primaryColor;
+      color: $whiteColor;
+    }
+
+    .icon-circle {
+      width: 37px;
+      height: 37px;
+      border: solid 2px $whiteColor;
+      border-radius: 37px;
+      background-color: $whiteColor;
+      display: inline-block;
+      transition: all .2s;
+      margin-right: 14px;
+    }
+
+    span.icon {
+      position: relative;
+      display: inline-block;
+      font-size: 19px;
+      vertical-align: top;
+      cursor: pointer;
+      transition: all .2s;
+      color: $blackColor;
+      text-align: center;
+      width: 35px;
+      left: -1px;
+      top: 2px;
+      transition: all .2s;
+    }
+
+    .icon-circle:hover {
+      background-color: $primaryColor;
+    }
+
+    .icon-circle:hover span.icon {
+      color: $whiteColor;
+    }
+  }
 }
 
 .nav-bar {
   position: fixed;
   flex-grow: 0; 
   flex-shrink: 0;
-  width: 220px;
+  width: 98px;
   height: 100%;
   flex-basis: 220px; 
   flex: 0 0 220px;
   z-index: 100;
   padding: 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .3);
-  background-color: #444444 !important;
+  background-color: $navbarColor !important;
   color: $whiteColor;
   transition: 0.3s all;
   overflow: hidden;
   box-shadow: 0 0 12px rgba(0,0,0,0.75);
   clip-path: inset(0px -12px 0px 0px);
+  padding-top: 0;
   padding-bottom: 30px;
 
-.status-bars {
-  position: absolute;
-  left: 52px;
-  bottom: 75px;
-}
+  .position-sticky {
+    padding-top: 10px !important;
+  }
 
-.status-bar {
-  height: 14px;
-  min-height: 14px;
-  width: 135px;
-  background-color: #777777;
-  position: relative;
-  margin-bottom: 20px;
-
-    .status-bar-complete {
-      background-color:$whiteColor;
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 50%;
-      height: 100%;
+  .nav-link {
+    color: $whiteColor;
+    position: relative;
+    display: inline-block;
+    height: 65px;
+    width: 65px;
+    max-width: 65px;
+    min-height: 65px;
+    max-height: 65px;
+    overflow: hidden;
+    margin-top: 3px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+    border-radius: 65px;
+    padding-top: 8px;
+    transition: background-color .5s ease;  
+  
+    .icon {
       display: block;
+      text-align: center;
+      position: relative;
+      transition: color .5s ease;  
+      font-size: 30px;
+      text-align: center;
+    }
+  
+    .icon-users {
+      top: 2px;
+      left: -2px;
+    }
+  
+    .icon-network-wired {
+      left: -2px;
+      xtop: 1px;
+    }
+  
+    .ml-2 { 
+      transition: all .35s;  
+    }
+  
+    &:visited {
+      color: $whiteColor;
+    }
+    
+    &:hover {
+      color: $primaryColor;    
+      xbackground-color: #222222;
+    }
+  
+    &.active, &:active {
+      color: $whiteColor;
+      background-color: $primaryColor;
+      cursor: default;
+    }
+  }
+
+  .status-donuts {  
+    text-align: center;
+    position: absolute;
+    width: 98px;
+    bottom: 55px;
+    list-style: none;
+    text-align: center;
+    padding: 0;  
+
+    .status-donut {    
+      color: $whiteColor;
+      position: relative;
+      display: inline-block;
+      height: 65px;
+      width: 65px;
+      max-width: 65px;
+      min-height: 65px;
+      max-height: 65px;
+      overflow: hidden;
+      margin-top: 3px;
+      margin-bottom: 10px;
+      margin-left: 0;
+      border-radius: 65px;
+      padding-top: 8px;
+      transition: background-color .5s ease;  
+      left: -1px;
+
+      &.strobe svg {  
+        animation: strobe 500ms ease-in-out infinite;
+      }
+
+      .icon {   
+        font-size: 27px;
+        text-align: center;
+        position: relative;
+        top: 3px;
+      }
+    
+      .icon-bed {
+        left: 2px;
+      }
+      
+      &.donut {
+        width: 65px; height: 65px;
+        border-radius: 50%;
+        background: conic-gradient( $primaryColor 0deg 360deg );
+        
+        .hole {
+          width: 55px; height: 55px;
+          border-radius: 50%;
+          background: $navbarColor;
+          left: 5px;
+          top: 5px;
+          position: absolute;    
+        }  
+      }
     }
   }
 }
@@ -275,101 +431,73 @@ form.form-error .input-container {
   overflow: hidden;
   z-index: 100;
   opacity: 0;
-}
 
-.top-modal-frame,
-.top-modal-content {
-  overflow: auto;
-  position: relative; 
-}
-
-.top-modal-frame {
-  flex-direction: column;
-  overflow: hidden;
-  -ms-overflow-y: visible;
-  width: 100%;
-  padding: 16px 20px 16px 20px;
-}
-
-.top-modal-buttons {
-  position: absolute;
-  right: 20px;
-  top: 13px;
-
-  .button {
-    display: inline;
-    border: solid 2px $whiteColor;
-    background-color: $whiteColor;
-    color: $primaryColor;
-    border-radius: 4px;
-    padding: 5px 6px 6px 6px;
-    font-size: 14px;
-    font-weight: 600;
-    width: 130px;
-    transition: all .2s;
-    vertical-align: top;
+  &.is-open {        
+    max-height: 60px;
+    opacity: 1;
   }
 
-  .button:hover {
-    background-color: $primaryColor;
-    color: $whiteColor;
+  .top-modal-frame,
+  .top-modal-content {
+    overflow: auto;
+    position: relative; 
   }
 
-  .button:last-child {
-    margin-left: .5em;
-    border: solid 2px $whiteColor;
-    background-color: $primaryColor;
-    color: $whiteColor;
+  .top-modal-frame {
+    flex-direction: column;
+    overflow: hidden;
+    -ms-overflow-y: visible;
+    width: 100%;
+    padding: 16px 20px 16px 20px;
   }
 
-  .is-open {        
-      max-height: 60px;
-      opacity: 1;
-  }
-}
-
-.status-bar {
-  .icon {
+  .top-modal-buttons {
     position: absolute;
-    left: -36px;
-    top: -4px;
-    font-size: 15px;
-    color: $whiteColor;
-    width: 19px;
-    text-align: right;
-    transition: all 1s ease-in-out;  
-  }
+    right: 20px;
+    top: 13px;
 
-  &.strobe .status-bar-complete {  
-    animation: strobe-background 500ms ease-in-out infinite;
-  }
+    .button {
+      display: inline;
+      border: solid 2px $whiteColor;
+      background-color: $whiteColor;
+      color: $primaryColor;
+      border-radius: 4px;
+      padding: 5px 6px 6px 6px;
+      font-size: 14px;
+      font-weight: 600;
+      width: 130px;
+      transition: all .2s;
+      vertical-align: top;
+    }
 
-  &.strobe .icon svg {  
-    animation: strobe 500ms ease-in-out infinite;
+    .button.is-danger:hover {
+      background-color: $primaryColor;
+      color: $whiteColor;
+    }
+
+    .button:hover {
+      background-color: $primaryColor;
+      color: $whiteColor;
+    }
+
+    .button:last-child {
+      margin-left: .5em;
+      border: solid 2px $whiteColor;
+      background-color: $primaryColor;
+      color: $whiteColor;
+    }
   }
 }
 
 @keyframes strobe {
   0% {
-    color: #999999;
+    color: $primaryColor;
   }  
   50% {
     color: $whiteColor;
   }
   100% {
-    color: #999999;
-  }  
-}
-
-@keyframes strobe-background {
-  0% {
-    background-color: #999999;
-  }  
-  50% {
-    background-color: $whiteColor;
-  }
-  100% {
-    background-color: #999999;
+    color: $primaryColor;
   }  
 }
 
@@ -551,70 +679,12 @@ form.form-error .input-container {
   }
 }
 
-.auth-container.nav-bar-collapsed {
- .nav-bar {
-    width: 50px;
-    flex-basis: 50px; 
-    flex: 0 0 50px;  
-
-    .nav-link .icon {
-      left: -5px;
-    }
-
-    .nav-link .ml-2 {
-      opacity: 0;
-    }
-
-    .collapse-button {
-      transform: rotate(180deg);   
-    }
-  }
-
-  main {
-    margin-left: 40px;
-  }
-}
-
-.nav-bar .nav-link {
-  color: $whiteColor;
-  position: relative;
-  display: inline-block;
-  height: 35px;
-  max-height: 35px;
-  overflow: hidden;
-  margin-top: 3px;
-  margin-bottom: 3px;
-  padding-left: 10px;
-  padding-right: 0;
-
-  .icon {
-    display: inline-block;
-    width: 40px;
-    text-align: center;
-    position: relative;
-    transition: all .35s;  
-    left: 0;
-  }
-
-  .ml-2 { 
-    transition: all .35s;  
-  }
-
-  &:visited {
-    color: $whiteColor;
-  }
-
-  &.active, &:active &:hover{
-    color: $primaryColor;
-  }
-}
-
 .auth-container {
   height: 100%;
 
   main {  
-    margin-left: 210px;
-    padding-left: 50px;
+    margin-left: 98px;
+    padding-left: 40px;
     padding-right: 40px;
     transition: all .2s;
     flex-grow: 1; /* grow wider by any factor */
@@ -638,80 +708,8 @@ form.form-error .input-container {
   font-weight: 600;
 }
 
-.nav-bar .position-sticky {
-  padding-top: 10px !important;
-}
-
-.nav-bar .collapse-button {
-  position: absolute;
-  top: 18px;
-  right: 22px;
-  cursor: pointer;
-  z-index: 999;
-  transition: .3s;
-}
-
-.top-bar-buttons {
-  position: absolute;
-  right: 20px;
-  top: 13px;
-
-  button {
-    display: inline;
-    border: solid 2px $whiteColor;
-    background-color: #000000;
-    color: $whiteColor;
-    border-radius: 4px;
-    padding: 4px 6px 7px 6px;
-    font-size: 14px;
-    width: 100px;
-    transition: all .2s;  
-    vertical-align: top;
-    font-weight: 600;
-  }
-
-  button:hover {
-    background-color: $whiteColor;
-    color: #000000;
-  }
-
-  .icon-circle {
-    width: 37px;
-    height: 37px;
-    border: solid 2px $whiteColor;
-    border-radius: 37px;
-    background-color: $whiteColor;
-    display: inline-block;
-    transition: all .2s;
-    margin-right: 14px;
-  }
-
-  span.icon {
-    position: relative;
-    display: inline-block;
-    font-size: 19px;
-    vertical-align: top;
-    cursor: pointer;
-    transition: all .2s;
-    color: #000000;
-    text-align: center;
-    width: 35px;
-    left: -1px;
-    top: 2px;
-    transition: all .2s;
-  }
-
-  .icon-circle:hover {
-    background-color: #000000;
-  }
-
-  .icon-circle:hover span.icon {
-    color: $whiteColor;
-  }
-}
-
 .property-bar {
-  padding: 30px 40px 0 40px;
+  padding: 27px 40px 70px 40px;
   top: 60px;
   overflow-y: auto;
   left: unset !important;
@@ -725,19 +723,19 @@ form.form-error .input-container {
   right: 0;
   transition: 0.3s all;
   height: 100%;
-  padding-top: 40px;
   
+  .collapse-button {
+    position: absolute;
+    top: 34px;
+    right: 40px;
+    cursor: pointer;
+    z-index: 999;
+    transition: .3s;
+  }
+
   &.collapsed {
     right: -400px;
     box-shadow: none;
-  }
-
-  .collapse-button {
-    top: 18px;
-    left: 22px;
-    right: unset;
-    position: absolute; 
-    display: none;
   }
 
   .input-container {
@@ -766,10 +764,10 @@ form.form-error .input-container {
   .caption {
     padding: 0;
     font-weight: 600;
-    font-size: 16px;
-    position: absolute;
-    top: 18px;
-    display: none;
+    font-size: 27px;
+    xposition: absolute;
+    xtop: 18px;
+    padding-bottom: 20px;
   }
 
   .buttons {
@@ -781,23 +779,23 @@ form.form-error .input-container {
     background-color: $primaryColor;
     padding: 1em 2.4em;
     width: 100%;
-  }
+ 
+    &:hover {
+      background-color: $whiteColor;
+      color: $primaryColor;
+    }
 
-  &:hover {
-    background-color: $whiteColor;
-    color: $primaryColor;
-  }
+    &.cancel {
+      background-color: $whiteColor;
+      color: $primaryColor;
+      padding: 1em 2.4em;
+      width: 100%;
+    }
 
-  &.cancel {
-    background-color: $whiteColor;
-    color: $primaryColor;
-    padding: 1em 2.4em;
-    width: 100%;
-  }
-
-  &.cancel:hover {
-    background-color: $primaryColor;
-    color: $whiteColor;
+    &.cancel:hover {
+      background-color: $primaryColor;
+      color: $whiteColor;
+    }
   }
 }
 
@@ -866,36 +864,13 @@ form.form-error .input-container {
   color: #bbbbbb;
 }
 
+.disabled-link {
+  pointer-events: none;
+}
+
 @media (min-width: 900px) {
   .col-md-lg-6 {
       flex: 0 0 auto;
       width: 50% !important;
-  }
-}
-
-@media (max-width: 900px) {
-  .nav-bar {
-    flex-basis: 50px; 
-    flex: 0 0 50px;  
-  }
-  
-  .nav.flex-column {
-    padding-top: 0px;
-  }
-  
-  .nav-bar .collapse-button {
-    display: none;
-  }
-
-  .nav-bar .nav-link .icon {
-    left: -5px;
-  }
-  
-  .nav-bar .nav-link .ml-2 {
-    opacity: 0;
-  }
-
-  .auth-container main {
-    padding-left: 85px;
   }
 }
