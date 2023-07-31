@@ -28,7 +28,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-web.config
 
 # local env files
 
