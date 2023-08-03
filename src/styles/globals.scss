@@ -308,7 +308,9 @@ form.form-error .input-container {
     margin-left: 15px;
     border-radius: 65px;
     padding-top: 8px;
-    transition: background-color .5s ease;  
+    transition: background-color .5s ease;
+    background-color: transparent;  
+    border-width: 0;
   
     .icon {
       display: block;
@@ -316,17 +318,22 @@ form.form-error .input-container {
       position: relative;
       transition: color .5s ease;  
       font-size: 30px;
-      text-align: center;
+      text-align: center;      
     }
   
+    .icon-home {
+      top: -1px;
+      left: 0px;
+    }
+
     .icon-users {
-      top: 2px;
+      top: 0px;
       left: -2px;
     }
   
     .icon-network-wired {
       left: -2px;
-      xtop: 1px;
+      top: -1px;
     }
   
     .ml-2 { 
