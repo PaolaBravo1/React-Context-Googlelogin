@@ -11,7 +11,7 @@ const NavItemList = ({ role }: INavItemList) => {
         <ul className="nav flex-column">
           <NavItem label="Dashboard" icon="home" href="/administrator/dashboard"></NavItem>
           <NavItem label="Participants" icon="users" href="/administrator/participants"></NavItem>
-          <NavItem label="Sign-ins" icon="network-wired" href="/administrator/signins"></NavItem>   
+          <NavItem label="Current sign-ins" icon="network-wired" href="/administrator/signins"></NavItem>   
         </ul>
       )
 
