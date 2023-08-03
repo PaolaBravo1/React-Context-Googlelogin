@@ -30,7 +30,7 @@ const SignIn = () => {
     if (provider == "Local")
       setEmailAddress(params.get("emailAddress") ?? ""); 
 
-    console.log(JSON.stringify(configSettings));
+    console.log("origin: " + process.env.REACT_APP_ORIGIN);
   }, []);
     
   useEffect(() => {    
