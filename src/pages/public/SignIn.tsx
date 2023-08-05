@@ -30,10 +30,7 @@ const SignIn = () => {
     if (provider == "Local")
       setEmailAddress(params.get("emailAddress") ?? ""); 
 
-    console.log("origin: " + process.env.REACT_APP_ORIGIN);
-    console.log("hostname: " + process.env.WEBSITE_HOSTNAME);
-    console.log("site: " + process.env.WEBSITE_SITE_NAME);
-    console.log("resource group: " + process.env.WEBSITE_RESOURCE_GROUP);
+    console.log("api: " + configSettings.ApiRootUrl);
   }, []);
     
   useEffect(() => {    

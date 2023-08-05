@@ -12,9 +12,19 @@ const identityCookieName = "hammer_identity";
 const providerCookieName = "hammer_provider";
 
 var overlayTimer: ReturnType<typeof setTimeout>;
+let apiRootUrl = configSettings.ApiRootUrl;
+
+/* todo there has to be a way to deploy this via azure application settings */
+
+if (window.location.hostname.startsWith("web-01"))
+  apiRootUrl = "hammerbeam-api-01.azurewebsites.net";
+else if (window.location.hostname.startsWith("web-02"))
+  apiRootUrl = "hammerbeam-api-02.azurewebsites.net";
+else if (window.location.hostname.startsWith("web-03"))
+  apiRootUrl = "hammerbeam-api-03.azurewebsites.net";
 
 export const axiosRequest = axios.create({
-  baseURL: configSettings.ApiRootUrl,
+  baseURL: apiRootUrl,
   withCredentials: true
 });
 
