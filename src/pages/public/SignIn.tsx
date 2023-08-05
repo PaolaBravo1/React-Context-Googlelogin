@@ -29,8 +29,6 @@ const SignIn = () => {
     
     if (provider == "Local")
       setEmailAddress(params.get("emailAddress") ?? ""); 
-
-    console.log("api: " + configSettings.ApiRootUrl);
   }, []);
     
   useEffect(() => {    

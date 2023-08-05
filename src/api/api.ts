@@ -16,12 +16,16 @@ let apiRootUrl = configSettings.ApiRootUrl;
 
 /* todo there has to be a way to deploy this via azure application settings */
 
+console.log("hostname: " + window.location.hostname);
+
 if (window.location.hostname.startsWith("web-01"))
   apiRootUrl = "hammerbeam-api-01.azurewebsites.net";
 else if (window.location.hostname.startsWith("web-02"))
   apiRootUrl = "hammerbeam-api-02.azurewebsites.net";
 else if (window.location.hostname.startsWith("web-03"))
   apiRootUrl = "hammerbeam-api-03.azurewebsites.net";
+
+console.log("apirooturl: " + apiRootUrl);
 
 export const axiosRequest = axios.create({
   baseURL: apiRootUrl,
@@ -47,7 +51,6 @@ export const getIdentity = (): Identity | null => {
 }
 
 const showOverlay = (isMakingRequest: boolean) => {
-  // right place for this?
   const overlay = document.getElementById("overlay");
 
   if (!overlay)
@@ -71,8 +74,6 @@ axiosRequest.interceptors.request.use((config) => {
     config.headers[contentTypeHeaderKey] = "application/x-www-form-urlencoded";
   } else {
     config.headers[contentTypeHeaderKey] = "application/json";
-    ////if (identity) .. todo removed with server-side cookies
-    ////  config.headers[authHeaderKey] = `Bearer ${identity.accessToken}`;
   } 
 
   if (config.url == authEndPoint && config?.data?.refresh_token !== undefined)
