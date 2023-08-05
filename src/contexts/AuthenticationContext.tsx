@@ -152,6 +152,7 @@ export function AuthenticationProvider({ children }: { children: any }) {
     ).then(async result => {
       saveIdentity(emailAddress, result.data.role, result.data.expires_in);
       saveProvider("Local");
+      alert(result.data.access_token);
       return result.data.access_token;
     }
     ).catch(error => { throw error; });

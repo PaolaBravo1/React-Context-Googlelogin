@@ -18,12 +18,14 @@ let apiRootUrl = configSettings.ApiRootUrl;
 
 console.log("hostname: " + window.location.hostname);
 
+/*
 if (window.location.hostname.startsWith("web-01"))
   apiRootUrl = "https://hammerbeam-api-01.azurewebsites.net";
 else if (window.location.hostname.startsWith("web-02"))
   apiRootUrl = "https://hammerbeam-api-02.azurewebsites.net";
 else if (window.location.hostname.startsWith("web-03"))
   apiRootUrl = "https://hammerbeam-api-03.azurewebsites.net";
+*/
 
 console.log("apirooturl: " + apiRootUrl);
 
