@@ -1,4 +1,4 @@
-name: web-03.hammerbeam.com CI/CD
+name: web-01.hammerbeam.com CI/CD
 
 on:
   push:
