@@ -34,7 +34,6 @@ export const axiosRequest = axios.create({
 
 export const restartIdentityTimer = () => {
   const identity = getIdentity();
-  // todo ???
 }
 
 export const getIdentity = (): Identity | null => {
