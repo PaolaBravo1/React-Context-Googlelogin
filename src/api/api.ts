@@ -19,9 +19,9 @@ let apiRootUrl = configSettings.ApiRootUrl;
 if (window.location.hostname.startsWith("web-01"))
   apiRootUrl = "https://api-01.hammerbeam.com";
 else if (window.location.hostname.startsWith("web-02"))
-  apiRootUrl = "https://api-01.hammerbeam.com";
+  apiRootUrl = "https://api-02.hammerbeam.com";
 else if (window.location.hostname.startsWith("web-03"))
-  apiRootUrl = "https://api-01.hammerbeam.com";
+  apiRootUrl = "https://api-03.hammerbeam.com";
 
 console.log("apirooturl: " + apiRootUrl);
 
