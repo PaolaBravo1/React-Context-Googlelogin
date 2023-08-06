@@ -1,7 +1,7 @@
 name: web-01.hammerbeam.com CI/CD
 
 env:
-  WEB_SERVER: "web-01.hammerbeam.com" 
+  REACT_APP_WEB_SERVER: web-01.hammerbeam.com
   
 on:
   push:
