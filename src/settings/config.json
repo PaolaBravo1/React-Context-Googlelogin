@@ -1,6 +1,5 @@
 {
-    "ApiRootUrl": "https://hammerbeam-api-01.azurewebsites.net",
-    "xApiRootUrl": "https://api.hammerbeam.com",
+    "ApiRootUrl": "https://api.hammerbeam.com",
     "AccessTokenTimeout": 600,
     "AccessTokenMinimumRefreshMargin": 30,
     "AccessTokenRefreshMarginPercent": 10,
