@@ -1,5 +1,5 @@
 {
-    "ApiRootUrl": "https://api-01.hammerbeam.com",
+    "ApiRootUrl": "https://api.hammerbeam.com",
     "AccessTokenTimeout": 600,
     "AccessTokenMinimumRefreshMargin": 30,
     "AccessTokenRefreshMarginPercent": 10,

@@ -15,13 +15,14 @@ var overlayTimer: ReturnType<typeof setTimeout>;
 let apiRootUrl = configSettings.ApiRootUrl;
 
 /* todo there has to be a way to deploy this via azure application settings */
-
+/*
 if (window.location.hostname.startsWith("web-01"))
   apiRootUrl = "https://api-01.hammerbeam.com";
 else if (window.location.hostname.startsWith("web-02"))
   apiRootUrl = "https://api-02.hammerbeam.com";
 else if (window.location.hostname.startsWith("web-03"))
   apiRootUrl = "https://api-03.hammerbeam.com";
+*/
 
 console.log("apirooturl: " + apiRootUrl);
 
