@@ -25,6 +25,7 @@ else if (window.location.hostname.startsWith("web-03"))
 */
 
 console.log("apirooturl: " + apiRootUrl);
+console.log(process.env);
 
 export const axiosRequest = axios.create({
   baseURL: apiRootUrl,
