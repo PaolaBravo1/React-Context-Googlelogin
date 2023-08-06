@@ -16,16 +16,12 @@ let apiRootUrl = configSettings.ApiRootUrl;
 
 /* todo there has to be a way to deploy this via azure application settings */
 
-console.log("hostname: " + window.location.hostname);
-
-/*
 if (window.location.hostname.startsWith("web-01"))
-  apiRootUrl = "https://hammerbeam-api-01.azurewebsites.net";
+  apiRootUrl = "https://api-01.hammerbeam.com";
 else if (window.location.hostname.startsWith("web-02"))
-  apiRootUrl = "https://hammerbeam-api-02.azurewebsites.net";
+  apiRootUrl = "https://api-01.hammerbeam.com";
 else if (window.location.hostname.startsWith("web-03"))
-  apiRootUrl = "https://hammerbeam-api-03.azurewebsites.net";
-*/
+  apiRootUrl = "https://api-01.hammerbeam.com";
 
 console.log("apirooturl: " + apiRootUrl);
 
