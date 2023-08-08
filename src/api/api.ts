@@ -75,6 +75,8 @@ axiosRequest.interceptors.request.use((config) => {
     config.headers[contentTypeHeaderKey] = "application/json";
   } 
 
+  config.headers["Cross-Origin-Opener-Policy"] = "same-origin-allow-popups";
+
   if (config.url == authEndPoint && config?.data?.refresh_token !== undefined)
     isShowOverlay = false;
    

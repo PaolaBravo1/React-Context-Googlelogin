@@ -10,6 +10,7 @@ import { v4 } from "uuid"
 import { Link, useNavigate } from "react-router-dom"
 
 const SignIn = () => {
+  const [nonce, setNonce] = useState(v4());
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("")
@@ -18,7 +19,6 @@ const SignIn = () => {
 
   const { getIdentity, authorize, authorizeGoogle, clearIdentity, getProvider } = AuthenticationContext();
 
-  const nonce = v4();
   const navigate = useNavigate();
 
   useEffect(() => {    
@@ -152,7 +152,7 @@ const SignIn = () => {
   return (
     <UnauthenticatedLayout id="signin" title="Welcome!" message="Please provide your user credentials in order to sign in." errorMessage={errorMessage}>  
       <div className={`muted password-reset ${isPasswordResetLinkVisible ? "": "hidden"}`}>Forgot your password? <Link className="simple-link" to="/forgotpassword">Click here to request a passsword reset!</Link></div>
-      <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>
+      <form className={(errorMessage.length > 0 ? "form-error" : "")} onSubmit={handleSubmit}>        
         <div className="mb-3">
           <TextInput required={true} type="text" label="Email address" name="email-address" value={emailAddress} onChange={(value:string) => setEmailAddress(value)}></TextInput>
         </div>
