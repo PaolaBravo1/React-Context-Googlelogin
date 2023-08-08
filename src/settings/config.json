@@ -1,10 +1,10 @@
 {
-    "ApiRootUrl": "http://localhost",
+    "ApiRootUrl": "https://api.hammerbeam.com",
     "AccessTokenTimeout": 600,
     "AccessTokenMinimumRefreshMargin": 30,
     "AccessTokenRefreshMarginPercent": 10,
     "IdleTimeout": 600,
     "IdlePopupDuration": 1,
     "GoogleOAuthClientID": "217243694227-qdl1ksll5dda1koe8iukcaiauqjfld7k.apps.googleusercontent.com",
-    "GoogleOAuthCallbackUrl": "http://localhost:3000/oauth/redirect/google"
+    "GoogleOAuthCallbackUrl": "https://web.hammerbeam.com/oauth/redirect/google"
 }
