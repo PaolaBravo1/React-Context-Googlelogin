@@ -18,6 +18,7 @@ import ParticipantDashboard from "./participant/Dashboard";
 import { ParticipantProvider } from "contexts/ParticipantContext";
 import { AccountManagementProvider } from "contexts/AccountManagementContext";
 import { AdministratorProvider } from "contexts/AdministratorContext";
+import Privacy from "./public/Privacy";
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
               <Route path="/" element={ <Navigate to="/signin" /> } />           
               <Route path="confirmaccount" element={<ConfirmAccount />} />
               <Route path="forgotpassword" element={<ForgotPassword />} />
+              <Route path="privacy" element={<Privacy />} />      
               <Route path="register" element={<Register />} />
               <Route path="setpassword" element={<SetPassword />} />
               <Route path="signin" element={<SignIn />} />

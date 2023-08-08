@@ -92,7 +92,6 @@ html, body {
   display: flex;
   flex-direction: column;
 
-
   &:focus-within label {
     transform: translate(-14px, 2px) scale(0.7);
     color: $primaryColor;
@@ -135,7 +134,6 @@ html, body {
   }
 }
 
-
 form.form-error .input-container {
   input, select {
     border-bottom: solid 2px $errorColor;
@@ -146,7 +144,6 @@ form.form-error .input-container {
     color: $errorColor;
   }
 }
-
 
 .unauth-container {
   .sign-in, .image {
@@ -180,6 +177,11 @@ form.form-error .input-container {
   .not-registered {
     margin-top: 60px;
   }
+}
+
+#privacy .bg-image {
+  background-size: contain !important;
+  background-position: unset !important;
 }
 
 .hidden {
