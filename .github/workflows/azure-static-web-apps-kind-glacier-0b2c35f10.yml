@@ -1,5 +1,9 @@
 name: web-02.hammerbeam.com CI/CD
 
+env:
+  REACT_APP_WEB_SERVER: web-02.hammerbeam.com
+  REACT_APP_WEB_SERVER_PRIVATE: kind-glacier-0b2c35f10.3.azurestaticapps.net
+  
 on:
   push:
     branches:

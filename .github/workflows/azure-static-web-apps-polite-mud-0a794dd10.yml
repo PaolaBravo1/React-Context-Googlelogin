@@ -1,5 +1,9 @@
 name: web-01.hammerbeam.com CI/CD
 
+env:
+  REACT_APP_WEB_SERVER: web-01.hammerbeam.com
+  REACT_APP_WEB_SERVER_PRIVATE: polite-mud-0a794dd10.3.azurestaticapps.net
+  
 on:
   push:
     branches:
