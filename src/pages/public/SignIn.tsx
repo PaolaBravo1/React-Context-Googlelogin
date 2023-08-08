@@ -171,7 +171,7 @@ const SignIn = () => {
         </div>
         <div id="social-login-buttons">
           <div id="google-login-button">
-            <GoogleLogin onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
+            <GoogleLogin nonce={nonce} onSuccess={handleGoogleSubmit} onError={handleGoogleError} />    
             <div id="google-login-override" className="styled-button">Sign in using Google</div>
           </div>          
         </div>   

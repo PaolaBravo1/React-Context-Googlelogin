@@ -4,7 +4,7 @@
     "AccessTokenMinimumRefreshMargin": 30,
     "AccessTokenRefreshMarginPercent": 10,
     "IdleTimeout": 600,
-    "IdlePopupDuration": 1,
+    "IdlePopupDuration": 15,
     "GoogleOAuthClientID": "217243694227-qdl1ksll5dda1koe8iukcaiauqjfld7k.apps.googleusercontent.com",
     "GoogleOAuthCallbackUrl": "https://web.hammerbeam.com/oauth/redirect/google"
 }
